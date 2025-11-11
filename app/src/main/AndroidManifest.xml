@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
         <activity
+            android:name=".LoginScreen"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterScreen"
+            android:exported="false" />
+        <activity
             android:name=".StartScreen"
             android:exported="true">
             <intent-filter>
@@ -22,8 +28,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
     </application>
 
 </manifest>
