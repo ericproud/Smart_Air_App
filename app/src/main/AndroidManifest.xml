@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
         <activity
+            android:name=".StartScreen"
+            android:exported="false" />
+        <activity
             android:name=".childHomeScreen"
             android:exported="false" />
         <activity
@@ -21,7 +24,7 @@
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".StartScreen"
+            android:name=".ParentHomeScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
