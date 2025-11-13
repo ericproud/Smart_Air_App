@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Item A"
+        android:icon="@drawable/baseline_access_time_24"/>
+    <item android:title="Item B"
+        android:icon="@drawable/outline_add_home_24"/>
+    <item android:title="Item C"
+        android:icon="@drawable/outline_attach_money_24"/>
+</menu>
