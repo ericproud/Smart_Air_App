@@ -21,6 +21,15 @@
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity
+            android:name=".childHomeScreen"
+            android:exported="false" />
+        <activity
+            android:name=".doctorHomeScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ParentChildHomeScreen"
+            android:exported="false" />
+        <activity
             android:name=".StartScreen"
             android:exported="true">
             <intent-filter>
