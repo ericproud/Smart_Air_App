@@ -22,12 +22,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/childDailyCheckIn2"
+        android:id="@+id/addChildButton"
         android:layout_width="300dp"
         android:layout_height="70dp"
         android:layout_marginTop="20dp"
         android:backgroundTint="#673AB7"
-        android:text="DAILY CHECK IN"
+        android:text="ADD CHILD"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +43,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childDailyCheckIn2"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/addChildButton"></LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.example.smart_air_app;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,5 +21,14 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Button parentDailyCheckinButton = findViewById(R.id.parentDailyCheckInButton);
+        Button parentLogControllerUsageButton = findViewById(R.id.parentLogControllerUsageButton);
+        Button parentLogRescueAttemptButton = findViewById(R.id.parentLogRescueAttemptButton);
+        Button parentEmergencyTriageButton = findViewById(R.id.parentEmergencyTriageButton);
+        Button parentInventoryButton = findViewById(R.id.parentInventoryButton);
+        Button parentStreaksAndBadgesButton = findViewById(R.id.parentStreaksAndBadgesButton);
+        Button parentSummaryChartsButton = findViewById(R.id.parentSummaryChartsButton);
+        Button parentManageAccountButton = findViewById(R.id.parentManageAccountButton);
     }
 }

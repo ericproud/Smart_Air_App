@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddChildScreen">
+
+    <Button
+        android:id="@+id/createAccountButton"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#673AB7"
+        android:text="CREATE ACCOUNT"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputPassword" />
+
+    <TextView
+        android:id="@+id/searchForPatients2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Full Name"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/searchForPatients5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Age"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputFullName" />
+
+    <TextView
+        android:id="@+id/searchForPatients4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Height (Inches)"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/InputDOB" />
+
+    <TextView
+        android:id="@+id/searchForPatients6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Username"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputHeight" />
+
+    <TextView
+        android:id="@+id/searchForPatients7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="542dp" />
+
+    <TextView
+        android:id="@+id/searchForPatients3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Date of Birth"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inputAge" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/inputFullName"
+        android:layout_width="320dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:height="50dp"
+        android:hint="Full Name"
+        android:maxHeight="50dp"
+        android:minHeight="50dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients2" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/inputAge"
+        android:layout_width="320dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:height="45dp"
+        android:hint="Age"
+        android:maxHeight="50dp"
+        android:minHeight="50dp"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients5" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="411dp"
+        android:layout_height="wrap_content"
+        android:background="#673AB7"
+        android:paddingStart="5sp"
+        android:text="ADDCHILD"
+        android:textAlignment="center"
+        android:textColor="#FFFDFD"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/InputDOB"
+        android:layout_width="320dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="DD/MM/YY"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients3" />
+
+    <EditText
+        android:id="@+id/inputHeight"
+        android:layout_width="320dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Height In Inches"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients4" />
+
+    <EditText
+        android:id="@+id/inputUsername"
+        android:layout_width="320dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Username"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.527"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients6" />
+
+    <EditText
+        android:id="@+id/inputPassword"
+        android:layout_width="320dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients7" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
