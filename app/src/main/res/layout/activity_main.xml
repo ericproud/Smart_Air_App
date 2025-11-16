@@ -47,7 +47,6 @@
         app:title="Some Text"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:menu="@menu/toolbar_menu"
         app:navigationIcon="@drawable/outline_arrow_back_24"
         app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,5 +68,21 @@
     </LinearLayout>
     </com.google.android.material.appbar.MaterialToolbar>
 
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="168dp"
+        android:layout_height="147dp"
+        tools:layout_editor_absoluteX="82dp"
+        tools:layout_editor_absoluteY="161dp"
+        app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
+
+        <Button
+            style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Button">
+
+        </Button>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
