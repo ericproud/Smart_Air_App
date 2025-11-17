@@ -7,7 +7,7 @@ public class Child extends User{
     public int weight;
     public String DOB;
 
-    public Child(String firstName, String lastName, int height, int weight, String DOB, int userID) {
+    public Child(String firstName, String lastName, int height, int weight, String DOB, String userID) {
         if (firstName.isEmpty()) {
             throw new IllegalArgumentException("Invalid first name: can not be empty");
         }

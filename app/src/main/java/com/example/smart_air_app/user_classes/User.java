@@ -1,13 +1,13 @@
 package com.example.smart_air_app.user_classes;
 
 public class User {
-    public int userID;
+    public String userID;
     public String type; // 3 options - "child", "parent", "doctor"
     public String firstName;
     public String lastName;
 
     public User() {};
-    public User(String type, String firstName, String lastName, int userID) {
+    public User(String type, String firstName, String lastName, String userID) {
         if (type.equals("child")) {
             throw new IllegalArgumentException("Initialize a child object if type is 'child'");
         }
@@ -54,7 +54,7 @@ public class User {
         return type;
     }
 
-    public int getUserID() {
+    public String getUserID() {
         return userID;
     }
 }
