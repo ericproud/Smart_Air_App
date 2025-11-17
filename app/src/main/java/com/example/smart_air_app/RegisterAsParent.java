@@ -1,10 +1,7 @@
 package com.example.smart_air_app;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -78,16 +75,12 @@ public class RegisterAsParent extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success
-                            Log.d(TAG, "createUserWithEmail:success");
                             String uID = mAuth.getCurrentUser().getUid();
                             User newUser = new User("parent", firstName, lastName, uID);
                             FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newUser);
                             startActivity(new Intent(RegisterAsParent.this, LoginScreen.class));
                             finish();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(RegisterAsParent.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
