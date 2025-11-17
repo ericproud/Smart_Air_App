@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".doctorHomeScreen">
+    tools:context=".DoctorHomeScreen">
 
     <Button
         android:id="@+id/doctorView3MonthHistory"
@@ -18,7 +18,7 @@
         android:text="3 MONTH HISTORY"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/childLogControllerUsage"
+        app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
         android:text="6 MONTH HISTORY"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/childLogControllerUsage"
+        app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
         android:text="3 MONTH SUMMARY"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/childLogControllerUsage"
+        app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
