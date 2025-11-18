@@ -18,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.user_classes.Child;
 import com.example.smart_air_app.user_classes.User;
 import com.example.smart_air_app.utils.DateValidator;
 import com.example.smart_air_app.utils.FormHelperFunctions;
@@ -84,21 +85,24 @@ public class AddChildScreen extends AppCompatActivity {
         String height = inputHeight.getText().toString().trim();
         String weight = inputWeight.getText().toString().trim();
         String DOB = inputDOBButton.getText().toString().trim();
-        String username = inputUsername.getText().toString().trim();
+        String username = inputUsername.getText().toString().trim() + "@xyz.com"; // Add fake email extension for firebase authentication to be easier
         String password = inputPassword.getText().toString().trim();
+        String parentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        mAuth.createUserWithEmailAndPassword(email, password)
+        mAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String uID = mAuth.getCurrentUser().getUid();
-                            User newUser = new User("doctor", firstName, lastName, uID);
-                            FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newUser);
-                            startActivity(new Intent(RegisterAsDoctor.this, LoginScreen.class));
+                            Child newChild = new Child(firstName, lastName, height, weight, DOB, uID);
+                            FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newChild);
+                            FirebaseDatabase.getInstance().getReference("Users").child(parentUID).child("children").child(uID).setValue(true);
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(AddChildScreen.this, ParentHomeScreen.class));
                             finish();
                         } else {
-                            Toast.makeText(RegisterAsDoctor.this, "Authentication failed.",
+                            Toast.makeText(AddChildScreen.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -111,7 +115,7 @@ public class AddChildScreen extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         month = month + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
+        return DateValidator.makeDateString(day, month, year);
     }
 
     private void initDatePicker() {
@@ -121,7 +125,7 @@ public class AddChildScreen extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day)
             {
                 month = month + 1;
-                String date = makeDateString(day, month, year);
+                String date = DateValidator.makeDateString(day, month, year);
                 inputDOBButton.setText(date);
             }
         };
@@ -134,39 +138,6 @@ public class AddChildScreen extends AppCompatActivity {
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
-        //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-    }
-
-    private String makeDateString(int day, int month, int year) {
-        return getMonthFormat(month) + " " + day + " " + year;
-    }
-
-    private String getMonthFormat(int month) {
-        if(month == 1)
-            return "JAN";
-        if(month == 2)
-            return "FEB";
-        if(month == 3)
-            return "MAR";
-        if(month == 4)
-            return "APR";
-        if(month == 5)
-            return "MAY";
-        if(month == 6)
-            return "JUN";
-        if(month == 7)
-            return "JUL";
-        if(month == 8)
-            return "AUG";
-        if(month == 9)
-            return "SEP";
-        if(month == 10)
-            return "OCT";
-        if(month == 11)
-            return "NOV";
-        if(month == 12)
-            return "DEC";
-        return "JAN";
     }
 
     public void openDatePicker(View view) {
