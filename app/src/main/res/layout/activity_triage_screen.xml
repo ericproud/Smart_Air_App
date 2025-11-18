@@ -173,6 +173,13 @@
             android:textAllCaps="true"
             android:enabled="false"
             android:textSize="16dp" />
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="40dp"
+            android:text="This is guidance, not a diagnosis. If in doubt, call emergency." />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
