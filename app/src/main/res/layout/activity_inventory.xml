@@ -12,14 +12,10 @@
         android:background="?attr/colorSurface"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:navigationIcon="@drawable/outline_arrow_back_24"
-        app:title="Some Text"
         app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge">
 
         <LinearLayout
@@ -37,150 +33,669 @@
         </LinearLayout>
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <com.google.android.material.card.MaterialCardView
-        style="?attr/materialCardViewElevatedStyle"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardBackgroundColor="@color/md_theme_primaryContainer"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialToolbar">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
+        <com.google.android.material.card.MaterialCardView
+            style="?attr/materialCardViewElevatedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardBackgroundColor="@color/md_theme_primaryContainer"
+            app:layout_constraintTop_toBottomOf="@+id/materialToolbar">
+
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Medicine Name"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="24dp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                <!--  VIEW -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:id="@+id/quickReliefView"
+                    >
 
-                <TextView
-                    android:layout_width="44dp"
-                    android:layout_height="wrap_content"
-                    android:text="45"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
-                    android:textSize="32dp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Quick-relief medicine"
+                        android:textColor="@color/md_theme_onPrimaryContainer"
+                        android:textSize="24dp"
+                        android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="/ 200 doses"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
-                    android:textSize="16dp" />
-            </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="22.5% available"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textStyle="italic" />
+                        <TextView
+                            android:layout_width="44dp"
+                            android:layout_height="wrap_content"
+                            android:text="45"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textSize="32dp"
+                            android:textStyle="bold" />
 
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/linear_progress_indicator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:indeterminate="false"
-                android:max="200"
-                android:progress="45"
-                app:indicatorColor="@color/md_theme_onPrimaryContainer"
-                app:indicatorTrackGapSize="0px"
-                app:trackColor="@color/md_theme_onPrimaryContainer_highContrast"
-                app:trackCornerRadius="16dp"
-                app:trackStopIndicatorSize="0dp"
-                app:trackThickness="32dp" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="/ 200 doses"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textSize="16dp" />
+                    </LinearLayout>
 
-            <TextView
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:text="Last purchased on: "
-                android:textColor="@color/md_theme_onPrimaryContainer" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="22.5% available"
+                        android:textColor="@color/md_theme_onPrimaryContainer"
+                        android:textStyle="italic" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="11/15/2025"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="24dp"
-                android:textStyle="bold" />
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:indeterminate="false"
+                        android:max="200"
+                        android:progress="45"
+                        app:indicatorColor="@color/md_theme_onPrimaryContainer"
+                        app:indicatorTrackGapSize="0px"
+                        app:trackColor="@color/md_theme_onPrimaryContainer_highContrast"
+                        app:trackCornerRadius="16dp"
+                        app:trackStopIndicatorSize="0dp"
+                        app:trackThickness="32dp" />
 
-            <TextView
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Expires on: "
-                android:textColor="@color/md_theme_onPrimaryContainer" />
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Last purchased on: "
+                        android:textColor="@color/md_theme_onPrimaryContainer" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="11/22/2025"
-                android:textColor="@color/md_theme_onPrimaryContainer"
-                android:textSize="24dp"
-                android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="11/15/2025"
+                        android:textColor="@color/md_theme_onPrimaryContainer"
+                        android:textSize="24dp"
+                        android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Expires on: "
+                        android:textColor="@color/md_theme_onPrimaryContainer" />
 
-                <TextView
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="11/22/2025"
+                        android:textColor="@color/md_theme_onPrimaryContainer"
+                        android:textSize="24dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="309dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reported by: "
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="parent"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" / "
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="child"
+                            android:textColor="@color/md_theme_outlineVariant"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!--  EDIT -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:id="@+id/quickReliefEdit"
+                    android:visibility="gone">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Medicine Name"/>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="32dp"
+                            android:textStyle="bold"
+                            android:hint="#"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="/"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textSize="16dp" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="44dp"
+                            android:layout_height="wrap_content"
+                            android:textSize="16dp"
+                            android:hint="total "/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" doses"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="22.5% available"
+                        android:textColor="@color/md_theme_onPrimaryContainer"
+                        android:textStyle="italic" />
+
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/linear_progress_indicator"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:indeterminate="false"
+                        android:max="200"
+                        android:progress="45"
+                        app:indicatorColor="@color/md_theme_onPrimaryContainer"
+                        app:indicatorTrackGapSize="0px"
+                        app:trackColor="@color/md_theme_onPrimaryContainer_highContrast"
+                        app:trackCornerRadius="16dp"
+                        app:trackStopIndicatorSize="0dp"
+                        app:trackThickness="32dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Select last purchased date"
+                        app:endIconMode="custom"
+                        app:endIconDrawable="@drawable/edit_calendar_24px"
+                        app:endIconContentDescription="Open Date Picker"
+                        style="?attr/textInputOutlinedStyle"
+                        android:layout_marginTop="16dp"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/quickReliefPurchased"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:inputType="none"
+                            android:textSize="14sp"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Select expiry date"
+                        app:endIconMode="custom"
+                        app:endIconDrawable="@drawable/edit_calendar_24px"
+                        app:endIconContentDescription="Open Date Picker"
+                        style="?attr/textInputOutlinedStyle"
+                        android:layout_marginTop="8dp">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/quickReliefExpires"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:inputType="none"
+                            android:textSize="14sp"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Reported by: "
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textSize="12dp" />
+
+                        <com.google.android.material.button.MaterialButtonToggleGroup
+                            android:id="@+id/toggleButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:singleSelection="true"
+                            app:selectionRequired="true"
+                            >
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/button1"
+                                style="?attr/materialButtonOutlinedStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minHeight="32dp"
+                                android:textSize="12dp"
+                                android:text="Parent"
+                                android:checked="true"
+                                />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/button2"
+                                style="?attr/materialButtonOutlinedStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:minHeight="32dp"
+                                android:textSize="12dp"
+                                android:text="Child" />
+
+                        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Reported by: "
-                    android:textColor="@color/md_theme_onPrimaryContainer"
-                    android:textSize="12dp" />
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/edit_24px"
+                    app:tint="@color/md_theme_onPrimaryContainer"
+                    android:id="@+id/quickReliefEditIcon"/>
+            </FrameLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="parent"
-                    android:textColor="@color/md_theme_onPrimaryContainer"
-                    android:textSize="16dp"
-                    android:textStyle="bold" />
+        </com.google.android.material.card.MaterialCardView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" / "
-                    android:textColor="@color/md_theme_onPrimaryContainer"
-                    android:textSize="16dp"
-                    android:textStyle="bold" />
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:cardBackgroundColor="@color/md_theme_secondaryContainer"
+                app:layout_constraintTop_toBottomOf="@+id/materialToolbar">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="child"
-                    android:textColor="@color/md_theme_outlineVariant"
-                    android:textSize="16dp"
-                    android:textStyle="bold" />
 
-            </LinearLayout>
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!--  VIEW -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:id="@+id/controllerView">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Controller medicine"
+                            android:textColor="@color/md_theme_onSecondaryContainer"
+                            android:textSize="24dp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="44dp"
+                                android:layout_height="wrap_content"
+                                android:text="45"
+                                android:textColor="@color/md_theme_onSecondaryContainer"
+                                android:textSize="32dp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="/ 200 doses"
+                                android:textColor="@color/md_theme_onSecondaryContainer"
+                                android:textSize="16dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="22.5% available"
+                            android:textColor="@color/md_theme_onSecondaryContainer"
+                            android:textStyle="italic" />
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:indeterminate="false"
+                            android:max="200"
+                            android:progress="45"
+                            app:indicatorColor="@color/md_theme_onSecondaryContainer"
+                            app:indicatorTrackGapSize="0px"
+                            app:trackColor="@color/md_theme_onSecondaryContainer_highContrast"
+                            app:trackCornerRadius="16dp"
+                            app:trackStopIndicatorSize="0dp"
+                            app:trackThickness="32dp" />
+
+                        <TextView
+                            style="@style/TextAppearance.AppCompat.Subhead"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="Last purchased on: "
+                            android:textColor="@color/md_theme_onSecondaryContainer" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="11/15/2025"
+                            android:textColor="@color/md_theme_onSecondaryContainer"
+                            android:textSize="24dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            style="@style/TextAppearance.AppCompat.Subhead"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Expires on: "
+                            android:textColor="@color/md_theme_onSecondaryContainer" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="11/22/2025"
+                            android:textColor="@color/md_theme_onSecondaryContainer"
+                            android:textSize="24dp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Reported by: "
+                                android:textColor="@color/md_theme_onSecondaryContainer"
+                                android:textSize="12dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="parent"
+                                android:textColor="@color/md_theme_onSecondaryContainer"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" / "
+                                android:textColor="@color/md_theme_onSecondaryContainer"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="child"
+                                android:textColor="@color/md_theme_outlineVariant"
+                                android:textSize="16dp"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/edit_24px"
+                        app:tint="@color/md_theme_onSecondaryContainer"
+                        android:id="@+id/controllerEditIcon"/>
+
+                    <!--  EDIT -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:visibility="gone"
+                        android:id="@+id/controllerEdit">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Medicine Name"/>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="32dp"
+                                android:textStyle="bold"
+                                android:hint="#"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="/"
+                                android:textColor="@color/md_theme_onPrimaryContainer"
+                                android:textSize="16dp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16dp"
+                                android:hint="total "/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" doses"/>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="22.5% available"
+                            android:textColor="@color/md_theme_onSecondaryContainer"
+                            android:textStyle="italic" />
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:indeterminate="false"
+                            android:max="200"
+                            android:progress="45"
+                            app:indicatorColor="@color/md_theme_onSecondaryContainer"
+                            app:indicatorTrackGapSize="0px"
+                            app:trackColor="@color/md_theme_onSecondaryContainer_highContrast"
+                            app:trackCornerRadius="16dp"
+                            app:trackStopIndicatorSize="0dp"
+                            app:trackThickness="32dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Select last purchased date"
+                            app:endIconMode="custom"
+                            app:endIconDrawable="@drawable/edit_calendar_24px"
+                            app:endIconContentDescription="Open Date Picker"
+                            style="?attr/textInputOutlinedStyle"
+                            android:layout_marginTop="16dp"
+                            >
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/controllerPurchased"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:clickable="true"
+                                android:inputType="none"
+                                android:textSize="14sp"
+                                />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Select expiry date"
+                            app:endIconMode="custom"
+                            app:endIconDrawable="@drawable/edit_calendar_24px"
+                            app:endIconContentDescription="Open Date Picker"
+                            style="?attr/textInputOutlinedStyle"
+                            android:layout_marginTop="8dp">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/controllerExpires"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:clickable="true"
+                                android:inputType="none"
+                                android:textSize="14sp"
+                                />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Reported by: "
+                                android:textColor="@color/md_theme_onPrimaryContainer"
+                                android:textSize="12dp" />
+
+                            <com.google.android.material.button.MaterialButtonToggleGroup
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:singleSelection="true"
+                                app:selectionRequired="true"
+                                >
+
+                                <com.google.android.material.button.MaterialButton
+                                    style="?attr/materialButtonOutlinedStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="32dp"
+                                    android:textSize="12dp"
+                                    android:text="Parent"
+                                    android:checked="true"
+                                    />
+
+                                <com.google.android.material.button.MaterialButton
+                                    style="?attr/materialButtonOutlinedStyle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="32dp"
+                                    android:textSize="12dp"
+                                    android:text="Child" />
+
+                            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </FrameLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
         </LinearLayout>
 
+    </ScrollView>
 
-    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,6 +31,12 @@
             android:exported="false" />
         <activity
             android:name=".StartScreen"
+            android:exported="false">
+        </activity>
+        <activity android:name=".LogRescueAttemptScreen"
+            android:exported="false">
+        </activity>
+        <activity android:name=".InventoryScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
