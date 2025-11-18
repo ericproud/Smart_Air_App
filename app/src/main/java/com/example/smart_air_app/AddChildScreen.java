@@ -2,24 +2,35 @@ package com.example.smart_air_app;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.user_classes.User;
+import com.example.smart_air_app.utils.DateValidator;
 import com.example.smart_air_app.utils.FormHelperFunctions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
 public class AddChildScreen extends AppCompatActivity {
+    FirebaseAuth mAuth;
     private DatePickerDialog datePickerDialog;
     private Button inputDOBButton;
     private Button createAccountButton;
@@ -41,6 +52,7 @@ public class AddChildScreen extends AppCompatActivity {
             return insets;
         });
         initDatePicker();
+        mAuth = FirebaseAuth.getInstance();
         inputFirstName = findViewById(R.id.inputChildFirstName);
         inputLastName = findViewById(R.id.inputChildLastName);
         inputHeight = findViewById(R.id.inputChildHeight);
@@ -55,26 +67,42 @@ public class AddChildScreen extends AppCompatActivity {
     }
 
     private void createAccount() {
-        boolean emptyInputField =
-                !(      FormHelperFunctions.handleEmpty(inputFirstName) &
-                        FormHelperFunctions.handleEmpty(inputLastName) &
-                        FormHelperFunctions.handleEmpty(inputHeight) &
-                        FormHelperFunctions.handleEmpty(inputWeight) &
-                        FormHelperFunctions.handleEmpty(inputUsername) &
+        boolean invalidField =
+                (      FormHelperFunctions.handleEmpty(inputFirstName) ||
+                        FormHelperFunctions.handleEmpty(inputLastName) ||
+                        FormHelperFunctions.handleEmpty(inputHeight) ||
+                        FormHelperFunctions.handleEmpty(inputWeight) ||
+                        !DateValidator.isValidDate(inputDOBButton.getText().toString().trim()) ||
+                        FormHelperFunctions.handleInvalidUsername(inputUsername) ||
                         FormHelperFunctions.handleEmpty(inputPassword)
                 );
 
-        if (emptyInputField) return;
+        if (invalidField) return;
 
         String firstName = inputFirstName.getText().toString().trim();
         String lastName = inputLastName.getText().toString().trim();
         String height = inputHeight.getText().toString().trim();
         String weight = inputWeight.getText().toString().trim();
+        String DOB = inputDOBButton.getText().toString().trim();
         String username = inputUsername.getText().toString().trim();
         String password = inputPassword.getText().toString().trim();
-        String DOB = inputDOBButton.getText().toString().trim();
 
-        // submit to firebase
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            String uID = mAuth.getCurrentUser().getUid();
+                            User newUser = new User("doctor", firstName, lastName, uID);
+                            FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newUser);
+                            startActivity(new Intent(RegisterAsDoctor.this, LoginScreen.class));
+                            finish();
+                        } else {
+                            Toast.makeText(RegisterAsDoctor.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private String getTodaysDate() {
