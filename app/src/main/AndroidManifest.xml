@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,6 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
         <activity
             android:name=".TriageScreen"
             android:exported="false" />
@@ -27,9 +29,6 @@
             android:name=".ManageChildAccount"
             android:exported="false" />
         <activity
-            android:name=".StartScreen"
-            android:exported="false" />
-        <activity
             android:name=".ParentHomeScreen"
             android:exported="false" />
         <activity
@@ -37,13 +36,7 @@
             android:exported="false" />
         <activity
             android:name=".StreaksAndBadges"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".DoctorHomeScreen"
             android:exported="false" />
@@ -51,30 +44,24 @@
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".DailyCheckInScreen"
-            android:exported="false">
-        </activity>
+            android:name=".DailyCheckIn"
+            android:exported="false" />
         <activity
             android:name=".AddChildScreen"
             android:exported="false" />
-            android:exported="false">
-        </activity>
         <activity
             android:name=".InventoryScreen"
-            android:exported="false">
-        </activity>
-        <activity android:name=".LogRescueAttemptScreen"
-            android:exported="false">
-        </activity>
-        <activity android:name="."
+            android:exported="false" />
+        <activity
+            android:name=".LogRescueAttemptScreen"
+            android:exported="false" />
+        <activity
             android:name=".StartScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="false" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
-
 </manifest>
