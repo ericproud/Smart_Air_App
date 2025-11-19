@@ -18,7 +18,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Calendar;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ControllerLoggingScreen extends AppCompatActivity {
 
@@ -38,6 +37,8 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         Button timeSelector = findViewById(R.id.timeButton);
         Spinner medicineSpinner = findViewById(R.id.medicineSpinner);
         TextView doseAmount = findViewById(R.id.amountInputText);
+        Spinner feelingSpinner = findViewById(R.id.feelingSpinner);
+        Spinner rescueSpinner = findViewById(R.id.rescueSpinner);
         Button techniqueHelperRedirect = findViewById(R.id.techniqueHelperButton);
         TextView preController = findViewById(R.id.preControllerInput);
         TextView postController = findViewById(R.id.postControllerInput);
@@ -49,6 +50,10 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
         //this is used for the medicineSpinner get from database.
         String[] medicine_to_choose = {"a", "b", "c"};
+
+        String[] feeling = {"Better", "Same", "Worse"};
+
+        String[] options = {"Controller", "Rescue"};
 
         //get from the database
         //this is used to display the current personal best
@@ -64,8 +69,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
         timeSelector.setOnClickListener(v->{
             //temp is the time chosen by showTimePopup
-            String temp = showTimePopup();
-            System.out.println(temp);
+            showTimePopup();
         });
 
         //using an adapter to use the spinner/add choices
@@ -77,7 +81,41 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         medicineSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println(medicine_to_choose[position]);
+                Toast.makeText(ControllerLoggingScreen.this, medicine_to_choose[position], Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        //using an adapter to use the spinner/add choices
+        ArrayAdapter<String> feelingAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, feeling);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        feelingSpinner.setAdapter(feelingAdapter);
+
+        feelingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(ControllerLoggingScreen.this, feeling[position], Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        //using an adapter to use the spinner/add choices
+        ArrayAdapter<String> rescueAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item, options);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        rescueSpinner.setAdapter(rescueAdapter);
+
+        rescueSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(ControllerLoggingScreen.this, options[position], Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -87,7 +125,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
         techniqueHelperRedirect.setOnClickListener(v-> {
             //redirect to the technique helper page once that's done
-            System.out.println("redirect to technique helper");
+            Toast.makeText(this, "redirect to technique helper page", Toast.LENGTH_SHORT).show();
         });
 
         personalBest.setText("Current Personal Best: " + personal_best);
@@ -108,7 +146,14 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             int postInputAmount = intParser(postInput);
             int newPersonalBestInputAmount = intParser(newPersonalBestInput);
 
-            System.out.println(doseInputAmount + " " + preInputAmount + " " + postInputAmount + " " + newPersonalBestInputAmount);
+            if (doseInputAmount == -69) {
+                Toast.makeText(this, "invalid dose input amount", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(this, "valid dose given", Toast.LENGTH_SHORT).show();
+            }
+
+            Toast.makeText(this, doseInputAmount + " " + preInputAmount + " " + postInputAmount + " " + newPersonalBestInputAmount, Toast.LENGTH_SHORT).show();
         });
 
         //exit page if back button is clicked
@@ -117,19 +162,19 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
     private int intParser(String input) {
         if (input.isEmpty()) {
-            System.out.println("empty input detected");
+            //Toast.makeText(this, "empty input given", Toast.LENGTH_SHORT).show();
         }
 
         try {
             int ans = Integer.parseInt(input);
             if (ans < 0) {
-                System.out.println("negative input given");
+                Toast.makeText(this, "negative input given", Toast.LENGTH_SHORT).show();
                 return -69;
             }
             return ans;
         }
         catch (NumberFormatException e) {
-            System.out.println("bad input given");
+            //Toast.makeText(this, "bad input given", Toast.LENGTH_SHORT).show();
             return -69;
         }
     }
@@ -148,6 +193,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
                     //these lines are what we do with the selected time, the rest of this code is the constructor
                     time[0] = selectedHour + ":" + selectedMinute;
                     timeChosen.setText("Selected Time: " + time[0]);
+                    Toast.makeText(ControllerLoggingScreen.this, time[0], Toast.LENGTH_SHORT).show();
                 }, hour, minute, true
                 );
         dialog.show();

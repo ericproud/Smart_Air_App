@@ -30,7 +30,7 @@
         android:id="@+id/timeButton"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="7dp"
         android:text="Select Time"
         app:layout_constraintEnd_toStartOf="@+id/selectedTimeText"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +40,7 @@
         android:id="@+id/selectedTimeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="25dp"
         android:text="Selected Time: "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/timeButton"
@@ -49,10 +49,10 @@
     <Spinner
         android:id="@+id/medicineSpinner"
         android:layout_width="300dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
         app:layout_constraintTop_toBottomOf="@+id/timeButton" />
 
     <EditText
@@ -75,7 +75,7 @@
         android:text="Technique Helper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amountInputText" />
+        app:layout_constraintTop_toBottomOf="@+id/rescueSpinner" />
 
     <TextView
         android:id="@+id/PEFText"
@@ -111,7 +111,7 @@
         android:id="@+id/currentBest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="35dp"
         android:text="Current Personal Best:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +121,7 @@
         android:id="@+id/setPersonalBestText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="30dp"
         android:text="Set Personal Best: "
         app:layout_constraintEnd_toStartOf="@+id/personalBestInput"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,27 +142,28 @@
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="7dp"
         android:text="Submit"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toBottomOf="@+id/currentZoneText" />
 
     <Button
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="7dp"
         android:text="Back"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/submitButton"
+        app:layout_constraintHorizontal_bias="0.068"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submitButton" />
+        app:layout_constraintTop_toBottomOf="@+id/currentZoneText" />
 
     <EditText
         android:id="@+id/personalBestInput"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="23dp"
         android:ems="10"
         android:hint="new highest score"
         android:inputType="numberDecimal"
@@ -193,5 +194,53 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/preControllerUseText"
         app:layout_constraintTop_toBottomOf="@+id/PEFText" />
+
+    <Spinner
+        android:id="@+id/feelingSpinner"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/label2"
+        app:layout_constraintTop_toBottomOf="@+id/amountInputText" />
+
+    <TextView
+        android:id="@+id/label2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Breath Rating:"
+        app:layout_constraintEnd_toStartOf="@+id/feelingSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/amountInputText" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toStartOf="@+id/medicineSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeButton" />
+
+    <Spinner
+        android:id="@+id/rescueSpinner"
+        android:layout_width="250dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/label3"
+        app:layout_constraintTop_toBottomOf="@+id/feelingSpinner" />
+
+    <TextView
+        android:id="@+id/label3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:text="Controller or Rescue:"
+        app:layout_constraintEnd_toStartOf="@+id/rescueSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
