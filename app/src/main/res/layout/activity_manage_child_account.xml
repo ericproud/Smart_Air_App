@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ManageChildAccount">
+
+    <TextView
+        android:id="@+id/searchForPatients12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Revoke access"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients10" />
+
+    <Button
+        android:id="@+id/generateOTCButton"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#673AB7"
+        android:text="GENERATE ONE TIME CODE"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/share" />
+
+    <Button
+        android:id="@+id/revokeProviderAccessButton"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#673AB7"
+        android:text="REVOKE PROVIDER ACCESS"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients13" />
+
+    <TextView
+        android:id="@+id/searchForPatients8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Additional notes"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text=" Share account with doctor"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchBox" />
+
+    <TextView
+        android:id="@+id/OTCText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="________________"
+        android:textColor="#E91E63"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/generateOTCButton" />
+
+    <TextView
+        android:id="@+id/searchForPatients10"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Give this code to your doctor within 7 days to share this account"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/OTCText" />
+
+    <TextView
+        android:id="@+id/searchForPatients13"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Revoking access will remove all permissions granted by sharing this account immediately"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients12" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="411dp"
+        android:layout_height="wrap_content"
+        android:background="#673AB7"
+        android:paddingStart="5sp"
+        android:text="MANAGE ACCOUNT"
+        android:textAlignment="center"
+        android:textColor="#FFFDFD"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchBox"
+        android:layout_width="320dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients8">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/additionalNotes"
+            android:layout_width="match_parent"
+            android:layout_height="150dp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
