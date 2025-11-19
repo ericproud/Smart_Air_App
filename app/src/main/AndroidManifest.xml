@@ -36,7 +36,7 @@
         <activity android:name=".LogRescueAttemptScreen"
             android:exported="false">
         </activity>
-        <activity android:name=".InventoryScreen"
+        <activity android:name=".DailyCheckIn"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

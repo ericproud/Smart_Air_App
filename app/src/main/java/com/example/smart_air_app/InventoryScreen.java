@@ -36,7 +36,7 @@ public class InventoryScreen extends AppCompatActivity {
         ImageView quickReliefEditButton = findViewById(R.id.quickReliefEditIcon);
 
         var controllerViewLayout = findViewById(R.id.controllerView);
-        var  controllerEditLayout = findViewById(R.id.controllerEdit);
+        var controllerEditLayout = findViewById(R.id.controllerEdit);
         ImageView  controllerEditButton = findViewById(R.id.controllerEditIcon);
 
         final boolean[] isEditMode = {false, false};
