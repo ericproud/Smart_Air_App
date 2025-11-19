@@ -33,10 +33,10 @@
             android:name=".ControllerScheduleScreen"
             android:exported="false" />
         <activity
-            android:name=".ControllerLoggingScreen"
+            android:name=".StartScreen"
             android:exported="false" />
         <activity
-            android:name=".StartScreen"
+            android:name=".ControllerLoggingScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

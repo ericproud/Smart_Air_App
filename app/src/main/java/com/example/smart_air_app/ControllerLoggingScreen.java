@@ -63,7 +63,6 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         });
 
         timeSelector.setOnClickListener(v->{
-            Toast.makeText(this, "Button clicked!", Toast.LENGTH_SHORT).show();
             //temp is the time chosen by showTimePopup
             String temp = showTimePopup();
             System.out.println(temp);
@@ -137,8 +136,6 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
     //method to get the popup to choose time
     private String showTimePopup() {
-        Toast.makeText(this, "showTimePopup entered!", Toast.LENGTH_SHORT).show();
-
         Calendar c = Calendar.getInstance();
         //set default time or start time to the current time
         int hour = c.get(Calendar.HOUR_OF_DAY);
