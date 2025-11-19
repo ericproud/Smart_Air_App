@@ -42,7 +42,22 @@
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
+            android:name=".DailyCheckInStartScreen"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".AddChildScreen"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".InventoryScreen"
+            android:exported="false">
+        </activity>
+        <activity android:name=".LogRescueAttemptScreen"
+            android:exported="false">
+        </activity>
+        <activity android:name="."
+            android:name=".StartScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

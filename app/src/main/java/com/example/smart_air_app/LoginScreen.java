@@ -26,12 +26,9 @@ public class LoginScreen extends AppCompatActivity {
 
         Button backButton = findViewById(R.id.buttonLoginBack);
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginScreen.this, StartScreen.class);
-                startActivity(intent);
-            }
+        backButton.setOnClickListener(view -> {
+            Intent intent = new Intent(LoginScreen.this, StartScreen.class);
+            startActivity(intent);
         });
     }
 }
