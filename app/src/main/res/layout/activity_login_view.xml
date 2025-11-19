@@ -14,12 +14,12 @@
         tools:context=".LoginScreen">
 
         <EditText
-            android:id="@+id/inputLoginEmail"
+            android:id="@+id/inputLoginUsernameOrEmail"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:ems="10"
+            android:hint="Email or Username"
             android:inputType="text"
-            android:text="Email"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
@@ -39,13 +39,26 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.231" />
 
+        <TextView
+            android:id="@+id/AuthFailedText"
+            android:layout_width="wrap_content"
+            android:layout_height="29dp"
+            android:text="Login failed, please try again"
+            android:textAlignment="center"
+            android:textColor="#F44336"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/inputLoginUsernameOrEmail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <EditText
-            android:id="@+id/inputPassword"
+            android:id="@+id/inputLoginPassword"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:ems="10"
+            android:hint="Password"
             android:inputType="text"
-            android:text="Password"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
@@ -54,7 +67,7 @@
             app:layout_constraintVertical_bias="0.499" />
 
         <Button
-            android:id="@+id/buttonLogin"
+            android:id="@+id/LoginButton"
             android:layout_width="129dp"
             android:layout_height="68dp"
             android:text="Log in"
