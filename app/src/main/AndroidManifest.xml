@@ -48,7 +48,7 @@
             android:name=".ParentOnboardingScreen3"
             android:exported="false" />
         <activity
-            android:name=".StartScreen"
+            android:name=".ProviderOnboardingScreen1"
             android:exported="false" />
         <activity
             android:name=".ProviderOnboardingScreen2"
@@ -57,7 +57,7 @@
             android:name=".ProviderOnboardingScreen3"
             android:exported="false" />
         <activity
-            android:name=".ProviderOnboardingScreen1"
+            android:name=".StartScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
