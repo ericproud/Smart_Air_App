@@ -24,7 +24,7 @@
             android:name=".ManageChildAccount"
             android:exported="false" />
         <activity
-            android:name=".StartScreen"
+            android:name=".AddChildScreen"
             android:exported="false" />
         <activity
             android:name=".ParentHomeScreen"
@@ -39,7 +39,13 @@
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".AddChildScreen"
+            android:name=".CheckinHistoryScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ViewHistoryScreen"
+            android:exported="false" />
+        <activity
+            android:name=".StartScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
