@@ -29,6 +29,9 @@
             android:name=".ManageChildAccount"
             android:exported="false" />
         <activity
+            android:name=".AddChildScreen"
+            android:exported="false" />
+        <activity
             android:name=".ParentHomeScreen"
             android:exported="false" />
         <activity
@@ -44,6 +47,12 @@
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
+            android:name=".CheckinHistoryScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ViewHistoryScreen"
+            android:exported="false" />
+              <activity
             android:name=".DailyCheckIn"
             android:exported="false" />
         <activity
