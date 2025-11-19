@@ -36,17 +36,27 @@
             android:name=".ChildHomeScreen"
             android:exported="false" />
         <activity
+            android:name=".StreaksAndBadges"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".DoctorHomeScreen"
             android:exported="false" />
         <activity
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".DailyCheckInStartScreen"
+            android:name=".DailyCheckInScreen"
             android:exported="false">
         </activity>
         <activity
             android:name=".AddChildScreen"
+            android:exported="false" />
             android:exported="false">
         </activity>
         <activity
@@ -62,9 +72,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="false" />
