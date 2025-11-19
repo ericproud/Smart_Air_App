@@ -30,6 +30,12 @@
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
+            android:name=".ControllerLoggingScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ControllerScheduleScreen"
+            android:exported="false" />
+        <activity
             android:name=".StartScreen"
             android:exported="true">
             <intent-filter>
