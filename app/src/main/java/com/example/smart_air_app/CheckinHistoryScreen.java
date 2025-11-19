@@ -9,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -76,34 +75,36 @@ public class CheckinHistoryScreen extends AppCompatActivity {
         triggerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         triggerSpinner.setAdapter(triggerAdapter);
 
+        //handles selecting a symptom
         symptomSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            //handles when a user selects an option
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 symptomSelected = symptoms[position];
-                Toast.makeText(CheckinHistoryScreen.this, "Symptom Selected: " + symptomSelected, Toast.LENGTH_SHORT).show();
                 symptomLabel.setText("Symptom Selected: " + symptomSelected);
             }
 
+            //handles when a user doesn't select an option
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 symptomSelected = "None";
-                Toast.makeText(CheckinHistoryScreen.this, "no symptom selected", Toast.LENGTH_SHORT).show();
                 symptomLabel.setText("Symptom Selected: " + symptomSelected);
             }
         });
 
+        //handles selecting a trigger
         triggerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            //handles what happens when a user chooses an option
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 triggerSelected = triggers[position];
-                Toast.makeText(CheckinHistoryScreen.this, "Trigger Selected: " + triggerSelected, Toast.LENGTH_SHORT).show();
                 triggerLabel.setText("Trigger Selected: " + triggerSelected);
             }
 
+            //handles what happens when a user doesn't choose an option
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 triggerSelected = "None";
-                Toast.makeText(CheckinHistoryScreen.this, "no trigger selected", Toast.LENGTH_SHORT).show();
                 triggerLabel.setText("Trigger Selected: " + triggerSelected);
             }
         });
@@ -119,7 +120,6 @@ public class CheckinHistoryScreen extends AppCompatActivity {
                     this,
                     (view, selectedYear, selectedMonth, selectedDay) -> {
                         startSelected = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
-                        Toast.makeText(CheckinHistoryScreen.this, "date selected: " + startSelected, Toast.LENGTH_SHORT).show();
                         startDateLabel.setText("Start Date Selected: " + startSelected);
                         startDate = Calendar.getInstance();
                         startDate.set(selectedYear, selectedMonth, selectedDay);
@@ -134,6 +134,7 @@ public class CheckinHistoryScreen extends AppCompatActivity {
             dateSelection.show();
         });
 
+        //resets the start date to "None"
         startDateResetButton.setOnClickListener(v->{
             startSelected = "None";
             startDateLabel.setText("Start Date Selected: " + startSelected);
@@ -151,7 +152,6 @@ public class CheckinHistoryScreen extends AppCompatActivity {
                     this,
                     (view, selectedYear, selectedMonth, selectedDay) -> {
                         endSelected = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
-                        Toast.makeText(CheckinHistoryScreen.this, "date selected: " + endSelected, Toast.LENGTH_SHORT).show();
                         endDateLabel.setText("Start Date Selected: " + endSelected);
                         endDate = Calendar.getInstance();
                         endDate.set(selectedYear, selectedMonth, selectedDay);
@@ -166,28 +166,27 @@ public class CheckinHistoryScreen extends AppCompatActivity {
             dateSelection.show();
         });
 
+        //resets the end date to "None"
         endDateResetButton.setOnClickListener(v->{
             endSelected = "None";
             endDateLabel.setText("End Date Selected: " + endSelected);
             endDate = null;
         });
 
+        //exits the page
         backButton.setOnClickListener(v->{
             finish();
         });
 
         viewHistoryButton.setOnClickListener(v->{
+            //as symptoms and triggers are option, all we care about are 2 valid dates selected.
             if (!startSelected.equals("None") && !endSelected.equals("None")) {
-                Toast.makeText(this, "entering view history", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(CheckinHistoryScreen.this, ViewHistoryScreen.class);
                 intent.putExtra("Symptom", symptomSelected);
                 intent.putExtra("Trigger", triggerSelected);
                 intent.putExtra("Start", startSelected);
                 intent.putExtra("End", endSelected);
                 startActivity(intent);
-            }
-            else {
-                Toast.makeText(this, "one of the dates is invalid", Toast.LENGTH_SHORT).show();
             }
         });
     }

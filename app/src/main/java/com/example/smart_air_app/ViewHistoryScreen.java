@@ -48,6 +48,7 @@ public class ViewHistoryScreen extends AppCompatActivity {
                 + ", start: " + startDate + ", end: " + endDate, Toast.LENGTH_SHORT).show();
 
         Button backButton = findViewById(R.id.backButton);
+        //exits if we click the back button
         backButton.setOnClickListener(v -> finish());
 
         //this array is exactly what's printed/displayed so you will need to format it however you want
@@ -56,6 +57,7 @@ public class ViewHistoryScreen extends AppCompatActivity {
         String[] matches = {"if", "you", "are", "reading", "these", "messages", "someone", "hasn't", "done", "their", "story", "points"
         , "hopefully", "they", "get", "done", "soon", "or", "else", "heads", "will", "roll"};
 
+        //handles the recycler view
         RecyclerView controllerSchedule = findViewById(R.id.historyMatches);
         controllerSchedule.setLayoutManager(new LinearLayoutManager(this));
         controllerSchedule.setAdapter(new CustomStringAdapter(matches));
