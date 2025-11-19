@@ -33,7 +33,7 @@
         tools:layout_editor_absoluteX="89dp" />
 
     <Button
-        android:id="@+id/childLogControllerUsage"
+        android:id="@+id/parentLogControllerUsageButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
         android:layout_marginStart="55dp"
@@ -43,14 +43,14 @@
         android:text="LOG CONTROLLER USAGE"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/childLogRescueAttempt"
+        app:layout_constraintBottom_toTopOf="@+id/parentLogRescueAttemptButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childDailyCheckIn" />
+        app:layout_constraintTop_toBottomOf="@+id/parentDailyCheckInButton" />
 
     <Button
-        android:id="@+id/parentChildSummaryCharts"
+        android:id="@+id/parentSummaryChartsButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
         android:layout_marginTop="10dp"
@@ -61,10 +61,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/streaksAndBadges" />
+        app:layout_constraintTop_toBottomOf="@+id/parentStreaksAndBadgesButton" />
 
     <Button
-        android:id="@+id/childEmergencyTriage"
+        android:id="@+id/parentManageAccountButton"
+        android:layout_width="300dp"
+        android:layout_height="70sp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#673AB7"
+        android:text="MANAGE ACCOUNT"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/parentSummaryChartsButton" />
+
+    <Button
+        android:id="@+id/parentEmergencyTriageButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
         android:layout_marginStart="55dp"
@@ -74,14 +88,14 @@
         android:text="EMERGENCY TRIAGE"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/parentChildInventory"
+        app:layout_constraintBottom_toTopOf="@+id/parentInventoryButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childLogRescueAttempt" />
+        app:layout_constraintTop_toBottomOf="@+id/parentLogRescueAttemptButton" />
 
     <Button
-        android:id="@+id/childDailyCheckIn"
+        android:id="@+id/parentDailyCheckInButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
         android:layout_marginStart="55dp"
@@ -91,14 +105,14 @@
         android:text="DAILY CHECK IN"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/childLogControllerUsage"
+        app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/childLogRescueAttempt"
+        android:id="@+id/parentLogRescueAttemptButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
         android:layout_marginStart="55dp"
@@ -109,14 +123,14 @@
         android:text="LOG RESCUE ATTEMPT"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/childEmergencyTriage"
+        app:layout_constraintBottom_toTopOf="@+id/parentEmergencyTriageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childLogControllerUsage" />
+        app:layout_constraintTop_toBottomOf="@+id/parentLogControllerUsageButton" />
 
     <Button
-        android:id="@+id/parentChildInventory"
+        android:id="@+id/parentInventoryButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
         android:layout_marginStart="55dp"
@@ -126,14 +140,14 @@
         android:text="INVENTORY"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/streaksAndBadges"
+        app:layout_constraintBottom_toTopOf="@+id/parentStreaksAndBadgesButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childEmergencyTriage" />
+        app:layout_constraintTop_toBottomOf="@+id/parentEmergencyTriageButton" />
 
     <Button
-        android:id="@+id/streaksAndBadges"
+        android:id="@+id/parentStreaksAndBadgesButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
         android:layout_marginStart="55dp"
@@ -146,7 +160,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parentChildInventory" />
+        app:layout_constraintTop_toBottomOf="@+id/parentInventoryButton" />
 
     />
 
