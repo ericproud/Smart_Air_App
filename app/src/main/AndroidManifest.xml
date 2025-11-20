@@ -56,9 +56,6 @@
             android:name=".DailyCheckIn"
             android:exported="false" />
         <activity
-            android:name=".AddChildScreen"
-            android:exported="false" />
-        <activity
             android:name=".InventoryScreen"
             android:exported="false" />
         <activity
