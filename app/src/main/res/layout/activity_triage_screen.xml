@@ -95,24 +95,27 @@
             android:text="Red flags: Select all that apply" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup2"
+            android:id="@+id/redFlagsGroup"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             app:chipSpacingVertical="0dp">
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/btnNoFullSentences"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Can't speak full sentences" />
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/btnRetractions"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Retractions (chest pulling in)" />
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/btnBlueGray"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -166,15 +169,16 @@
             android:textSize="16dp" />
 
         <Button
+            android:id="@+id/btnEmergency"
             style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="32dp"
+            android:enabled="false"
             android:text="Call Emergency Now"
             android:textAllCaps="true"
-            android:enabled="false"
             android:textSize="16dp" />
 
         <TextView
