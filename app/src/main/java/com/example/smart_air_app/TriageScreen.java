@@ -2,12 +2,12 @@ package com.example.smart_air_app;
 
 import android.os.Bundle;
 import android.widget.Button;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.view.View;
 
 import com.google.android.material.chip.ChipGroup;
 
@@ -36,5 +36,12 @@ public class TriageScreen extends AppCompatActivity {
             }
             emergencyBtn.setEnabled(emergencyStatus); // enable emergency btn when red flag checked
         });
+
+
     }
+
+    public void emergencyButtonPressed(View view) {
+        System.out.println("Hello");
+    }
+
 }
