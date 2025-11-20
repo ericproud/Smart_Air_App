@@ -72,9 +72,13 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="168dp"
         android:layout_height="147dp"
-        tools:layout_editor_absoluteX="82dp"
-        tools:layout_editor_absoluteY="161dp"
-        app:cardBackgroundColor="?attr/colorSurfaceContainerHigh">
+        android:layout_marginStart="82dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginEnd="161dp"
+        app:cardBackgroundColor="?attr/colorSurfaceContainerHigh"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialToolbar">
 
         <Button
             style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
