@@ -331,7 +331,7 @@
                             >
 
                             <com.google.android.material.button.MaterialButton
-                                android:id="@+id/button1"
+                                android:id="@+id/btnRescueYes"
                                 style="?attr/materialButtonOutlinedStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -342,7 +342,7 @@
                                 />
 
                             <com.google.android.material.button.MaterialButton
-                                android:id="@+id/button2"
+                                android:id="@+id/btnRescueNo"
                                 style="?attr/materialButtonOutlinedStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
