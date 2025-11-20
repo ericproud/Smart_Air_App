@@ -21,6 +21,12 @@ public class TriageEntry {
         PEF = -1;
     }
 
+    public TriageEntry(boolean[] redFlags, boolean recentRescue, double PEF) {
+        this.redFlags = redFlags;
+        this.recentRescue = recentRescue;
+        this.PEF = PEF;
+    }
+
     public int getTriageID() {
         return triageID;
     }
