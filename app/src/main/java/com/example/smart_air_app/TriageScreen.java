@@ -11,11 +11,17 @@ import android.view.View;
 
 import com.example.smart_air_app.triage.TriageEntry;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
 public class TriageScreen extends AppCompatActivity {
+
+    boolean inputIsValid() {
+        // Returns true when form input is valid
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +36,26 @@ public class TriageScreen extends AppCompatActivity {
 
         ChipGroup redFlagsGroup = findViewById(R.id.redFlagsGroup);
         Button emergencyBtn = findViewById(R.id.btnEmergency);
+        Button homeStepsBtn = findViewById(R.id.btnHomeSteps);
+        MaterialButton btnRescueYes = findViewById(R.id.btnRescueYes);
+        MaterialButton btnRescueNo = findViewById(R.id.btnRescueNo);
+        MaterialButtonToggleGroup btnRescueGroup = findViewById(R.id.btnRescueGroup);
 
         redFlagsGroup.setOnCheckedStateChangeListener((chipGroup, checkedIds) -> {
-            boolean emergencyStatus = false; // true when one of the red flags is checked
-            if (checkedIds.isEmpty()) {
-                emergencyStatus = false;
-            } else {
-                emergencyStatus = true;
+            if (inputIsValid()) {
+                boolean emergencyStatus = false; // true when one of the red flags is checked
+                if (checkedIds.isEmpty()) {
+                    emergencyStatus = false;
+                } else {
+                    emergencyStatus = true;
+                }
+                emergencyBtn.setEnabled(emergencyStatus); // enable emergency btn when red flag checked
+                homeStepsBtn.setEnabled(!emergencyStatus); // enable home steps btn when no red flag checked
             }
-            emergencyBtn.setEnabled(emergencyStatus); // enable emergency btn when red flag checked
+        });
+
+        btnRescueGroup.addOnButtonCheckedListener((toggleGroup, checkedId, isChecked) -> {
+
         });
 
     }
@@ -61,7 +78,7 @@ public class TriageScreen extends AppCompatActivity {
         Chip redFlag2 = findViewById(R.id.btnBlueGray);
         boolean[] redFlags = {redFlag0.isChecked(), redFlag1.isChecked(), redFlag2.isChecked()};
 
-        // At least one of yes/no must be checked. Only check for btnRescueYes!!!!!!!!!!!!!!!!
+        // At least one of yes/no must be checked. Only check for btnRescueYes
         MaterialButton btnRescueYes = findViewById(R.id.btnRescueYes);
         boolean recentRescue = btnRescueYes.isChecked();
 

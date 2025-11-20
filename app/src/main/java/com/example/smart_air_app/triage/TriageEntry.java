@@ -22,6 +22,8 @@ public class TriageEntry {
     }
 
     public TriageEntry(boolean[] redFlags, boolean recentRescue, double PEF) {
+        triageID = numTriages;
+        numTriages++;
         this.redFlags = redFlags;
         this.recentRescue = recentRescue;
         this.PEF = PEF;
