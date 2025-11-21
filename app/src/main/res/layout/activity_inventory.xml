@@ -94,7 +94,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="/ 200 doses"
+                            android:text="/ 200 puffs"
                             android:textColor="@color/md_theme_onPrimaryContainer"
                             android:textSize="16dp" />
                     </LinearLayout>
@@ -205,7 +205,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Medicine Name"/>
+                        android:hint="Medicine Name" />
 
 
                     <LinearLayout
@@ -219,7 +219,8 @@
                             android:layout_height="wrap_content"
                             android:textSize="32dp"
                             android:textStyle="bold"
-                            android:hint="#"/>
+                            android:hint="#"
+                            android:inputType="number"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -232,7 +233,8 @@
                             android:layout_width="44dp"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
-                            android:hint="total "/>
+                            android:hint="total "
+                            android:inputType="number"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -418,7 +420,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="/ 200 doses"
+                                android:text="/ 200 puffs"
                                 android:textColor="@color/md_theme_onSecondaryContainer"
                                 android:textSize="16dp" />
                         </LinearLayout>
@@ -555,7 +557,8 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="32dp"
                                 android:textStyle="bold"
-                                android:hint="#"/>
+                                android:hint="#"
+                                android:inputType="number"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -568,7 +571,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
-                                android:hint="total "/>
+                                android:hint="total "
+                                android:inputType="number"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
