@@ -6,12 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class StreaksAndBadges extends AppCompatActivity {
     /// /////////////I need two int here, one is login days, the other is the number of something el
     /// that can be bundeled for a badges ( i.e. number of t excersises done)
-    int login_streak = 99;
+    int login_streak = 85;
     int exercise = 0;
     @Override
     protected void onCreate( Bundle savedInstanceState){
@@ -33,7 +34,7 @@ public class StreaksAndBadges extends AppCompatActivity {
             public void onClick(View v) {
                 // 3. Show the Toast message
                 Toast.makeText(StreaksAndBadges.this,
-                        "you have a " + login_streak + " day login streak",
+                        "you have a " + login_streak + " day login streak" ,
                         Toast.LENGTH_SHORT).show();
             }
         });
@@ -56,6 +57,10 @@ public class StreaksAndBadges extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         });
+        TextView daysStreak = findViewById(R.id.streakNumber);
+        daysStreak.setText( "You have " + login_streak + " days of login streak" +
+                 "\n" + "and " + exercise + " days of controlled excersice" );
+
 
 
     }

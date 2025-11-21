@@ -39,7 +39,12 @@
             android:exported="false" />
         <activity
             android:name=".StreaksAndBadges"
-            android:exported="false" />
+            android:exported="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
         <activity
             android:name=".DoctorHomeScreen"
             android:exported="false" />
@@ -62,9 +67,6 @@
             android:name=".DailyCheckIn"
             android:exported="false" />
         <activity
-            android:name=".AddChildScreen"
-            android:exported="false" />
-        <activity
             android:name=".InventoryScreen"
             android:exported="false" />
         <activity
@@ -72,11 +74,10 @@
             android:exported="false" />
         <activity
             android:name=".StartScreen"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false"/>
+        <activity
+            android:name=".VideoSBSInhallerUse"
+            android:exported="false" />
+
     </application>
 </manifest>
