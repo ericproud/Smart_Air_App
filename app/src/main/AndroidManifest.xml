@@ -12,7 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
         <activity
-            android:name=".login_module.LoginView"
+            android:name=".RegisterAsDoctor"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterAsParent"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterAsParent"
             android:exported="false" />
         <activity
             android:name=".TemplateActivity"
