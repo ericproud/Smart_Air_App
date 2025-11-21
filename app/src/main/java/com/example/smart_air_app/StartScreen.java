@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.view.View;
 import android.content.Intent;
 
+import com.example.smart_air_app.login_module.LoginView;
+
 
 public class StartScreen extends AppCompatActivity {
 
@@ -30,7 +32,7 @@ public class StartScreen extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(StartScreen.this, LoginScreen.class);
+                Intent intent = new Intent(StartScreen.this, LoginView.class);
                 startActivity(intent);
             }
         });
