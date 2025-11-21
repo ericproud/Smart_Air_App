@@ -58,7 +58,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="56dp"
         android:backgroundTint="#673AB7"
-        android:text="EMERGENCY TRIAGE"
+        android:text="HAVING TROUBLE BREATHING?"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -187,9 +187,18 @@
         <TextView
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="40dp"
-            android:text="This is guidance, not a diagnosis. If in doubt, call emergency." />
+            android:layout_height="80dp"
+            android:layout_marginTop="30dp"
+            android:text="This is guidance, not a diagnosis. If in doubt, call emergency. Automatically escalating to emergency status if symptoms don't improve or new red flags appear within 10 minutes." />
+
+        <TextView
+            android:id="@+id/emergencyTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:00"
+            android:textSize="30sp"
+            android:layout_marginTop="20dp"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

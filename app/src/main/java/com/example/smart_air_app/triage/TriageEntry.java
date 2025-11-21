@@ -3,6 +3,7 @@ package com.example.smart_air_app.triage;
 public class TriageEntry {
 
     private static int numTriages = 0; // Number of total triage entries across all users
+    private int childUID;
     private int triageID;
     private boolean[] redFlags = new boolean[3];
     // redFlags[0]: can't speak full sentences
@@ -10,23 +11,28 @@ public class TriageEntry {
     // redFlags[2]: blue/gray lips or nails
     private boolean recentRescue;
     private double PEF;
+    private boolean emergency;
 
     public TriageEntry() {
         triageID = numTriages;
         numTriages++;
+        childUID = -1;
         redFlags[0] = false;
         redFlags[1] = false;
         redFlags[2] = false;
         recentRescue = false;
         PEF = -1;
+        emergency = false;
     }
 
-    public TriageEntry(boolean[] redFlags, boolean recentRescue, double PEF) {
+    public TriageEntry(boolean[] redFlags, boolean recentRescue, double PEF, boolean emergency) {
         triageID = numTriages;
         numTriages++;
+        childUID = -1;
         this.redFlags = redFlags;
         this.recentRescue = recentRescue;
         this.PEF = PEF;
+        this.emergency = emergency;
     }
 
     public int getTriageID() {

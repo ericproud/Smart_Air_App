@@ -1,6 +1,7 @@
 package com.example.smart_air_app;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.smart_air_app.triage.TriageEntry;
 import com.google.android.material.button.MaterialButton;
@@ -79,6 +81,31 @@ public class TriageScreen extends AppCompatActivity {
             }
         });
 
+        // Auto-escalate to emergency timer
+        TextView timerText = findViewById(R.id.emergencyTimer);
+
+        CountDownTimer emergencyTimer;
+        // 10 mins = 600000ms
+        emergencyTimer = new CountDownTimer(5000, 1000) {
+            @Override
+            public void onTick(long msUntilFinished) {
+                long seconds = msUntilFinished / 1000;
+                long minutes = seconds / 60;
+                long remainingSeconds = seconds % 60;
+
+                String formatted = String.format("%02d:%02d", minutes, remainingSeconds);
+                timerText.setText(formatted);
+            }
+
+            @Override
+            public void onFinish() {
+                timerText.setText("00:00");
+                emergencyButtonPressed(findViewById(R.id.btnEmergency));
+            }
+        };
+
+        emergencyTimer.start();
+
     }
 
     public TriageEntry createTriageEntry() {
@@ -99,15 +126,23 @@ public class TriageScreen extends AppCompatActivity {
         Chip redFlag2 = findViewById(R.id.btnBlueGray);
         boolean[] redFlags = {redFlag0.isChecked(), redFlag1.isChecked(), redFlag2.isChecked()};
 
+        boolean emergency = redFlag0.isChecked() || redFlag1.isChecked() || redFlag2.isChecked();
+
         // At least one of yes/no must be checked. Only check for btnRescueYes
         MaterialButton btnRescueYes = findViewById(R.id.btnRescueYes);
         boolean recentRescue = btnRescueYes.isChecked();
 
-        return new TriageEntry(redFlags, recentRescue, PEFvalue);
+        return new TriageEntry(redFlags, recentRescue, PEFvalue, emergency);
 
     }
 
     public void emergencyButtonPressed(View view) {
+
+        TriageEntry entry = createTriageEntry();
+
+    }
+
+    public void btnHomeSteps(View view) {
 
         TriageEntry entry = createTriageEntry();
 
