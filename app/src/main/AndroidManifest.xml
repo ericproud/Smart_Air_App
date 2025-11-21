@@ -21,9 +21,6 @@
             android:name=".TemplateActivity"
             android:exported="false" />
         <activity
-            android:name=".login_module.LoginView"
-            android:exported="false" />
-        <activity
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity
@@ -45,7 +42,10 @@
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".StartScreen"
+            android:name=".log_rescue_attempt.LogRescueAttemptActivity"
+            android:exported="false" />
+        <activity
+            android:name=".login_module.LoginView"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -2,11 +2,12 @@ package com.example.smart_air_app.log_rescue_attempt;
 
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
 
 public class RescueAttempt {
     private double dosage;
-    private EnumSet<Trigger> triggers;
-    private EnumSet<Symptom>  symptoms;
+    private List<String> triggers;
+    private List<String> symptoms;
     private double peakFlowBefore;
     private double peakFlowAfter;
     private boolean triageIncident;
@@ -27,11 +28,11 @@ public class RescueAttempt {
         this.dosage = dosage;
     }
 
-    public void setTriggers(EnumSet<Trigger> triggers ) {
+    public void setTriggers(List<String> triggers ) {
         this.triggers = triggers;
     }
 
-    public void setSymptoms(EnumSet<Symptom> symptoms) {
+    public void setSymptoms(List<String> symptoms) {
         this.symptoms = symptoms;
     }
 
@@ -45,5 +46,29 @@ public class RescueAttempt {
 
     public void setTriageIncident(boolean triageIncident) {
         this.triageIncident = triageIncident;
+    }
+
+    public double getDosage() {
+        return dosage;
+    }
+
+    public List<String> getTriggers() {
+        return triggers;
+    }
+
+    public List<String> getSymptoms() {
+        return symptoms;
+    }
+
+    public double getPeakFlowBefore() {
+        return peakFlowBefore;
+    }
+
+    public double getPeakFlowAfter() {
+        return peakFlowAfter;
+    }
+
+    public boolean isTriageIncident() {
+        return triageIncident;
     }
 }

@@ -1,16 +1,20 @@
 package com.example.smart_air_app.log_rescue_attempt;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.EnumSet;
+import java.util.List;
 
 public class LogRescueAttemptPresenterImpl implements  LogRescueAttemptPresenter{
     private final LogRescueAttemptView view;
-    public LogRescueAttemptPresenterImpl(LogRescueAttemptView view) {
+    private final RescueAttemptRepository repo;
+    public LogRescueAttemptPresenterImpl(LogRescueAttemptView view, RescueAttemptRepository repo) {
         this.view = view;
+        this.repo = repo;
     }
     @Override
-    public void onSubmitPressed(double dosage, EnumSet<Trigger> triggers, EnumSet<Symptom> symptoms,
+    public void onSubmitPressed(double dosage, List<String>  triggers, List<String> symptoms,
                                 double peakFlowBefore, double peakFlowAfter, boolean triageIncident) {
 
         view.resetErrors();
@@ -48,5 +52,17 @@ public class LogRescueAttemptPresenterImpl implements  LogRescueAttemptPresenter
         info.setTriageIncident(triageIncident);
 
         Log.i("info", info.toString());
+        repo.saveRescueAttempt(info, new RescueAttemptRepository.RepoCallback() {
+            @Override
+            public void onSuccess() {
+                System.out.println("Success");
+                view.navigateToSuccessScreen();
+            }
+
+            @Override
+            public void onError(String e) {
+                System.out.println(e);
+            }
+        });
     }
 }

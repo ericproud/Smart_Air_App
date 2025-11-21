@@ -1,5 +1,6 @@
 package com.example.smart_air_app.log_rescue_attempt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,14 +12,18 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.ChildHomeScreen;
 import com.example.smart_air_app.R;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 public class LogRescueAttemptActivity extends AppCompatActivity implements LogRescueAttemptView {
 
@@ -30,6 +35,7 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
     private TextInputLayout peakFlowBeforeInput;
     private TextInputLayout peakFlowAfterInput;
     private MaterialButtonToggleGroup triageIncidentToggleButton;
+    private MaterialToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +48,8 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
             return insets;
         });
 
-        LogRescueAttemptPresenter presenter = new LogRescueAttemptPresenterImpl(this);
+        RescueAttemptRepository repo = new FirebaseRescueAttemptRepository();
+        LogRescueAttemptPresenter presenter = new LogRescueAttemptPresenterImpl(this, repo);
 
         dosageInput = findViewById(R.id.dosageInput);
         chipGroupTriggers = findViewById(R.id.chipGroupTriggers);
@@ -53,11 +60,14 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
         peakFlowAfterInput = findViewById(R.id.peakFlowAfterInput);
         triageIncidentToggleButton = findViewById(R.id.triageIncidentToggleButton);
         Button submit = findViewById(R.id.submitRescueAttemptButton);
+        toolbar = findViewById(R.id.materialToolbar);
+
+        toolbar.setNavigationOnClickListener(view -> {
+            startActivity(new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class));
+        });
 
         // default check no
         triageIncidentToggleButton.check(triageIncidentToggleButton.getChildAt(1).getId());
-
-        bindChipsToEnums();
 
         submit.setOnClickListener(button -> {
             var dosageText = dosageInput.getEditText().getText();
@@ -65,8 +75,8 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
             var peakFlowAfterText = peakFlowAfterInput.getEditText().getText();
 
             double dosage = dosageText.isEmpty() ? -1 : Double.parseDouble(dosageText.toString());
-            EnumSet<Trigger> triggers = EnumSet.noneOf(Trigger.class);
-            EnumSet<Symptom> symptoms = EnumSet.noneOf(Symptom.class);
+            List<String> triggers = new ArrayList<>();
+            List<String> symptoms = new ArrayList<>();
             double peakFlowBefore = peakFlowBeforeText.isEmpty() ? -1 : Double.parseDouble(peakFlowBeforeText.toString());
             double peakFlowAfter = peakFlowAfterText.isEmpty() ? -1 : Double.parseDouble(peakFlowAfterText.toString());
             boolean triageIncident;
@@ -74,14 +84,14 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
             for (int i = 0; i < chipGroupTriggers.getChildCount(); i++) {
                 Chip chip = (Chip) chipGroupTriggers.getChildAt(i);
                 if (chip.isChecked()) {
-                    triggers.add((Trigger) chip.getTag());
+                    triggers.add(chip.getText().toString());
                 }
             }
 
             for (int i = 0; i < chipGroupSymptoms.getChildCount(); i++) {
                 Chip chip = (Chip) chipGroupSymptoms.getChildAt(i);
                 if (chip.isChecked()) {
-                    symptoms.add((Symptom) chip.getTag());
+                    symptoms.add(chip.getText().toString());
                 }
             }
 
@@ -91,26 +101,6 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
 
             presenter.onSubmitPressed(dosage, triggers, symptoms, peakFlowBefore, peakFlowAfter, triageIncident);
         });
-    }
-
-    private void bindChipsToEnums() {
-        // Triggers
-        chipGroupTriggers.findViewById(R.id.chipExercise).setTag(Trigger.EXERCISE);
-        chipGroupTriggers.findViewById(R.id.chipPollen).setTag(Trigger.POLLEN);
-        chipGroupTriggers.findViewById(R.id.chipColdAir).setTag(Trigger.COLD_AIR);
-        chipGroupTriggers.findViewById(R.id.chipDust).setTag(Trigger.DUST);
-        chipGroupTriggers.findViewById(R.id.chipSmoke).setTag(Trigger.SMOKE);
-        chipGroupTriggers.findViewById(R.id.chipStress).setTag(Trigger.STRESS);
-        chipGroupTriggers.findViewById(R.id.chipOtherTrigger).setTag(Trigger.OTHER);
-
-        // Symptoms
-        chipGroupSymptoms.findViewById(R.id.chipShortness).setTag(Symptom.SHORTNESS_OF_BREATH);
-        chipGroupSymptoms.findViewById(R.id.chipChestTightness).setTag(Symptom.CHEST_TIGHTNESS);
-        chipGroupSymptoms.findViewById(R.id.chipChestPain).setTag(Symptom.CHEST_PAIN);
-        chipGroupSymptoms.findViewById(R.id.chipWheezing).setTag(Symptom.WHEEZING);
-        chipGroupSymptoms.findViewById(R.id.chipTroubleSleeping).setTag(Symptom.TROUBLE_SLEEPING);
-        chipGroupSymptoms.findViewById(R.id.chipCoughing).setTag(Symptom.COUGHING);
-        chipGroupSymptoms.findViewById(R.id.chipOtherSymptom).setTag(Symptom.OTHER);
     }
 
     @Override
@@ -169,6 +159,6 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
 
     @Override
     public void navigateToSuccessScreen() {
-
+        startActivity(new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class));
     }
 }
