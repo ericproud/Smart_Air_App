@@ -18,9 +18,11 @@ import com.google.android.material.textfield.TextInputEditText;
 
 public class TriageScreen extends AppCompatActivity {
 
-    boolean inputIsValid() {
-        // Returns true when form input is valid
-        return true;
+    boolean yesornoChecked() {
+        // Returns true when either yes or no is checked
+        MaterialButton btnRescueYes = findViewById(R.id.btnRescueYes);
+        MaterialButton btnRescueNo = findViewById(R.id.btnRescueNo);
+        return btnRescueNo.isChecked() || btnRescueYes.isChecked();
     }
 
     @Override
@@ -40,9 +42,12 @@ public class TriageScreen extends AppCompatActivity {
         MaterialButton btnRescueYes = findViewById(R.id.btnRescueYes);
         MaterialButton btnRescueNo = findViewById(R.id.btnRescueNo);
         MaterialButtonToggleGroup btnRescueGroup = findViewById(R.id.btnRescueGroup);
+        Chip redFlag0 = findViewById(R.id.btnNoFullSentences);
+        Chip redFlag1 = findViewById(R.id.btnRetractions);
+        Chip redFlag2 = findViewById(R.id.btnBlueGray);
 
         redFlagsGroup.setOnCheckedStateChangeListener((chipGroup, checkedIds) -> {
-            if (inputIsValid()) {
+            if (yesornoChecked()) {
                 boolean emergencyStatus = false; // true when one of the red flags is checked
                 if (checkedIds.isEmpty()) {
                     emergencyStatus = false;
@@ -51,11 +56,27 @@ public class TriageScreen extends AppCompatActivity {
                 }
                 emergencyBtn.setEnabled(emergencyStatus); // enable emergency btn when red flag checked
                 homeStepsBtn.setEnabled(!emergencyStatus); // enable home steps btn when no red flag checked
+            } else {
+                // if neither "yes" nor "no" is checked, don't enable a button
+                emergencyBtn.setEnabled(false);
+                homeStepsBtn.setEnabled(false);
             }
         });
 
         btnRescueGroup.addOnButtonCheckedListener((toggleGroup, checkedId, isChecked) -> {
+            if (yesornoChecked()) {
+                boolean emergencyStatus = false; // true when one of the red flags is checked
+                if (redFlag0.isChecked() || redFlag1.isChecked() || redFlag2.isChecked()) {
+                    emergencyStatus = true;
+                }
 
+                emergencyBtn.setEnabled(emergencyStatus); // enable emergency btn when red flag checked
+                homeStepsBtn.setEnabled(!emergencyStatus); // enable home steps btn when no red flag checked
+            } else {
+                // if neither "yes" nor "no" is checked, don't enable a button
+                emergencyBtn.setEnabled(false);
+                homeStepsBtn.setEnabled(false);
+            }
         });
 
     }
