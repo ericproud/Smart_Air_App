@@ -39,7 +39,7 @@
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".AddChildScreen"
+            android:name=".log_rescue_attempt.LogRescueAttemptActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
