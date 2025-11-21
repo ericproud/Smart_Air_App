@@ -5,6 +5,7 @@ public class User {
     public String type; // 3 options - "child", "parent", "doctor"
     public String firstName;
     public String lastName;
+    public boolean isOnboarded;
 
     public User() {};
     public User(String type, String firstName, String lastName, String userID) {
@@ -24,9 +25,8 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userID = userID;
+        this.isOnboarded = false;
     }
-
-    // Only use when instantiating child
 
     public String getFirstName() {
         return firstName;
