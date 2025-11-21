@@ -18,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.session.SessionManager;
 import com.example.smart_air_app.user_classes.Child;
 import com.example.smart_air_app.user_classes.User;
 import com.example.smart_air_app.utils.DateValidator;
@@ -78,6 +79,7 @@ public class AddChildScreen extends AppCompatActivity {
                         FormHelperFunctions.handleEmpty(inputPassword)
                 );
 
+
         if (invalidField) return;
 
         String firstName = inputFirstName.getText().toString().trim();
@@ -87,7 +89,7 @@ public class AddChildScreen extends AppCompatActivity {
         String DOB = inputDOBButton.getText().toString().trim();
         String username = inputUsername.getText().toString().trim() + "@xyz.com"; // Add fake email extension for firebase authentication to be easier
         String password = inputPassword.getText().toString().trim();
-        String parentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String parentUID = SessionManager.getInstance().getUserId();
 
         mAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

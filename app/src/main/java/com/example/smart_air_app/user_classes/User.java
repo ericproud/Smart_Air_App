@@ -9,10 +9,10 @@ public class User {
 
     public User() {};
     public User(String type, String firstName, String lastName, String userID) {
-        if (type.equals("child")) {
+        if (getClass().equals(User.class) && type.equals("child")) {
             throw new IllegalArgumentException("Initialize a child object if type is 'child'");
         }
-        if (!type.equals("parent") && !type.equals("doctor")) {
+        if (!type.equals("parent") && !type.equals("doctor") && !type.equals("child")) {
             throw new IllegalArgumentException("Invalid user type: " + type);
         }
         if (firstName.isEmpty()) {

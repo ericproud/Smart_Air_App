@@ -33,7 +33,7 @@ public class FormHelperFunctions {
 
     public static boolean handleInvalidEmail(EditText inputField) {
         String email = inputField.getText().toString().trim();
-        boolean isValid = email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        boolean isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
 
         CharSequence hint = inputField.getHint();
         String currentHint = (hint != null) ? hint.toString() : "";

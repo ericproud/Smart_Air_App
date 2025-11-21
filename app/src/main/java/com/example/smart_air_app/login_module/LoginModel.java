@@ -5,6 +5,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.smart_air_app.user_classes.Child;
+import com.example.smart_air_app.user_classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -28,7 +30,7 @@ public class LoginModel {
     }
 
     public interface AuthCallback {
-        void onAuthSuccess(String type);
+        void onAuthSuccess(User user);
         void onAuthFailure(String message);
     }
 
@@ -40,25 +42,26 @@ public class LoginModel {
                     // Get user type from Realtime Database
                     dbRef.child("Users").child(userId)
                             .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    if (dataSnapshot.exists()) {
-                                        String userType = dataSnapshot.child("type").getValue(String.class);
-                                        if (userType != null && !userType.isEmpty()) {
-                                            callback.onAuthSuccess(userType);
-                                        } else {
-                                            callback.onAuthFailure("User type not found.");
-                                        }
-                                    } else {
-                                        callback.onAuthFailure("User data not found.");
-                                    }
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                String userType = dataSnapshot.child("type").getValue(String.class);
+                                if (userType != null && !userType.isEmpty()) {
+                                    User user = dataSnapshot.getValue(User.class);
+                                    callback.onAuthSuccess(user);
+                                } else {
+                                    callback.onAuthFailure("User type not found.");
                                 }
+                            } else {
+                                callback.onAuthFailure("User data not found.");
+                            }
+                        }
 
-                                @Override
-                                public void onCancelled(DatabaseError error) {
-                                    callback.onAuthFailure("Authorization failed");
-                                }
-                            });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            callback.onAuthFailure("Authorization failed");
+                        }
+                    });
                 })
                 .addOnFailureListener(exception -> {
                     callback.onAuthFailure("Authorization failed");

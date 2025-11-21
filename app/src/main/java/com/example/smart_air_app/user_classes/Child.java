@@ -6,24 +6,19 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class Child extends User{
-    public String height;
-    public String weight;
-    public String DOB;
-    public boolean isOnboarded;
+    private String height;
+    private String weight;
+    private String DOB;
+    private boolean isOnboarded;
     HashMap<String, Integer> permissions;
     HashMap<String, Integer> inventoryRemaining;
     HashMap<String, String> inventoryExpiresOn;
     HashMap<String, Integer> streaks;
     HashMap<String, Integer> badges;
 
-    public Child() {}
     public Child(String firstName, String lastName, String height, String weight, String DOB, String userID) {
-        if (firstName.isEmpty()) {
-            throw new IllegalArgumentException("Invalid first name: can not be empty");
-        }
-        if (lastName.isEmpty()) {
-            throw new IllegalArgumentException("Invalid last name: can not be empty");
-        }
+        super("child", firstName, lastName, userID);
+
         if(!DateValidator.isValidDate(DOB)) {
             throw new IllegalArgumentException("Invalid date format: " + DOB);
         }
@@ -33,10 +28,7 @@ public class Child extends User{
         if(Integer.parseInt(weight) < 0) {
             throw new IllegalArgumentException("Invalid weight: " + weight);
         }
-        this.type = "child";
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userID = userID;
+
         this.height = height;
         this.weight = weight;
         this.DOB = DOB;

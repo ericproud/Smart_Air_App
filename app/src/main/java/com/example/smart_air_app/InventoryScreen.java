@@ -39,36 +39,41 @@ public class InventoryScreen extends AppCompatActivity {
         var controllerEditLayout = findViewById(R.id.controllerEdit);
         ImageView  controllerEditButton = findViewById(R.id.controllerEditIcon);
 
-        final boolean[] isEditMode = {false, false};
+        quickReliefEditButton.setOnClickListener(new View.OnClickListener() {
+            boolean isEditMode = false;
+            @Override
+            public void onClick(View v) {
+                isEditMode = !isEditMode;
 
-        quickReliefEditButton.setOnClickListener(view -> {
-            isEditMode[0] = !isEditMode[0];
-
-            if (isEditMode[0]) {
-                quickReliefViewLayout.setVisibility(View.GONE);
-                quickReliefEditLayout.setVisibility(View.VISIBLE);
-                quickReliefEditButton.setImageResource(R.drawable.save_24px);
-            } else {
-                quickReliefViewLayout.setVisibility(View.VISIBLE);
-                quickReliefEditLayout.setVisibility(View.GONE);
-                quickReliefEditButton.setImageResource(R.drawable.edit_24px);
+                if (isEditMode) {
+                    quickReliefViewLayout.setVisibility(View.GONE);
+                    quickReliefEditLayout.setVisibility(View.VISIBLE);
+                    quickReliefEditButton.setImageResource(R.drawable.save_24px);
+                } else {
+                    quickReliefViewLayout.setVisibility(View.VISIBLE);
+                    quickReliefEditLayout.setVisibility(View.GONE);
+                    quickReliefEditButton.setImageResource(R.drawable.edit_24px);
+                }
             }
         });
 
-        controllerEditButton.setOnClickListener(view -> {
-            isEditMode[1] = !isEditMode[1];
+        controllerEditButton.setOnClickListener(new View.OnClickListener() {
+            boolean isEditMode = false;
+            @Override
+            public void onClick(View v) {
+                isEditMode = !isEditMode;
 
-            if (isEditMode[1]) {
-                controllerViewLayout.setVisibility(View.GONE);
-                controllerEditLayout.setVisibility(View.VISIBLE);
-                controllerEditButton.setImageResource(R.drawable.save_24px);
-            } else {
-                controllerViewLayout.setVisibility(View.VISIBLE);
-                controllerEditLayout.setVisibility(View.GONE);
-                controllerEditButton.setImageResource(R.drawable.edit_24px);
+                if (isEditMode) {
+                    controllerViewLayout.setVisibility(View.GONE);
+                    controllerEditLayout.setVisibility(View.VISIBLE);
+                    controllerEditButton.setImageResource(R.drawable.save_24px);
+                } else {
+                    controllerViewLayout.setVisibility(View.VISIBLE);
+                    controllerEditLayout.setVisibility(View.GONE);
+                    controllerEditButton.setImageResource(R.drawable.edit_24px);
+                }
             }
         });
-
 
         TextInputEditText quickReliefPurchased = findViewById(R.id.quickReliefPurchased);
         TextInputEditText quickReliefExpires = findViewById(R.id.quickReliefExpires);
@@ -92,7 +97,7 @@ public class InventoryScreen extends AppCompatActivity {
         // Pre-select existing date
         if (!editText.getText().toString().isEmpty()) {
             try {
-                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                SimpleDateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.getDefault());
                 df.setTimeZone(TimeZone.getTimeZone("UTC"));
 
                 Date parsed = df.parse(editText.getText().toString());
@@ -105,7 +110,7 @@ public class InventoryScreen extends AppCompatActivity {
         MaterialDatePicker<Long> datePicker = builder.build();
 
         datePicker.addOnPositiveButtonClickListener(selection -> {
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            SimpleDateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.getDefault());
             df.setTimeZone(TimeZone.getTimeZone("UTC"));
             editText.setText(df.format(new Date(selection)));
         });
