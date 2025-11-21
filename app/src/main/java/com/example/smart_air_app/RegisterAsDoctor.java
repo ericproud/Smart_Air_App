@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.smart_air_app.login_module.LoginView;
 import com.example.smart_air_app.user_classes.User;
 import com.example.smart_air_app.utils.FormHelperFunctions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -76,7 +78,7 @@ public class RegisterAsDoctor extends AppCompatActivity {
                             String uID = mAuth.getCurrentUser().getUid();
                             User newUser = new User("doctor", firstName, lastName, uID);
                             FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newUser);
-                            startActivity(new Intent(RegisterAsDoctor.this, LoginScreen.class));
+                            startActivity(new Intent(RegisterAsDoctor.this, LoginView.class));
                             finish();
                         } else {
                             Toast.makeText(RegisterAsDoctor.this, "Authentication failed.",
