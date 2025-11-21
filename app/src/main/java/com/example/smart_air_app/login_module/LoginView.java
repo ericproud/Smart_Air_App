@@ -84,7 +84,7 @@ public class LoginView extends AppCompatActivity implements LoginPresenter.AuthV
         else intent = new Intent(LoginView.this, StartScreen.class);
         startActivity(intent);
         finish();
-    };
+    }
 
     @Override
     public void showAuthFailedMessage() {
@@ -95,7 +95,7 @@ public class LoginView extends AppCompatActivity implements LoginPresenter.AuthV
     public void resetInputs(){
         inputUsernameOrEmail.setText("");
         inputPassword.setText("");
-    };
+    }
 
     @Override
     public void showError(String error) {
@@ -105,10 +105,10 @@ public class LoginView extends AppCompatActivity implements LoginPresenter.AuthV
     @Override
     public void onEmptyUsernameOrEmail() {
         inputUsernameOrEmail.setHintTextColor(getResources().getColor(android.R.color.holo_red_dark));
-    };
+    }
 
     @Override
     public void onEmptyPassword() {
         inputPassword.setHintTextColor(getResources().getColor(android.R.color.holo_red_dark));
-    };
+    }
 }
