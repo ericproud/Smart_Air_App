@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.login_module.LoginView;
 import com.example.smart_air_app.user_classes.User;
 import com.example.smart_air_app.utils.FormHelperFunctions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -78,7 +79,7 @@ public class RegisterAsParent extends AppCompatActivity {
                             String uID = mAuth.getCurrentUser().getUid();
                             User newUser = new User("parent", firstName, lastName, uID);
                             FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newUser);
-                            startActivity(new Intent(RegisterAsParent.this, LoginScreen.class));
+                            startActivity(new Intent(RegisterAsParent.this, LoginView.class));
                             finish();
                         } else {
                             Toast.makeText(RegisterAsParent.this, "Authentication failed.",

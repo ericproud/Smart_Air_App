@@ -18,9 +18,6 @@
             android:name=".RegisterAsParent"
             android:exported="false" />
         <activity
-            android:name=".RegisterAsParent"
-            android:exported="false" />
-        <activity
             android:name=".TemplateActivity"
             android:exported="false" />
         <activity
