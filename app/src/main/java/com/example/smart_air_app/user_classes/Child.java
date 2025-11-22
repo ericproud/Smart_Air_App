@@ -10,7 +10,7 @@ public class Child extends User{
     private String weight;
     private String DOB;
     private boolean isOnboarded;
-    HashMap<String, Integer> permissions;
+    HashMap<String, Boolean> permissions;
     HashMap<String, Integer> inventoryRemaining;
     HashMap<String, String> inventoryExpiresOn;
     HashMap<String, Integer> streaks;
@@ -41,13 +41,13 @@ public class Child extends User{
 
         // Controller adherence summary and rescue logs are 0 or 3-6 for NOT SHARED / 3-6 MONTHS SHARED
         // All others are 0 or 1 for NOT SHARED / SHARED
-        permissions.put("controller adherence summary", 0);
-        permissions.put("rescue logs", 0);
-        permissions.put("symptoms", 0);
-        permissions.put("triggers", 0);
-        permissions.put("pef", 0);
-        permissions.put("triage incidents", 0);
-        permissions.put("summary charts", 0);
+        permissions.put("controller adherence summary", false);
+        permissions.put("rescue logs", false);
+        permissions.put("symptoms", false);
+        permissions.put("triggers", false);
+        permissions.put("pef", false);
+        permissions.put("triage incidents", false);
+        permissions.put("summary charts", false);
 
         // Inventory remaining initialized to 0 (unit is puffs)
         inventoryRemaining.put("controller medicine puffs remaining", 0);
@@ -71,7 +71,7 @@ public class Child extends User{
         return badges;
     }
 
-    public HashMap<String, Integer> getPermissions() {
+    public HashMap<String, Boolean> getPermissions() {
         return permissions;
     }
 
