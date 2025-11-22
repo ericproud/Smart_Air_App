@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class AddChildScreen extends AppCompatActivity {
     FirebaseAuth mAuth;
@@ -91,6 +92,33 @@ public class AddChildScreen extends AppCompatActivity {
         String password = inputPassword.getText().toString().trim();
         String parentUID = SessionManager.getInstance().getUserId();
 
+        HashMap<String, Boolean> permissions = new HashMap<>();
+        HashMap<String, Integer> inventoryRemaining = new HashMap<>();
+        HashMap<String, String> inventoryExpiresOn = new HashMap<>();
+        HashMap<String, Integer> streaks = new HashMap<>();
+        HashMap<String, Integer> badges = new HashMap<>();
+
+        permissions.put("controller adherence summary", false);
+        permissions.put("rescue logs", false);
+        permissions.put("symptoms", false);
+        permissions.put("triggers", false);
+        permissions.put("pef", false);
+        permissions.put("triage incidents", false);
+        permissions.put("summary charts", false);
+
+        inventoryRemaining.put("controller medicine puffs remaining", 0);
+        inventoryRemaining.put("rescue inhaler puffs remaining", 0);
+
+        inventoryExpiresOn.put("controller medicine expiry date", DateValidator.getTodaysDate());
+        inventoryExpiresOn.put("rescue inhaler expiry date", DateValidator.getTodaysDate());
+
+        streaks.put("consecutive controller use days", 0);
+        streaks.put("consecutive technique conpleted days", 0);
+
+        badges.put("first perfect controller week", 0);
+        badges.put("10 high quality technique sessions", 0);
+        badges.put("low rescue month", 0);
+
         mAuth.createUserWithEmailAndPassword(username, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -99,11 +127,11 @@ public class AddChildScreen extends AppCompatActivity {
                             String uID = mAuth.getCurrentUser().getUid();
                             Child newChild = new Child(firstName, lastName, height, weight, DOB, uID);
                             FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newChild);
-                            FirebaseDatabase.getInstance().getReference("Badges").child(uID).setValue(newChild.getBadges());
-                            FirebaseDatabase.getInstance().getReference("Permissions").child(uID).setValue(newChild.getPermissions());
-                            FirebaseDatabase.getInstance().getReference("InventoryRemaining").child(uID).setValue(newChild.getInventoryRemaining());
-                            FirebaseDatabase.getInstance().getReference("InventoryExpiresOn").child(uID).setValue(newChild.getInventoryExpiresOn());
-                            FirebaseDatabase.getInstance().getReference("Streaks").child(uID).setValue(newChild.getStreaks());
+                            FirebaseDatabase.getInstance().getReference("Badges").child(uID).setValue(badges);
+                            FirebaseDatabase.getInstance().getReference("Permissions").child(uID).setValue(permissions);
+                            FirebaseDatabase.getInstance().getReference("InventoryRemaining").child(uID).setValue(inventoryRemaining);
+                            FirebaseDatabase.getInstance().getReference("InventoryExpiresOn").child(uID).setValue(inventoryExpiresOn);
+                            FirebaseDatabase.getInstance().getReference("Streaks").child(uID).setValue(streaks);
                             FirebaseDatabase.getInstance().getReference("Users").child(parentUID).child("children").child(uID).setValue(true);
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(AddChildScreen.this, ParentHomeScreen.class));

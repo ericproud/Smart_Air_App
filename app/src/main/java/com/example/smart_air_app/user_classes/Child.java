@@ -10,11 +10,6 @@ public class Child extends User{
     private String weight;
     private String DOB;
     private boolean isOnboarded;
-    HashMap<String, Boolean> permissions;
-    HashMap<String, Integer> inventoryRemaining;
-    HashMap<String, String> inventoryExpiresOn;
-    HashMap<String, Integer> streaks;
-    HashMap<String, Integer> badges;
 
     public Child(String firstName, String lastName, String height, String weight, String DOB, String userID) {
         super("child", firstName, lastName, userID);
@@ -33,57 +28,20 @@ public class Child extends User{
         this.weight = weight;
         this.DOB = DOB;
         this.isOnboarded = false;
-        permissions = new HashMap<>();
-        inventoryRemaining = new HashMap<>();
-        inventoryExpiresOn = new HashMap<>();
-        streaks = new HashMap<>();
-        badges = new HashMap<>();
-
-        // Controller adherence summary and rescue logs are 0 or 3-6 for NOT SHARED / 3-6 MONTHS SHARED
-        // All others are 0 or 1 for NOT SHARED / SHARED
-        permissions.put("controller adherence summary", false);
-        permissions.put("rescue logs", false);
-        permissions.put("symptoms", false);
-        permissions.put("triggers", false);
-        permissions.put("pef", false);
-        permissions.put("triage incidents", false);
-        permissions.put("summary charts", false);
-
-        // Inventory remaining initialized to 0 (unit is puffs)
-        inventoryRemaining.put("controller medicine puffs remaining", 0);
-        inventoryRemaining.put("rescue inhaler puffs remaining", 0);
-
-        // The day the inventory expires is set to the date of account creation
-        inventoryExpiresOn.put("controller medicine expiry date", DateValidator.getTodaysDate());
-        inventoryExpiresOn.put("rescue inhaler expiry date", DateValidator.getTodaysDate());
-
-        // Set streaks to 0 days (unit is days)
-        streaks.put("consecutive controller use days", 0);
-        streaks.put("consecutive technique conpleted days", 0);
-
-        // Set badges to 0 (unit - 0 if no badge, 1 if has badge)
-        badges.put("first perfect controller week", 0);
-        badges.put("10 high quality technique sessions", 0);
-        badges.put("low rescue month", 0);
+    }
+    public String getWeight() {
+        return weight;
     }
 
-    public HashMap<String, Integer> getBadges() {
-        return badges;
+    public String getDOB() {
+        return DOB;
     }
 
-    public HashMap<String, Boolean> getPermissions() {
-        return permissions;
+    public boolean getIsOnboarded() {
+        return isOnboarded;
     }
 
-    public HashMap<String, Integer> getInventoryRemaining() {
-        return inventoryRemaining;
-    }
-
-    public HashMap<String, String> getInventoryExpiresOn() {
-        return inventoryExpiresOn;
-    }
-
-    public HashMap<String, Integer> getStreaks() {
-        return streaks;
+    public String getHeight() {
+        return height;
     }
 }
