@@ -8,17 +8,17 @@
     tools:context=".RegisterScreen">
 
     <Button
-        android:id="@+id/buttonChildSignup"
+        android:id="@+id/buttonDoctorSignup"
         android:layout_width="230dp"
         android:layout_height="92dp"
-        android:text="Child Signup"
+        android:text="Doctor Signup"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.406" />
+        app:layout_constraintVertical_bias="0.569" />
 
     <Button
         android:id="@+id/buttonParentSignup"
@@ -28,23 +28,10 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.569" />
-
-    <Button
-        android:id="@+id/buttonProviderSignup"
-        android:layout_width="230dp"
-        android:layout_height="92dp"
-        android:text="Provider Signup"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.735" />
+        app:layout_constraintVertical_bias="0.403" />
 
     <Button
         android:id="@+id/buttonBackRegister"

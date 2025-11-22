@@ -2,23 +2,30 @@ package com.example.smart_air_app.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class DateValidator {
-    public static final SimpleDateFormat FORMATTER = new SimpleDateFormat("MMM dd yyyy");
-    static {
-        FORMATTER.setLenient(false);
-    }
+    private static final DateTimeFormatter FORMATTER =
+            new DateTimeFormatterBuilder()
+                    .parseCaseInsensitive()
+                    .appendPattern("MMM dd yyyy")
+                    .toFormatter(Locale.ENGLISH);
 
     public static boolean isValidDate(String dateString) {
         try {
-            Date date = FORMATTER.parse(dateString);
-            return FORMATTER.format(date).equals(dateString);
-        } catch (ParseException e) {
+            LocalDate.parse(dateString, FORMATTER);
+            return true;
+        } catch (DateTimeParseException e) {
             return false;
         }
     }
+
 
     public static String getTodaysDate() {
         Calendar cal = Calendar.getInstance();

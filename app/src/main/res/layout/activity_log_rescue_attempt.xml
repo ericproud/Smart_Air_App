@@ -74,11 +74,14 @@
                 android:layout_height="60dp"
                 android:layout_marginRight="12dp"
                 android:layout_weight="3"
-                android:hint="Dosage">
+                android:hint="Dosage"
+                android:id="@+id/dosageInput">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                   />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,112 +93,161 @@
                 android:text="puffs" />
         </LinearLayout>
 
-        <TextView
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Triggers" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Triggers" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/chipGroupTriggersError"
+                    android:textColor="?attr/colorError"
+                    android:layout_marginLeft="8dp"
+                    />
+
+            </LinearLayout>
+
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
+            android:id="@+id/chipGroupTriggers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:chipSpacingVertical="0dp">
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Exercise" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipExercise"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Exercise"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pollen" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipPollen"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Pollen"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cold Air" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipColdAir"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Cold air"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dust" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipDust"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Dust"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Smoke" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipSmoke"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Smoke"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stress" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipStress"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Stress"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Other" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipOtherTrigger"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Other"/>
 
         </com.google.android.material.chip.ChipGroup>
 
-        <TextView
-            style="@style/TextAppearance.AppCompat.Subhead"
-            android:layout_width="match_parent"
-            android:layout_height="24dp"
-            android:layout_marginTop="4dp"
-            android:text="Symptoms" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp">
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Symptoms" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:id="@+id/chipGroupSymptomsError"
+                    android:textColor="?attr/colorError"
+                    android:layout_marginLeft="8dp"
+                    />
+
+            </LinearLayout>
 
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup2"
-            android:layout_width="365dp"
+            android:id="@+id/chipGroupSymptoms"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:chipSpacingVertical="0dp">
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Shortness of breath" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipShortness"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Shortness of breath"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chest tightness / pain" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipChestTightness"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Chest tightness"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wheezing" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipChestPain"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Chest pain"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Trouble sleeping" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipWheezing"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Wheezing"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Coughing" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipTroubleSleeping"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Trouble sleeping"/>
 
             <com.google.android.material.chip.Chip
-                style="@style/Widget.Material3.Chip.Suggestion"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Other" />
+                android:layout_width="wrap_content"
+                android:id="@+id/chipCoughing"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Coughing"/>
+
+            <com.google.android.material.chip.Chip
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/chipOtherSymptom"
+                style="@style/Widget.Material3.Chip.Suggestion"
+                android:text="Other"/>
 
         </com.google.android.material.chip.ChipGroup>
 
@@ -215,11 +267,14 @@
                 android:layout_height="60dp"
                 android:layout_marginRight="12dp"
                 android:layout_weight="1"
-                android:hint="Before (%)">
+                android:hint="Before (L/m)"
+                android:id="@+id/peakFlowBeforeInput">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -228,11 +283,14 @@
                 android:layout_height="60dp"
                 android:layout_marginRight="12dp"
                 android:layout_weight="1"
-                android:hint="After (%)">
+                android:hint="After (L/m)"
+                android:id="@+id/peakFlowAfterInput">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -246,23 +304,25 @@
 
 
         <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggleButton"
+            android:id="@+id/triageIncidentToggleButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            app:selectionRequired="true"
+            >
 
             <Button
-                android:id="@+id/button1"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Yes" />
 
             <Button
-                android:id="@+id/button2"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No" />
+                android:text="No"
+                />
 
         </com.google.android.material.button.MaterialButtonToggleGroup>
         
@@ -276,6 +336,7 @@
             style="@style/Widget.Material3.Button.IconButton.Filled"
             android:textAllCaps="true"
             android:textSize="16dp"
+            android:id="@+id/submitRescueAttemptButton"
             />
         </LinearLayout>
     </ScrollView>
