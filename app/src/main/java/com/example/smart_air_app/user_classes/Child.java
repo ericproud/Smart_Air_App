@@ -67,32 +67,23 @@ public class Child extends User{
         badges.put("low rescue month", 0);
     }
 
-    public String getHeight() {
-        return height;
+    public HashMap<String, Integer> getBadges() {
+        return badges;
     }
 
-    public void setHeight(String height) {
-        this.height = height;
+    public HashMap<String, Integer> getPermissions() {
+        return permissions;
     }
 
-    public String getWeight() {
-        return weight;
+    public HashMap<String, Integer> getInventoryRemaining() {
+        return inventoryRemaining;
     }
 
-    public void setWeight(String weight) {
-        this.weight = weight;
+    public HashMap<String, String> getInventoryExpiresOn() {
+        return inventoryExpiresOn;
     }
 
-    public String getDOB() {
-        return DOB;
-    }
-
-    public void setDOB(String DOB) {
-        if(DateValidator.isValidDate(DOB)) {
-            this.DOB = DOB;
-        }
-        else {
-            throw new IllegalArgumentException("Invalid date format: " + DOB);
-        }
+    public HashMap<String, Integer> getStreaks() {
+        return streaks;
     }
 }

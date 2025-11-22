@@ -39,15 +39,6 @@
             android:name=".ChildHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".StreaksAndBadges"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".DoctorHomeScreen"
             android:exported="false" />
         <activity
@@ -72,14 +63,23 @@
             android:name=".InventoryScreen"
             android:exported="false" />
         <activity
-            android:name=".LogRescueAttemptScreen"
+            android:name=".StreaksAndBadges"
             android:exported="false" />
         <activity
-            android:name=".StartScreen"
+            android:name=".login_module.LoginView"
             android:exported="false" />
         <activity
             android:name=".VideoSBSInhallerUse"
             android:exported="false" />
+        <activity
+            android:name=".StartScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

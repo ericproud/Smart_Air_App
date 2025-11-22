@@ -74,9 +74,9 @@ public class AddChildScreen extends AppCompatActivity {
                         FormHelperFunctions.handleEmpty(inputLastName) ||
                         FormHelperFunctions.handleEmpty(inputHeight) ||
                         FormHelperFunctions.handleEmpty(inputWeight) ||
-                        !DateValidator.isValidDate(inputDOBButton.getText().toString().trim()) ||
                         FormHelperFunctions.handleInvalidUsername(inputUsername) ||
-                        FormHelperFunctions.handleEmpty(inputPassword)
+                        FormHelperFunctions.handleEmpty(inputPassword) ||
+                        !DateValidator.isValidDate(inputDOBButton.getText().toString().trim())
                 );
 
 
@@ -99,6 +99,11 @@ public class AddChildScreen extends AppCompatActivity {
                             String uID = mAuth.getCurrentUser().getUid();
                             Child newChild = new Child(firstName, lastName, height, weight, DOB, uID);
                             FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newChild);
+                            FirebaseDatabase.getInstance().getReference("Badges").child(uID).setValue(newChild.getBadges());
+                            FirebaseDatabase.getInstance().getReference("Permissions").child(uID).setValue(newChild.getPermissions());
+                            FirebaseDatabase.getInstance().getReference("InventoryRemaining").child(uID).setValue(newChild.getInventoryRemaining());
+                            FirebaseDatabase.getInstance().getReference("InventoryExpiresOn").child(uID).setValue(newChild.getInventoryExpiresOn());
+                            FirebaseDatabase.getInstance().getReference("Streaks").child(uID).setValue(newChild.getStreaks());
                             FirebaseDatabase.getInstance().getReference("Users").child(parentUID).child("children").child(uID).setValue(true);
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(AddChildScreen.this, ParentHomeScreen.class));
