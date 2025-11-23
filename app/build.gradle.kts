@@ -43,7 +43,7 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.firebase.auth)
     testImplementation(libs.junit)
-    testImplementation("org.mockito:mockito-core:1.10.19")
+    testImplementation("org.mockito:mockito-core:4.11.0")
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
