@@ -19,6 +19,7 @@ import com.example.smart_air_app.ChildHomeScreen;
 import com.example.smart_air_app.DoctorHomeScreen;
 import com.example.smart_air_app.ParentHomeScreen;
 import com.example.smart_air_app.R;
+import com.example.smart_air_app.ResetPasswordScreen;
 import com.example.smart_air_app.StartScreen;
 
 public class LoginView extends AppCompatActivity implements LoginPresenter.AuthView {
@@ -47,6 +48,7 @@ public class LoginView extends AppCompatActivity implements LoginPresenter.AuthV
         inputUsernameOrEmail = findViewById(R.id.inputLoginUsernameOrEmail);
         inputPassword = findViewById(R.id.inputLoginPassword);
         authFailedText = findViewById(R.id.AuthFailedText);
+        recoverAccountButton = findViewById(R.id.buttonRecoverAccount);
         presenter = new LoginPresenter(new LoginModel(), this);
 
         authFailedText.setVisibility(View.INVISIBLE);
@@ -57,6 +59,14 @@ public class LoginView extends AppCompatActivity implements LoginPresenter.AuthV
                 String email = inputUsernameOrEmail.getText().toString();
                 String password = inputPassword.getText().toString();
                 presenter.Login(email, password);
+            }
+        });
+
+        recoverAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginView.this, ResetPasswordScreen.class);
+                startActivity(intent);
             }
         });
 
