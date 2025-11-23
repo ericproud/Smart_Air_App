@@ -44,7 +44,7 @@ public class LoginPresenter {
             return;
         }
         callback = new LoginCallback();
-        handledUsernameOrEmail = handleUsername(usernameOrEmail);
+        handledUsernameOrEmail = convertUsername(usernameOrEmail);
         model.signIn(handledUsernameOrEmail, password, callback);
     }
 
@@ -55,12 +55,17 @@ public class LoginPresenter {
         validUsernameOrEmail = validateUsernameOrEmail(usernameOrEmail);
         validPassword = validatePassword(password);
 
+        if (!validateUsernameOrEmail(usernameOrEmail)) {
+            handleEmptyUsernameOrEmail();
+        }
+        if (!validPassword) {
+            handleEmptyPassword();
+        }
         return validUsernameOrEmail && validPassword;
     }
 
     public boolean validateUsernameOrEmail(String usernameOrEmail) {
         if (usernameOrEmail.isEmpty()) {
-            view.onEmptyUsernameOrEmail();
             return false;
         }
         return true;
@@ -68,13 +73,20 @@ public class LoginPresenter {
 
     public boolean validatePassword(String password) {
         if (password.isEmpty()) {
-            view.onEmptyPassword();
             return false;
         }
         return true;
     }
 
-    public String handleUsername(String usernameOrEmail) {
+    public void handleEmptyUsernameOrEmail() {
+        view.onEmptyUsernameOrEmail();
+    }
+
+    public void handleEmptyPassword() {
+        view.onEmptyPassword();
+    }
+
+    public String convertUsername(String usernameOrEmail) {
         if (usernameOrEmail.contains("@")) {
             return usernameOrEmail;
         }

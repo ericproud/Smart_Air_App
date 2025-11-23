@@ -62,37 +62,48 @@ public class ParentHomeScreen extends AppCompatActivity {
     }
     void createChildButtons(List<String> childUIDs) {
         for (String childUID : childUIDs) {
-            Button button = new Button(this);
+            dbRef.child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot childSnapshot) {
+                    String firstName = childSnapshot.child("firstName").getValue(String.class);
+                    String lastName = childSnapshot.child("lastName").getValue(String.class);
+                    String childName = firstName + " " + lastName;
+                    createChildButton(childUID, childName);
+                }
 
-            String childName = dbRef.child(childUID).child("firstName") + " " + dbRef.child(childUID).child("lastName");
-            button.setText(childName);
-            button.setTextColor(Color.WHITE);
-
-            GradientDrawable drawable = new GradientDrawable();
-            drawable.setShape(GradientDrawable.RECTANGLE);
-            drawable.setColor(Color.parseColor("#673AB7"));
-            drawable.setCornerRadius(dpToPx(35));
-            button.setBackground(drawable);
-            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-            button.setPadding(0, 0, 0, 0);
-
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    dpToPx(297), dpToPx(67)
-            );
-            params.setMargins(dpToPx(55), dpToPx(20), dpToPx(56), 0);
-            button.setLayoutParams(params);
-
-            button.setClickable(true);
-
-            button.setOnClickListener(v -> {
-                Intent intent = new Intent(ParentHomeScreen.this, ParentChildHomeScreen.class);
-                intent.putExtra("childUID", childUID);
-                intent.putExtra("childName", childName);
-                startActivity(intent);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) { }
             });
-
-            container.addView(button);
         }
+    }
+
+    void createChildButton(String childUID, String childName) {
+        Button button = new Button(this);
+        button.setText(childName);
+        button.setTextColor(Color.WHITE);
+
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setShape(GradientDrawable.RECTANGLE);
+        drawable.setColor(Color.parseColor("#673AB7"));
+        drawable.setCornerRadius(dpToPx(35));
+        button.setBackground(drawable);
+        button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        button.setPadding(0, 0, 0, 0);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                dpToPx(297), dpToPx(67)
+        );
+        params.setMargins(dpToPx(55), dpToPx(20), dpToPx(56), 0);
+        button.setLayoutParams(params);
+
+        button.setOnClickListener(v -> {
+            Intent intent = new Intent(ParentHomeScreen.this, ParentChildHomeScreen.class);
+            intent.putExtra("childUID", childUID);
+            intent.putExtra("childName", childName);
+            startActivity(intent);
+        });
+
+        container.addView(button);
     }
     private int dpToPx(int dp){
         return (int) TypedValue.applyDimension(
