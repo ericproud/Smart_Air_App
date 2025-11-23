@@ -27,22 +27,43 @@
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity
-            android:name=".ManageChildAccount"
-            android:exported="false" />
-        <activity
-            android:name=".AddChildScreen"
-            android:exported="false" />
-        <activity
-            android:name=".ParentHomeScreen"
-            android:exported="false" />
-        <activity
             android:name=".ChildHomeScreen"
             android:exported="false" />
         <activity
             android:name=".DoctorHomeScreen"
+            android:exported="false"/>
+        <activity
+            android:name=".AddChildScreen"
             android:exported="false" />
         <activity
             android:name=".ParentChildHomeScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ChildOnboardingScreen1"
+            android:exported="false" />
+        <activity
+            android:name=".ChildOnboardingScreen2"
+            android:exported="false" />
+        <activity
+            android:name=".ChildOnboardingScreen3"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen1"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen2"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen3"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderOnboardingScreen1"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderOnboardingScreen2"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderOnboardingScreen3"
             android:exported="false" />
         <activity
             android:name=".ControllerLoggingScreen"
