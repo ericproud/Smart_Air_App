@@ -2,24 +2,38 @@ package com.example.smart_air_app;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.session.SessionManager;
+import com.example.smart_air_app.user_classes.Child;
+import com.example.smart_air_app.user_classes.User;
+import com.example.smart_air_app.utils.DateValidator;
 import com.example.smart_air_app.utils.FormHelperFunctions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 public class AddChildScreen extends AppCompatActivity {
+    FirebaseAuth mAuth;
     private DatePickerDialog datePickerDialog;
     private Button inputDOBButton;
     private Button createAccountButton;
@@ -41,6 +55,7 @@ public class AddChildScreen extends AppCompatActivity {
             return insets;
         });
         initDatePicker();
+        mAuth = FirebaseAuth.getInstance();
         inputFirstName = findViewById(R.id.inputChildFirstName);
         inputLastName = findViewById(R.id.inputChildLastName);
         inputHeight = findViewById(R.id.inputChildHeight);
@@ -55,26 +70,78 @@ public class AddChildScreen extends AppCompatActivity {
     }
 
     private void createAccount() {
-        boolean emptyInputField =
-                !(      FormHelperFunctions.handleEmpty(inputFirstName) &
-                        FormHelperFunctions.handleEmpty(inputLastName) &
-                        FormHelperFunctions.handleEmpty(inputHeight) &
-                        FormHelperFunctions.handleEmpty(inputWeight) &
-                        FormHelperFunctions.handleEmpty(inputUsername) &
-                        FormHelperFunctions.handleEmpty(inputPassword)
+        boolean invalidField =
+                (      FormHelperFunctions.handleEmpty(inputFirstName) ||
+                        FormHelperFunctions.handleEmpty(inputLastName) ||
+                        FormHelperFunctions.handleEmpty(inputHeight) ||
+                        FormHelperFunctions.handleEmpty(inputWeight) ||
+                        FormHelperFunctions.handleInvalidUsername(inputUsername) ||
+                        FormHelperFunctions.handleEmpty(inputPassword) ||
+                        !DateValidator.isValidDate(inputDOBButton.getText().toString().trim())
                 );
 
-        if (emptyInputField) return;
+
+        if (invalidField) return;
 
         String firstName = inputFirstName.getText().toString().trim();
         String lastName = inputLastName.getText().toString().trim();
         String height = inputHeight.getText().toString().trim();
         String weight = inputWeight.getText().toString().trim();
-        String username = inputUsername.getText().toString().trim();
-        String password = inputPassword.getText().toString().trim();
         String DOB = inputDOBButton.getText().toString().trim();
+        String username = inputUsername.getText().toString().trim() + "@xyz.com"; // Add fake email extension for firebase authentication to be easier
+        String password = inputPassword.getText().toString().trim();
+        String parentUID = SessionManager.getInstance().getUserId();
 
-        // submit to firebase
+        HashMap<String, Boolean> permissions = new HashMap<>();
+        HashMap<String, Integer> inventoryRemaining = new HashMap<>();
+        HashMap<String, String> inventoryExpiresOn = new HashMap<>();
+        HashMap<String, Integer> streaks = new HashMap<>();
+        HashMap<String, Integer> badges = new HashMap<>();
+
+        permissions.put("controller adherence summary", false);
+        permissions.put("rescue logs", false);
+        permissions.put("symptoms", false);
+        permissions.put("triggers", false);
+        permissions.put("pef", false);
+        permissions.put("triage incidents", false);
+        permissions.put("summary charts", false);
+
+        inventoryRemaining.put("controller medicine puffs remaining", 0);
+        inventoryRemaining.put("rescue inhaler puffs remaining", 0);
+
+        inventoryExpiresOn.put("controller medicine expiry date", DateValidator.getTodaysDate());
+        inventoryExpiresOn.put("rescue inhaler expiry date", DateValidator.getTodaysDate());
+
+        streaks.put("consecutive controller use days", 0);
+        streaks.put("consecutive technique conpleted days", 0);
+
+        badges.put("first perfect controller week", 0);
+        badges.put("10 high quality technique sessions", 0);
+        badges.put("low rescue month", 0);
+
+        mAuth.createUserWithEmailAndPassword(username, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            String uID = mAuth.getCurrentUser().getUid();
+                            Child newChild = new Child(firstName, lastName, height, weight, DOB, uID);
+                            FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newChild);
+                            FirebaseDatabase.getInstance().getReference("Badges").child(uID).setValue(badges);
+                            FirebaseDatabase.getInstance().getReference("Permissions").child(uID).setValue(permissions);
+                            FirebaseDatabase.getInstance().getReference("InventoryRemaining").child(uID).setValue(inventoryRemaining);
+                            FirebaseDatabase.getInstance().getReference("InventoryExpiresOn").child(uID).setValue(inventoryExpiresOn);
+                            FirebaseDatabase.getInstance().getReference("Streaks").child(uID).setValue(streaks);
+                            FirebaseDatabase.getInstance().getReference("Users").child(parentUID).child("children").child(uID).setValue(true);
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(AddChildScreen.this, ParentHomeScreen.class));
+                            finish();
+                        } else {
+                            Toast.makeText(AddChildScreen.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private String getTodaysDate() {
@@ -83,7 +150,7 @@ public class AddChildScreen extends AppCompatActivity {
         int month = cal.get(Calendar.MONTH);
         month = month + 1;
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
+        return DateValidator.makeDateString(day, month, year);
     }
 
     private void initDatePicker() {
@@ -93,7 +160,7 @@ public class AddChildScreen extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day)
             {
                 month = month + 1;
-                String date = makeDateString(day, month, year);
+                String date = DateValidator.makeDateString(day, month, year);
                 inputDOBButton.setText(date);
             }
         };
@@ -106,39 +173,6 @@ public class AddChildScreen extends AppCompatActivity {
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month, day);
-        //datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-    }
-
-    private String makeDateString(int day, int month, int year) {
-        return getMonthFormat(month) + " " + day + " " + year;
-    }
-
-    private String getMonthFormat(int month) {
-        if(month == 1)
-            return "JAN";
-        if(month == 2)
-            return "FEB";
-        if(month == 3)
-            return "MAR";
-        if(month == 4)
-            return "APR";
-        if(month == 5)
-            return "MAY";
-        if(month == 6)
-            return "JUN";
-        if(month == 7)
-            return "JUL";
-        if(month == 8)
-            return "AUG";
-        if(month == 9)
-            return "SEP";
-        if(month == 10)
-            return "OCT";
-        if(month == 11)
-            return "NOV";
-        if(month == 12)
-            return "DEC";
-        return "JAN";
     }
 
     public void openDatePicker(View view) {
