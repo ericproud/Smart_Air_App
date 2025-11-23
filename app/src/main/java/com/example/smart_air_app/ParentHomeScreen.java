@@ -7,12 +7,11 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smart_air_app.session.SessionManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +36,7 @@ public class ParentHomeScreen extends AppCompatActivity {
         container = findViewById(R.id.childButtonContainer);
         addChildButton = findViewById(R.id.addChildButton);
 
-        parentUID = SessionManager.getInstance().getUserId();
+        parentUID = FirebaseAuth.getInstance().getUid();
         dbRef = FirebaseDatabase.getInstance().getReference().child("Users");
         childUIDs = new ArrayList<>();
 
