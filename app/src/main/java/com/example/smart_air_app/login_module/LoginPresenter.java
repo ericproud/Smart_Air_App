@@ -1,8 +1,5 @@
 package com.example.smart_air_app.login_module;
 
-import com.example.smart_air_app.session.SessionManager;
-import com.example.smart_air_app.user_classes.User;
-
 public class LoginPresenter {
     LoginModel model;
     LoginView view;
@@ -22,10 +19,9 @@ public class LoginPresenter {
 
     private class LoginCallback implements LoginModel.AuthCallback {
         @Override
-        public void onAuthSuccess(User user) {
+        public void onAuthSuccess(String userType) {
             // store basic information about the user like id to be used to make later requests
-            SessionManager.getInstance().setCurrentUser(user);
-            view.redirectToHome(user.type);
+            view.redirectToHome(userType);
         }
 
         @Override
