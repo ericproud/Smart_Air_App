@@ -3,7 +3,6 @@ package com.example.smart_air_app;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,20 +11,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.smart_air_app.session.SessionManager;
 import com.example.smart_air_app.user_classes.Child;
-import com.example.smart_air_app.user_classes.User;
 import com.example.smart_air_app.utils.DateValidator;
 import com.example.smart_air_app.utils.FormHelperFunctions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -90,7 +85,6 @@ public class AddChildScreen extends AppCompatActivity {
         String DOB = inputDOBButton.getText().toString().trim();
         String username = inputUsername.getText().toString().trim() + "@xyz.com"; // Add fake email extension for firebase authentication to be easier
         String password = inputPassword.getText().toString().trim();
-        String parentUID = SessionManager.getInstance().getUserId();
 
         HashMap<String, Boolean> permissions = new HashMap<>();
         HashMap<String, Integer> inventoryRemaining = new HashMap<>();
@@ -119,28 +113,29 @@ public class AddChildScreen extends AppCompatActivity {
         badges.put("10 high quality technique sessions", 0);
         badges.put("low rescue month", 0);
 
-        mAuth.createUserWithEmailAndPassword(username, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            String uID = mAuth.getCurrentUser().getUid();
-                            Child newChild = new Child(firstName, lastName, height, weight, DOB, uID);
-                            FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newChild);
-                            FirebaseDatabase.getInstance().getReference("Badges").child(uID).setValue(badges);
-                            FirebaseDatabase.getInstance().getReference("Permissions").child(uID).setValue(permissions);
-                            FirebaseDatabase.getInstance().getReference("InventoryRemaining").child(uID).setValue(inventoryRemaining);
-                            FirebaseDatabase.getInstance().getReference("InventoryExpiresOn").child(uID).setValue(inventoryExpiresOn);
-                            FirebaseDatabase.getInstance().getReference("Streaks").child(uID).setValue(streaks);
-                            FirebaseDatabase.getInstance().getReference("Users").child(parentUID).child("children").child(uID).setValue(true);
-                            FirebaseAuth.getInstance().signOut();
-                            startActivity(new Intent(AddChildScreen.this, ParentHomeScreen.class));
-                            finish();
-                        } else {
-                            Toast.makeText(AddChildScreen.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+        String parentUID = FirebaseAuth.getInstance().getUid();
+        FirebaseAuth childAuth = createChildAuth();
+
+        childAuth.createUserWithEmailAndPassword(username, password)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        String uID = childAuth.getCurrentUser().getUid();
+                        Child newChild = new Child(firstName, lastName, height, weight, DOB, uID);
+                        FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newChild);
+                        FirebaseDatabase.getInstance().getReference("Badges").child(uID).setValue(badges);
+                        FirebaseDatabase.getInstance().getReference("Permissions").child(uID).setValue(permissions);
+                        FirebaseDatabase.getInstance().getReference("InventoryRemaining").child(uID).setValue(inventoryRemaining);
+                        FirebaseDatabase.getInstance().getReference("InventoryExpiresOn").child(uID).setValue(inventoryExpiresOn);
+                        FirebaseDatabase.getInstance().getReference("Streaks").child(uID).setValue(streaks);
+                        FirebaseDatabase.getInstance().getReference("Users").child(parentUID).child("children").child(uID).setValue(true);
+                        childAuth.signOut();
+                        startActivity(new Intent(AddChildScreen.this, ParentHomeScreen.class));
+                        finish();
+                    } else {
+                        Toast.makeText(AddChildScreen.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
                     }
+                    childAuth.getApp().delete(); // dispose temp child auth instance
                 });
     }
 
@@ -177,5 +172,19 @@ public class AddChildScreen extends AppCompatActivity {
 
     public void openDatePicker(View view) {
         datePickerDialog.show();
+    }
+
+    private FirebaseAuth createChildAuth() {
+        // work around: create a new auth for whenever parent creates a new child
+        // to avoid signing out the parent
+        FirebaseOptions options = new FirebaseOptions.Builder()
+                .setApiKey("AIzaSyAYEH_8fDLodoHSWkihUMGkiz0aHEYQ4-A")
+                .setApplicationId("1:282364377779:android:eebc52271deecfcf2d0ec6")
+                .setProjectId("smart-air-app-database")
+                .build();
+
+        String appName = "ChildApp_" + System.currentTimeMillis();
+        FirebaseApp childApp = FirebaseApp.initializeApp(this, options, appName);
+        return FirebaseAuth.getInstance(childApp);
     }
 }
