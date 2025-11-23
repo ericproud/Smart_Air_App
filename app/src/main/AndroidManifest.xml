@@ -72,6 +72,10 @@
             android:name=".VideoSBSInhallerUse"
             android:exported="false" />
         <activity
+            android:name=".log_rescue_attempt.LogRescueAttemptActivity"
+            android:exported="false"
+        />
+        <activity
             android:name=".StartScreen"
             android:exported="true">
             <intent-filter>
