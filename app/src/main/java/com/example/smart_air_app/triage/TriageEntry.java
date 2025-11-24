@@ -1,5 +1,11 @@
 package com.example.smart_air_app.triage;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class TriageEntry {
 
     private static int numTriages = 0; // Number of total triage entries across all users
@@ -14,8 +20,10 @@ public class TriageEntry {
     private boolean emergency;
 
     public TriageEntry() { // need a public empty constructor?
-        triageID = numTriages;
+
+        this.triageID = numTriages;
         numTriages++;
+
         childUID = "-1";
         redFlags[0] = false;
         redFlags[1] = false;
@@ -26,8 +34,10 @@ public class TriageEntry {
     }
 
     public TriageEntry(boolean[] redFlags, boolean recentRescue, double PEF, boolean emergency) {
-        triageID = numTriages;
+
+        this.triageID = numTriages;
         numTriages++;
+
         this.childUID = "-1";
         this.redFlags = redFlags;
         this.recentRescue = recentRescue;

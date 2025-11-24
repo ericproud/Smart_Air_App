@@ -14,13 +14,13 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".StartScreen"
+            android:name=".TriageScreen"
             android:exported="false" />
         <activity
             android:name=".TemplateActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginScreen"
+            android:name=".login_module.LoginView"
             android:exported="false" />
         <activity
             android:name=".RegisterScreen"
@@ -62,7 +62,7 @@
             android:name=".LogRescueAttemptScreen"
             android:exported="false" />
         <activity
-            android:name=".TriageScreen"
+            android:name=".StartScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
