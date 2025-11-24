@@ -1,10 +1,12 @@
-package com.example.smart_air_app;
+package com.example.smart_air_app.inventory;
 
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.TimeZone;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +14,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.R;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Date;
@@ -30,6 +35,24 @@ public class InventoryScreen extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
+        TextView quickReliefName = findViewById(R.id.quickReliefName);
+        TextView quickReliefRemaining = findViewById(R.id.quickReliefRemaining);
+        TextView quickReliefTotal = findViewById(R.id.quickReliefTotal);
+        TextView quickReliefPercentage = findViewById(R.id.quickReliefPercentage);
+        LinearProgressIndicator quickReliefProgress = findViewById(R.id.quickReliefProgress);
+        TextView quickReliefLastPurchased = findViewById(R.id.quickReliefLastPurchased);
+        TextView quickReliefExpires = findViewById(R.id.quickReliefExpires);
+        LinearLayout quickReliefReportedBy = findViewById(R.id.quickReliefReportedBy);
+
+        TextInputEditText quickReliefNameInput = findViewById(R.id.quickReliefNameInput);
+        TextInputEditText quickReliefRemainingInput = findViewById(R.id.quickReliefRemainingInput);
+        TextInputEditText quickReliefTotalInput = findViewById(R.id.quickReliefTotalInput);
+        TextInputEditText quickReliefLastPurchasedInput = findViewById(R.id.quickReliefLastPurchasedInput);
+        TextInputEditText quickReliefExpiresInput = findViewById(R.id.quickReliefExpiresInput);
+        MaterialButtonToggleGroup quickReliefReportedByToggle = findViewById(R.id.quickReliefReportedByToggle);
+
 
         var quickReliefViewLayout = findViewById(R.id.quickReliefView);
         var quickReliefEditLayout = findViewById(R.id.quickReliefEdit);
@@ -75,16 +98,14 @@ public class InventoryScreen extends AppCompatActivity {
             }
         });
 
-        TextInputEditText quickReliefPurchased = findViewById(R.id.quickReliefPurchased);
-        TextInputEditText quickReliefExpires = findViewById(R.id.quickReliefExpires);
 
-        TextInputEditText controllerPurchased = findViewById(R.id.controllerPurchased);
-        TextInputEditText controllerExpires = findViewById(R.id.controllerExpires);
+        TextInputEditText controllerPurchasedInput = findViewById(R.id.controllerPurchasedInput);
+        TextInputEditText controllerExpiresInput = findViewById(R.id.controllerExpiresInput);
 
-        attachDatePicker(quickReliefPurchased);
-        attachDatePicker(quickReliefExpires);
-        attachDatePicker(controllerPurchased);
-        attachDatePicker(controllerExpires);
+        attachDatePicker(quickReliefLastPurchasedInput);
+        attachDatePicker(quickReliefExpiresInput);
+        attachDatePicker(controllerPurchasedInput);
+        attachDatePicker(controllerExpiresInput);
 
     }
 
