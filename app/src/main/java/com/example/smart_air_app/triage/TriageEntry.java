@@ -3,7 +3,7 @@ package com.example.smart_air_app.triage;
 public class TriageEntry {
 
     private static int numTriages = 0; // Number of total triage entries across all users
-    private int childUID;
+    private String childUID;
     private int triageID;
     private boolean[] redFlags = new boolean[3];
     // redFlags[0]: can't speak full sentences
@@ -13,10 +13,10 @@ public class TriageEntry {
     private double PEF;
     private boolean emergency;
 
-    public TriageEntry() {
+    public TriageEntry() { // need a public empty constructor?
         triageID = numTriages;
         numTriages++;
-        childUID = -1;
+        childUID = "-1";
         redFlags[0] = false;
         redFlags[1] = false;
         redFlags[2] = false;
@@ -28,7 +28,7 @@ public class TriageEntry {
     public TriageEntry(boolean[] redFlags, boolean recentRescue, double PEF, boolean emergency) {
         triageID = numTriages;
         numTriages++;
-        childUID = -1;
+        this.childUID = "-1";
         this.redFlags = redFlags;
         this.recentRescue = recentRescue;
         this.PEF = PEF;
@@ -47,6 +47,10 @@ public class TriageEntry {
         return redFlags[flagNum];
     }
 
+    public boolean[] getAllRedFlags() {
+        return redFlags;
+    }
+
     public boolean getRecentRescue() {
         return recentRescue;
     }
@@ -61,6 +65,14 @@ public class TriageEntry {
 
     public void setPEF(double value) {
         PEF = value;
+    }
+
+    public String getChildUID() {
+        return childUID;
+    }
+
+    public boolean getEmergencyStatus() {
+        return emergency;
     }
 
 }

@@ -10,6 +10,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.view.View;
 import android.widget.TextView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 
 import com.example.smart_air_app.triage.TriageEntry;
 import com.google.android.material.button.MaterialButton;
@@ -17,6 +19,8 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class TriageScreen extends AppCompatActivity {
 
@@ -86,7 +90,7 @@ public class TriageScreen extends AppCompatActivity {
 
         CountDownTimer emergencyTimer;
         // 10 mins = 600000ms
-        emergencyTimer = new CountDownTimer(5000, 1000) {
+        emergencyTimer = new CountDownTimer(600000, 1000) {
             @Override
             public void onTick(long msUntilFinished) {
                 long seconds = msUntilFinished / 1000;
@@ -139,12 +143,68 @@ public class TriageScreen extends AppCompatActivity {
     public void emergencyButtonPressed(View view) {
 
         TriageEntry entry = createTriageEntry();
+        saveTriageToDatabase(entry);
 
     }
 
     public void btnHomeSteps(View view) {
 
         TriageEntry entry = createTriageEntry();
+        saveTriageToDatabase(entry);
+
+    }
+
+    public void saveTriageToDatabase(TriageEntry entry) {
+
+        // Set triage ID to triage count in database
+        FirebaseDatabase.getInstance()
+                .getReference("TriageEntries").child("Count")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DataSnapshot snapshot = task.getResult();
+                        Integer count = snapshot.getValue(Integer.class);
+                    }
+                });;
+
+        FirebaseDatabase.getInstance()
+                .getReference("TriageEntries")
+                .child("Triage" + Integer.toString(entry.getTriageID()))
+                .child("PEF")
+                .setValue(entry.getPEF());
+        FirebaseDatabase.getInstance()
+                .getReference("TriageEntries")
+                .child("Triage" + Integer.toString(entry.getTriageID()))
+                .child("childUID")
+                .setValue(entry.getChildUID());
+
+        // Firebase doesn't accept arrays, so save a boolean for each red flag
+        FirebaseDatabase.getInstance()
+                .getReference("TriageEntries")
+                .child("Triage" + Integer.toString(entry.getTriageID()))
+                .child("NoFullSentences")
+                .setValue(entry.getRedFlag(0));
+        FirebaseDatabase.getInstance()
+                .getReference("TriageEntries")
+                .child("Triage" + Integer.toString(entry.getTriageID()))
+                .child("Retractions")
+                .setValue(entry.getRedFlag(1));
+        FirebaseDatabase.getInstance()
+                .getReference("TriageEntries")
+                .child("Triage" + Integer.toString(entry.getTriageID()))
+                .child("BlueGrayLipsNails")
+                .setValue(entry.getRedFlag(2));
+
+        FirebaseDatabase.getInstance()
+                .getReference("TriageEntries")
+                .child("Triage" + Integer.toString(entry.getTriageID()))
+                .child("RecentRescueDone")
+                .setValue(entry.getRecentRescue());
+        FirebaseDatabase.getInstance()
+                .getReference("TriageEntries")
+                .child("Triage" + Integer.toString(entry.getTriageID()))
+                .child("emergencyStatus")
+                .setValue(entry.getEmergencyStatus());
 
     }
 
