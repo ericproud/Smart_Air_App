@@ -12,6 +12,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class RegisterScreen extends AppCompatActivity {
+    private Button parentSignupButton;
+    private Button doctorSignupButton;
+    private Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +27,25 @@ public class RegisterScreen extends AppCompatActivity {
             return insets;
         });
 
-        Button backButton = findViewById(R.id.buttonBackRegister);
+        parentSignupButton = findViewById(R.id.buttonParentSignup);
+        doctorSignupButton = findViewById(R.id.buttonDoctorSignup);
+        backButton = findViewById(R.id.buttonBackRegister);
+
+        doctorSignupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RegisterScreen.this, RegisterAsDoctor.class);
+                startActivity(intent);
+            }
+        });
+
+        parentSignupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(RegisterScreen.this, RegisterAsParent.class);
+                startActivity(intent);
+            }
+        });
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override

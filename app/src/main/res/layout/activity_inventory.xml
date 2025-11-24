@@ -68,13 +68,25 @@
                     android:id="@+id/quickReliefView"
                     >
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Quick-relief medicine"
-                        android:textColor="@color/md_theme_onPrimaryContainer"
-                        android:textSize="24dp"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Medicine A"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textSize="24dp"
+                            android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" (quick relief)"
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:layout_marginLeft="8dp"/>
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -94,7 +106,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="/ 200 doses"
+                            android:text="/ 200 puffs"
                             android:textColor="@color/md_theme_onPrimaryContainer"
                             android:textSize="16dp" />
                     </LinearLayout>
@@ -205,7 +217,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Medicine Name"/>
+                        android:hint="Medicine Name" />
 
 
                     <LinearLayout
@@ -219,7 +231,8 @@
                             android:layout_height="wrap_content"
                             android:textSize="32dp"
                             android:textStyle="bold"
-                            android:hint="#"/>
+                            android:hint="#"
+                            android:inputType="number"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -232,7 +245,8 @@
                             android:layout_width="44dp"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
-                            android:hint="total "/>
+                            android:hint="total "
+                            android:inputType="number"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -392,13 +406,24 @@
                         android:padding="16dp"
                         android:id="@+id/controllerView">
 
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Controller medicine"
-                            android:textColor="@color/md_theme_onSecondaryContainer"
-                            android:textSize="24dp"
-                            android:textStyle="bold" />
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Medicine B"
+                                android:textColor="@color/md_theme_onSecondaryContainer"
+                                android:textSize="24dp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" (controller)"
+                                android:textColor="@color/md_theme_onSecondaryContainer"
+                                android:layout_marginLeft="8dp"/>
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -418,7 +443,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="/ 200 doses"
+                                android:text="/ 200 puffs"
                                 android:textColor="@color/md_theme_onSecondaryContainer"
                                 android:textSize="16dp" />
                         </LinearLayout>
@@ -555,7 +580,8 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="32dp"
                                 android:textStyle="bold"
-                                android:hint="#"/>
+                                android:hint="#"
+                                android:inputType="number"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -568,7 +594,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
-                                android:hint="total "/>
+                                android:hint="total "
+                                android:inputType="number"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
