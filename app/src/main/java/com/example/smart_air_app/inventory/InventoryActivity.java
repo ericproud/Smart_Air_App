@@ -324,12 +324,14 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
         Medicine m = new Medicine();
         try {
             if (index == 0) {
+                m.setType("Quick-Relief");
                 m.setRemaining(safeParseInt(safeGetText(quickReliefRemainingInput), 0));
                 m.setTotal(safeParseInt(safeGetText(quickReliefTotalInput), 0));
                 m.setLastPurchased(safeGetText(quickReliefLastPurchasedInput));
                 m.setExpires(safeGetText(quickReliefExpiresInput));
                 m.setReportedBy(getReportedByFromToggle(quickReliefReportedByToggle));
             } else {
+                m.setType("Controller");
                 m.setRemaining(safeParseInt(safeGetText(controllerRemainingInput), 0));
                 m.setTotal(safeParseInt(safeGetText(controllerTotalInput), 0));
                 m.setLastPurchased(safeGetText(controllerLastPurchasedInput));
