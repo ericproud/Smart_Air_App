@@ -167,6 +167,7 @@
             android:layout_marginRight="32dp"
             android:enabled="false"
             android:text="Start Home Steps"
+            android:onClick="btnHomeSteps"
             android:textAllCaps="true"
             android:textSize="16dp" />
 

@@ -72,18 +72,6 @@ public class TriageScreen extends AppCompatActivity {
         Chip redFlag1 = findViewById(R.id.btnRetractions);
         Chip redFlag2 = findViewById(R.id.btnBlueGray);
 
-        emergencyBtn.setOnClickListener(view -> {
-            if (validPEF()) {
-                startActivity(new Intent(TriageScreen.this, EmergencyScreen.class));
-            }
-        });
-
-        homeStepsBtn.setOnClickListener(view -> {
-            if (validPEF()) {
-                startActivity(new Intent(TriageScreen.this, VideoSBSInhallerUse.class));
-            }
-        });
-
         redFlagsGroup.setOnCheckedStateChangeListener((chipGroup, checkedIds) -> {
             if (yesornoChecked()) {
                 boolean emergencyStatus = false; // true when one of the red flags is checked
@@ -179,6 +167,7 @@ public class TriageScreen extends AppCompatActivity {
         if (validPEF()) {
             TriageEntry entry = createTriageEntry();
             saveTriageToDatabase(entry);
+            startActivity(new Intent(TriageScreen.this, EmergencyScreen.class));
         }
 
     }
@@ -188,6 +177,7 @@ public class TriageScreen extends AppCompatActivity {
         if (validPEF()) {
             TriageEntry entry = createTriageEntry();
             saveTriageToDatabase(entry);
+            startActivity(new Intent(TriageScreen.this, VideoSBSInhallerUse.class));
         }
 
     }
