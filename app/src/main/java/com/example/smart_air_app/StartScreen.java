@@ -12,9 +12,10 @@ import android.view.View;
 import android.content.Intent;
 
 import com.example.smart_air_app.login_module.LoginView;
-
+import com.google.firebase.auth.FirebaseAuth;
 
 public class StartScreen extends AppCompatActivity {
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,9 @@ public class StartScreen extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
 
         Button loginButton = findViewById(R.id.button_login);
 

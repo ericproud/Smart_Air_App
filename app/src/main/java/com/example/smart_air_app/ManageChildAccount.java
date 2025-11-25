@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ManageChildAccount extends AppCompatActivity {
 
@@ -22,27 +25,32 @@ public class ManageChildAccount extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+
+            Button sendOTCButton = findViewById(R.id.generateOTCButton);
+            Button revokeProviderAccessButton = findViewById(R.id.revokeProviderAccessButton);
+            Button managePermissionsButton = findViewById(R.id.manageChildPermissions);
+            TextView OTCText = findViewById(R.id.OTCText);
+
+            sendOTCButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String childUID = getIntent().getStringExtra("childUID");
+                    String OTC = Integer.toString((int) (Math.random() * (999999999 - 100000000 + 1) + 100000000));
+                    String text = "Your code is: " + OTC + " please give this to your provider.";
+                    OTCText.setText(text);
+                    FirebaseDatabase.getInstance().getReference("OTC's").child(childUID).setValue(OTC);
+                }
+            });
+
+            managePermissionsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ManageChildAccount.this, ManageSharingScreen.class);
+                    startActivity(intent);
+                }
+            });
+
             return insets;
-        });
-
-        Button generateOTCButton = findViewById(R.id.sendOTCButton);
-        Button revokeProviderAccessButton = findViewById(R.id.revokeProviderAccessButton);
-        Button managePermissionsButton = findViewById(R.id.manageChildPermissions);
-
-        generateOTCButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generateOTCButton.setEnabled(false);
-                int OTC = (int)(Math.random() * (999999999 - 100000000 + 1) + 100000000);
-            }
-        });
-
-        managePermissionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ManageChildAccount.this, ManageSharingScreen.class);
-                startActivity(intent);
-            }
         });
     }
 }

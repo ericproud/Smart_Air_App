@@ -45,9 +45,6 @@
             android:name=".ChildOnboardingScreen1"
             android:exported="false" />
         <activity
-            android:name=".DoctorHomeScreen"
-            android:exported="false" />
-        <activity
             android:name=".ChildOnboardingScreen2"
             android:exported="false" />
         <activity
@@ -84,9 +81,6 @@
             android:name=".CheckinHistoryScreen"
             android:exported="false" />
         <activity
-            android:name="login_module.LoginView"
-            android:exported="false" />
-        <activity
             android:name=".ViewHistoryScreen"
             android:exported="false" />
         <activity
@@ -106,6 +100,9 @@
             android:exported="false" />
         <activity
             android:name=".log_rescue_attempt.LogRescueAttemptActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageChildAccount"
             android:exported="false" />
         <activity
             android:name=".StartScreen"
