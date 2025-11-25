@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
         <activity
+            android:name=".ResetPasswordScreen"
+            android:exported="false" />
+        <activity
             android:name=".ManageSharingScreen"
             android:exported="false" />
         <activity
@@ -31,7 +34,7 @@
             android:exported="false" />
         <activity
             android:name=".DoctorHomeScreen"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".AddChildScreen"
             android:exported="false" />
@@ -100,6 +103,9 @@
             android:exported="false"/>
         <activity
             android:name=".VideoSBSInhallerUse"
+            android:exported="false" />
+        <activity
+            android:name=".log_rescue_attempt.LogRescueAttemptActivity"
             android:exported="false" />
         <activity
             android:name=".StartScreen"
