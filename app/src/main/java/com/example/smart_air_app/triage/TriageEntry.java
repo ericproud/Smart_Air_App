@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TriageEntry {
 
     private static int numTriages = 0; // Number of total triage entries across all users
-    private String childUID;
     private int triageID;
     private boolean[] redFlags = new boolean[3];
     // redFlags[0]: can't speak full sentences
@@ -24,7 +23,6 @@ public class TriageEntry {
         this.triageID = numTriages;
         numTriages++;
 
-        childUID = "-1";
         redFlags[0] = false;
         redFlags[1] = false;
         redFlags[2] = false;
@@ -38,7 +36,6 @@ public class TriageEntry {
         this.triageID = numTriages;
         numTriages++;
 
-        this.childUID = "-1";
         this.redFlags = redFlags;
         this.recentRescue = recentRescue;
         this.PEF = PEF;
@@ -75,10 +72,6 @@ public class TriageEntry {
 
     public void setPEF(double value) {
         PEF = value;
-    }
-
-    public String getChildUID() {
-        return childUID;
     }
 
     public boolean getEmergencyStatus() {
