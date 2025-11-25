@@ -193,13 +193,13 @@ public class TriageScreen extends AppCompatActivity {
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("PEF")
                 .setValue(entry.getPEF());
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("childUID")
                 .setValue(childUID);
 
@@ -207,32 +207,32 @@ public class TriageScreen extends AppCompatActivity {
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("NoFullSentences")
                 .setValue(entry.getRedFlag(0));
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("Retractions")
                 .setValue(entry.getRedFlag(1));
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("BlueGrayLipsNails")
                 .setValue(entry.getRedFlag(2));
 
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("RecentRescueDone")
                 .setValue(entry.getRecentRescue());
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("emergencyStatus")
                 .setValue(entry.getEmergencyStatus());
 
