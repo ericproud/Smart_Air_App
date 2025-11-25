@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -10,6 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
+        <activity
+            android:name=".EmergencyScreen"
+            android:exported="false" />
         <activity
             android:name=".ResetPasswordScreen"
             android:exported="false" />
@@ -26,7 +30,13 @@
             android:name=".login_module.LoginView"
             android:exported="false" />
         <activity
+            android:name=".login_module.LoginView"
+            android:exported="false" />
+        <activity
             android:name=".RegisterScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ManageChildAccount"
             android:exported="false" />
         <activity
             android:name=".ManageChildAccount"
@@ -35,7 +45,13 @@
             android:name=".DoctorHomeScreen"
             android:exported="false" />
         <activity
+            android:name=".DoctorHomeScreen"
+            android:exported="false" />
+        <activity
             android:name=".AddChildScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
             android:name=".ParentChildHomeScreen"
@@ -71,10 +87,7 @@
             android:name=".StreaksAndBadges"
             android:exported="false" />
         <activity
-            android:name=".DoctorHomeScreen"
-            android:exported="false" />
-        <activity
-            android:name=".ParentChildHomeScreen"
+            android:name=".StreaksAndBadges"
             android:exported="false" />
         <activity
             android:name=".CheckinHistoryScreen"
@@ -89,27 +102,20 @@
             android:name=".InventoryScreen"
             android:exported="false" />
         <activity
-            android:name=".login_module.LoginView"
-            android:exported="false" />
-        <activity
-            android:name=".StreaksAndBadges"
-            android:exported="false"/>
-        <activity
             android:name=".VideoSBSInhallerUse"
             android:exported="false" />
         <activity
             android:name=".log_rescue_attempt.LogRescueAttemptActivity"
             android:exported="false" />
         <activity
-            android:name=".ManageChildAccount"
-            android:exported="false" />
-        <activity
             android:name=".StartScreen"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+
 </manifest>
