@@ -20,6 +20,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -50,6 +51,13 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
 
         RescueAttemptRepository repo = new FirebaseRescueAttemptRepository();
         LogRescueAttemptPresenter presenter = new LogRescueAttemptPresenterImpl(this, repo);
+
+
+        if (getIntent().hasExtra("childUID")) { // child logged in through parent
+            repo.setUid(getIntent().getStringExtra("childUID"));
+        } else {
+            repo.setUid(FirebaseAuth.getInstance().getUid()); // child logged in normally
+        }
 
         dosageInput = findViewById(R.id.dosageInput);
         chipGroupTriggers = findViewById(R.id.chipGroupTriggers);

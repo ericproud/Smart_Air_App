@@ -6,4 +6,5 @@ public interface RescueAttemptRepository {
         void onError(String e);
     }
     void saveRescueAttempt(RescueAttempt attempt, RepoCallback callback);
+    void setUid(String uid);
 }
