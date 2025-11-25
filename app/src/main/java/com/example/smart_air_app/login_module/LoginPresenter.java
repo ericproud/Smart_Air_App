@@ -1,8 +1,5 @@
 package com.example.smart_air_app.login_module;
 
-import com.example.smart_air_app.session.SessionManager;
-import com.example.smart_air_app.user_classes.User;
-
 public class LoginPresenter {
     LoginModel model;
     LoginView view;
@@ -22,10 +19,9 @@ public class LoginPresenter {
 
     private class LoginCallback implements LoginModel.AuthCallback {
         @Override
-        public void onAuthSuccess(User user) {
+        public void onAuthSuccess(String userType) {
             // store basic information about the user like id to be used to make later requests
-            SessionManager.getInstance().setCurrentUser(user);
-            view.redirectToHome(user.type);
+            view.redirectToHome(userType);
         }
 
         @Override
@@ -44,7 +40,7 @@ public class LoginPresenter {
             return;
         }
         callback = new LoginCallback();
-        handledUsernameOrEmail = handleUsername(usernameOrEmail);
+        handledUsernameOrEmail = convertUsername(usernameOrEmail);
         model.signIn(handledUsernameOrEmail, password, callback);
     }
 
@@ -55,12 +51,17 @@ public class LoginPresenter {
         validUsernameOrEmail = validateUsernameOrEmail(usernameOrEmail);
         validPassword = validatePassword(password);
 
+        if (!validateUsernameOrEmail(usernameOrEmail)) {
+            handleEmptyUsernameOrEmail();
+        }
+        if (!validPassword) {
+            handleEmptyPassword();
+        }
         return validUsernameOrEmail && validPassword;
     }
 
     public boolean validateUsernameOrEmail(String usernameOrEmail) {
         if (usernameOrEmail.isEmpty()) {
-            view.onEmptyUsernameOrEmail();
             return false;
         }
         return true;
@@ -68,13 +69,20 @@ public class LoginPresenter {
 
     public boolean validatePassword(String password) {
         if (password.isEmpty()) {
-            view.onEmptyPassword();
             return false;
         }
         return true;
     }
 
-    public String handleUsername(String usernameOrEmail) {
+    public void handleEmptyUsernameOrEmail() {
+        view.onEmptyUsernameOrEmail();
+    }
+
+    public void handleEmptyPassword() {
+        view.onEmptyPassword();
+    }
+
+    public String convertUsername(String usernameOrEmail) {
         if (usernameOrEmail.contains("@")) {
             return usernameOrEmail;
         }

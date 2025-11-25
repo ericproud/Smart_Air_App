@@ -2,6 +2,7 @@ package com.example.smart_air_app;
 
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             return insets;
         });
 
+        TextView childName = findViewById(R.id.childsName);
         Button parentDailyCheckinButton = findViewById(R.id.parentDailyCheckInButton);
         Button parentLogControllerUsageButton = findViewById(R.id.parentLogControllerUsageButton);
         Button parentLogRescueAttemptButton = findViewById(R.id.parentLogRescueAttemptButton);
@@ -30,5 +32,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         Button parentStreaksAndBadgesButton = findViewById(R.id.parentStreaksAndBadgesButton);
         Button parentSummaryChartsButton = findViewById(R.id.parentSummaryChartsButton);
         Button parentManageAccountButton = findViewById(R.id.parentManageAccountButton);
+
+        childName.setText(getIntent().getStringExtra("childName"));
     }
 }

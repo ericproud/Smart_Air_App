@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "282364377779",
+    "firebase_url": "https://smart-air-app-database-default-rtdb.firebaseio.com",
     "project_id": "smart-air-app-database",
     "storage_bucket": "smart-air-app-database.firebasestorage.app"
   },

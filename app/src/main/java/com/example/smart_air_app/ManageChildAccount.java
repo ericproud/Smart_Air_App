@@ -1,5 +1,6 @@
 package com.example.smart_air_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import java.util.Random;
 
 public class ManageChildAccount extends AppCompatActivity {
 
@@ -26,17 +25,23 @@ public class ManageChildAccount extends AppCompatActivity {
             return insets;
         });
 
-        Button generateOTCButton = findViewById(R.id.generateOTCButton);
+        Button generateOTCButton = findViewById(R.id.sendOTCButton);
         Button revokeProviderAccessButton = findViewById(R.id.revokeProviderAccessButton);
-
-        TextView OTCText = findViewById(R.id.OTCText);
+        Button managePermissionsButton = findViewById(R.id.manageChildPermissions);
 
         generateOTCButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 generateOTCButton.setEnabled(false);
                 int OTC = (int)(Math.random() * (999999999 - 100000000 + 1) + 100000000);
-                OTCText.setText(Integer.toString(OTC));
+            }
+        });
+
+        managePermissionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ManageChildAccount.this, ManageSharingScreen.class);
+                startActivity(intent);
             }
         });
     }
