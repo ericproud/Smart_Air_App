@@ -45,6 +45,9 @@
             android:name=".ChildOnboardingScreen1"
             android:exported="false" />
         <activity
+            android:name=".DoctorHomeScreen"
+            android:exported="false" />
+        <activity
             android:name=".ChildOnboardingScreen2"
             android:exported="false" />
         <activity
@@ -81,6 +84,9 @@
             android:name=".CheckinHistoryScreen"
             android:exported="false" />
         <activity
+            android:name="login_module.LoginView"
+            android:exported="false" />
+        <activity
             android:name=".ViewHistoryScreen"
             android:exported="false" />
         <activity
@@ -90,11 +96,11 @@
             android:name=".InventoryScreen"
             android:exported="false" />
         <activity
-            android:name=".StreaksAndBadges"
-            android:exported="false" />
-        <activity
             android:name=".login_module.LoginView"
             android:exported="false" />
+        <activity
+            android:name=".StreaksAndBadges"
+            android:exported="false"/>
         <activity
             android:name=".VideoSBSInhallerUse"
             android:exported="false" />
@@ -103,10 +109,9 @@
             android:exported="false" />
         <activity
             android:name=".StartScreen"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -8,7 +8,7 @@
     tools:context=".TemplateActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/childsName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#673AB7"
@@ -52,7 +52,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/childsName" />
 
     <CheckBox
         android:id="@+id/checkBox"
