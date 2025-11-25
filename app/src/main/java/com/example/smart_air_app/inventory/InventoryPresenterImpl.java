@@ -9,10 +9,14 @@ public class InventoryPresenterImpl implements InventoryPresenter {
     private final InventoryRepository repo;
     private final List<Medicine> inventory = new ArrayList<>();
     private final boolean[] editing = new boolean[2];
+    private final String uid;
 
-    public InventoryPresenterImpl(InventoryView view, InventoryRepository repo) {
+    public InventoryPresenterImpl(String uid, InventoryView view, InventoryRepository repo) {
         this.view = view;
         this.repo = repo;
+        this.uid = uid;
+
+        repo.setUid(uid);
 
         repo.fetchInventory(new InventoryRepository.FetchCallback() {
             @Override
@@ -21,7 +25,7 @@ public class InventoryPresenterImpl implements InventoryPresenter {
 
                 if (InventoryPresenterImpl.this.inventory.get(0) == null) {
                     Medicine m1 = new Medicine();
-                    m1.setName("Medicine 1");
+                    m1.setType("Quick-Relief");
                     m1.setRemaining(0);
                     m1.setTotal(0);
                     m1.setLastPurchased("");
@@ -33,7 +37,7 @@ public class InventoryPresenterImpl implements InventoryPresenter {
 
                 if (InventoryPresenterImpl.this.inventory.get(1) == null) {
                     Medicine m2 = new Medicine();
-                    m2.setName("Medicine 2");
+                    m2.setType("Controller");
                     m2.setRemaining(0);
                     m2.setTotal(0);
                     m2.setLastPurchased("");
@@ -77,11 +81,6 @@ public class InventoryPresenterImpl implements InventoryPresenter {
         }
 
         boolean valid = true;
-
-        if (medicine.getName().isEmpty()) {
-            view.showNameError(index, "Name cannot be empty");
-            valid = false;
-        }
 
         if (medicine.getTotal() == 0) {
             view.showTotalError(index, "Total cannot be 0");

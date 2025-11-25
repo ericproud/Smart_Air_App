@@ -1,7 +1,7 @@
 package com.example.smart_air_app.inventory;
 
 public class Medicine {
-    private String name;
+    private String type;
     private int remaining;
     private int total;
     private String lastPurchased;
@@ -9,10 +9,9 @@ public class Medicine {
     private String reportedBy;
 
     @Override
-    public String
-    toString() {
+    public String toString() {
         return "Medicine{" +
-                "name='" + name + '\'' +
+                "type='" + type + '\'' +
                 ", remaining=" + remaining +
                 ", total=" + total +
                 ", lastPurchased='" + lastPurchased + '\'' +
@@ -41,12 +40,12 @@ public class Medicine {
         return remaining;
     }
 
-    public String getName() {
-        return name;
+    public String getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public void setRemaining(int remaining) {

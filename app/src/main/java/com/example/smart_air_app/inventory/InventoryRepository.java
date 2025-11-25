@@ -14,4 +14,6 @@ public interface InventoryRepository {
     }
     void saveInventory(List<Medicine> inventory, int index, SaveCallback callback);
     void fetchInventory(FetchCallback callback);
+    void initInventory();
+    void setUid(String uid);
 }

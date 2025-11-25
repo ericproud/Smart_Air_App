@@ -84,7 +84,7 @@
             android:name=".DailyCheckIn"
             android:exported="false" />
         <activity
-            android:name=".InventoryScreen"
+            android:name=".inventory.InventoryActivity"
             android:exported="false" />
         <activity
             android:name=".login_module.LoginView"
@@ -95,15 +95,13 @@
         <activity
             android:name=".VideoSBSInhallerUse"
             android:exported="false" />
+        <activity android:name=".ParentHomeScreen"
+            android:exported="false" />
         <activity
             android:name=".StartScreen"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

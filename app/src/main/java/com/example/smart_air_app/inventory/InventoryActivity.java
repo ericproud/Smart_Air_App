@@ -25,7 +25,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class InventoryActivity extends AppCompatActivity implements InventoryView {
-    private TextView quickReliefName;
     private TextView quickReliefRemaining;
     private TextView quickReliefTotal;
     private TextView quickReliefPercentage;
@@ -34,14 +33,12 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
     private TextView quickReliefExpires;
     private LinearLayout quickReliefReportedBy;
 
-    private TextInputEditText quickReliefNameInput;
     private TextInputEditText quickReliefRemainingInput;
     private TextInputEditText quickReliefTotalInput;
     private TextInputEditText quickReliefLastPurchasedInput;
     private TextInputEditText quickReliefExpiresInput;
     private MaterialButtonToggleGroup quickReliefReportedByToggle;
 
-    private TextView controllerName;
     private TextView controllerRemaining;
     private TextView controllerTotal;
     private TextView controllerPercentage;
@@ -50,7 +47,6 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
     private TextView controllerExpires;
     private LinearLayout controllerReportedBy;
 
-    private TextInputEditText controllerNameInput;
     private TextInputEditText controllerRemainingInput;
     private TextInputEditText controllerTotalInput;
     private TextInputEditText controllerLastPurchasedInput;
@@ -78,7 +74,6 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
             return insets;
         });
 
-        quickReliefName = findViewById(R.id.quickReliefName);
         quickReliefRemaining = findViewById(R.id.quickReliefRemaining);
         quickReliefTotal = findViewById(R.id.quickReliefTotal);
         quickReliefPercentage = findViewById(R.id.quickReliefPercentage);
@@ -87,14 +82,12 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
         quickReliefExpires = findViewById(R.id.quickReliefExpires);
         quickReliefReportedBy = findViewById(R.id.quickReliefReportedBy);
 
-        quickReliefNameInput = findViewById(R.id.quickReliefNameInput);
         quickReliefRemainingInput = findViewById(R.id.quickReliefRemainingInput);
         quickReliefTotalInput = findViewById(R.id.quickReliefTotalInput);
         quickReliefLastPurchasedInput = findViewById(R.id.quickReliefLastPurchasedInput);
         quickReliefExpiresInput = findViewById(R.id.quickReliefExpiresInput);
         quickReliefReportedByToggle = findViewById(R.id.quickReliefReportedByToggle);
 
-        controllerName = findViewById(R.id.controllerName);
         controllerRemaining = findViewById(R.id.controllerRemaining);
         controllerTotal = findViewById(R.id.controllerTotal);
         controllerPercentage = findViewById(R.id.controllerPercentage);
@@ -103,7 +96,6 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
         controllerExpires = findViewById(R.id.controllerExpires);
         controllerReportedBy = findViewById(R.id.controllerReportedBy);
 
-        controllerNameInput = findViewById(R.id.controllerNameInput);
         controllerRemainingInput = findViewById(R.id.controllerRemainingInput);
         controllerTotalInput = findViewById(R.id.controllerTotalInput);
         controllerLastPurchasedInput = findViewById(R.id.controllerLastPurchasedInput);
@@ -120,7 +112,8 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
         controllerEditButton = findViewById(R.id.controllerEditIcon);
         controllerSaveButton = findViewById(R.id.controllerSaveIcon);
 
-        InventoryPresenter presenter = new InventoryPresenterImpl(this, new FirebaseInventoryRepository());
+        String childUID = getIntent().getStringExtra("childUID");
+        InventoryPresenter presenter = new InventoryPresenterImpl(childUID, this, new FirebaseInventoryRepository());
 
         quickReliefEditButton.setOnClickListener(v -> presenter.onEditToggle(0));
         quickReliefSaveButton.setOnClickListener(v -> {
@@ -211,20 +204,11 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
     }
 
     public void clearErrors(int index) {
-        TextInputEditText edit = index == 0 ? quickReliefNameInput : controllerNameInput;
         TextInputEditText remaining = index == 0 ? quickReliefRemainingInput : controllerRemainingInput;
         TextInputEditText total = index == 0 ? quickReliefTotalInput : controllerTotalInput;
 
         remaining.setError("");
         total.setError("");
-        edit.setError("");
-    }
-
-    @Override
-    public void showNameError(int index, String message) {
-        TextInputEditText edit = index == 0 ? quickReliefNameInput : controllerNameInput;
-        edit.setError(message);
-        showError(message);
     }
 
     @Override
@@ -261,7 +245,6 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
     }
 
     private void populateDisplayFieldsQuick(Medicine m) {
-        quickReliefName.setText(m.getName());
         quickReliefRemaining.setText(String.valueOf(m.getRemaining()));
         quickReliefTotal.setText(String.valueOf(m.getTotal()));
 
@@ -288,7 +271,6 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
     }
 
     private void populateEditFieldsQuick(Medicine m) {
-        quickReliefNameInput.setText(m.getName());
         quickReliefRemainingInput.setText(String.valueOf(m.getRemaining()));
         quickReliefTotalInput.setText(String.valueOf(m.getTotal()));
         quickReliefLastPurchasedInput.setText(m.getLastPurchased());
@@ -301,7 +283,6 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
     }
 
     private void populateDisplayFieldsController(Medicine m) {
-        controllerName.setText(m.getName());
         controllerRemaining.setText(String.valueOf(m.getRemaining()));
         controllerTotal.setText(String.valueOf(m.getTotal()));
 
@@ -328,7 +309,6 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
     }
 
     private void populateEditFieldsController(Medicine m) {
-        controllerNameInput.setText(m.getName());
         controllerRemainingInput.setText(String.valueOf(m.getRemaining()));
         controllerTotalInput.setText(String.valueOf(m.getTotal()));
         controllerLastPurchasedInput.setText(m.getLastPurchased());
@@ -344,14 +324,12 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
         Medicine m = new Medicine();
         try {
             if (index == 0) {
-                m.setName(safeGetText(quickReliefNameInput));
                 m.setRemaining(safeParseInt(safeGetText(quickReliefRemainingInput), 0));
                 m.setTotal(safeParseInt(safeGetText(quickReliefTotalInput), 0));
                 m.setLastPurchased(safeGetText(quickReliefLastPurchasedInput));
                 m.setExpires(safeGetText(quickReliefExpiresInput));
                 m.setReportedBy(getReportedByFromToggle(quickReliefReportedByToggle));
             } else {
-                m.setName(safeGetText(controllerNameInput));
                 m.setRemaining(safeParseInt(safeGetText(controllerRemainingInput), 0));
                 m.setTotal(safeParseInt(safeGetText(controllerTotalInput), 0));
                 m.setLastPurchased(safeGetText(controllerLastPurchasedInput));
