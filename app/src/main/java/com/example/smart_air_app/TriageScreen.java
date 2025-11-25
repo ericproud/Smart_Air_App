@@ -1,5 +1,6 @@
 package com.example.smart_air_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.Button;
@@ -10,11 +11,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.view.View;
 import android.widget.TextView;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
+import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.triage.TriageEntry;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -22,7 +21,6 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class TriageScreen extends AppCompatActivity {
@@ -46,7 +44,7 @@ public class TriageScreen extends AppCompatActivity {
         });
 
         ChipGroup redFlagsGroup = findViewById(R.id.redFlagsGroup);
-        Button emergencyBtn = findViewById(R.id.btnEmergency);
+        Button emergencyBtn = findViewById(R.id.btnFeelingBetter);
         Button homeStepsBtn = findViewById(R.id.btnHomeSteps);
         MaterialButton btnRescueYes = findViewById(R.id.btnRescueYes);
         MaterialButton btnRescueNo = findViewById(R.id.btnRescueNo);
@@ -54,6 +52,14 @@ public class TriageScreen extends AppCompatActivity {
         Chip redFlag0 = findViewById(R.id.btnNoFullSentences);
         Chip redFlag1 = findViewById(R.id.btnRetractions);
         Chip redFlag2 = findViewById(R.id.btnBlueGray);
+
+        emergencyBtn.setOnClickListener(view -> {
+            startActivity(new Intent(TriageScreen.this, EmergencyScreen.class));
+        });
+
+        homeStepsBtn.setOnClickListener(view -> {
+            startActivity(new Intent(TriageScreen.this, VideoSBSInhallerUse.class));
+        });
 
         redFlagsGroup.setOnCheckedStateChangeListener((chipGroup, checkedIds) -> {
             if (yesornoChecked()) {
@@ -107,7 +113,7 @@ public class TriageScreen extends AppCompatActivity {
             @Override
             public void onFinish() {
                 timerText.setText("00:00");
-                emergencyButtonPressed(findViewById(R.id.btnEmergency));
+                emergencyButtonPressed(findViewById(R.id.btnFeelingBetter));
             }
         };
 
@@ -175,7 +181,7 @@ public class TriageScreen extends AppCompatActivity {
                 .child(childUID)
                 .child("TriageID" + Integer.toString(entry.getTriageID()))
                 .child("childUID")
-                .setValue(entry.getChildUID());
+                .setValue(childUID);
 
         // Firebase doesn't accept arrays, so save a boolean for each red flag
         FirebaseDatabase.getInstance()

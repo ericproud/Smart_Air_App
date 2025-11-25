@@ -67,7 +67,7 @@
             android:text="You are now in emergency status. Your parent has been alerted of this emergency. Please call emergency services (911) immediately. Since this app only provides guidance, we cannot make this call for you." />
 
         <Button
-            android:id="@+id/btnEmergency"
+            android:id="@+id/btnFeelingBetter"
             style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="match_parent"
             android:layout_height="64dp"
