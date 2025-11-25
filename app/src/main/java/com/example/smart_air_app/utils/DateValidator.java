@@ -37,6 +37,9 @@ public class DateValidator {
     }
 
     public static String makeDateString(int day, int month, int year) {
+        if (day < 10) {
+            return DateValidator.getMonthFormat(month) + " " + "0" + day + " " + year;
+        }
         return DateValidator.getMonthFormat(month) + " " + day + " " + year;
     }
 

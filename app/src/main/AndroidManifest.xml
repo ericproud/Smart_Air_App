@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
         <activity
+            android:name=".ManageSharingScreen"
+            android:exported="false" />
+        <activity
             android:name=".RegisterAsDoctor"
             android:exported="false" />
         <activity
@@ -24,22 +27,46 @@
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity
-            android:name=".ManageChildAccount"
+            android:name=".ChildHomeScreen"
             android:exported="false" />
+        <activity
+            android:name=".DoctorHomeScreen"
+            android:exported="false"/>
         <activity
             android:name=".AddChildScreen"
             android:exported="false" />
         <activity
-            android:name=".ParentHomeScreen"
+            android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".ChildHomeScreen"
+            android:name=".ChildOnboardingScreen1"
             android:exported="false" />
         <activity
             android:name=".DoctorHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".ParentChildHomeScreen"
+            android:name=".ChildOnboardingScreen2"
+            android:exported="false" />
+        <activity
+            android:name=".ChildOnboardingScreen3"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen1"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen2"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen3"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderOnboardingScreen1"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderOnboardingScreen2"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderOnboardingScreen3"
             android:exported="false" />
         <activity
             android:name=".ControllerLoggingScreen"
@@ -53,7 +80,7 @@
         <activity
             android:name=".ViewHistoryScreen"
             android:exported="false" />
-              <activity
+        <activity
             android:name=".DailyCheckIn"
             android:exported="false" />
         <activity
@@ -77,6 +104,9 @@
             </intent-filter>
         </activity>
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

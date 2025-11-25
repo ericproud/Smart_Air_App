@@ -30,7 +30,7 @@ public class LoginModel {
     }
 
     public interface AuthCallback {
-        void onAuthSuccess(User user);
+        void onAuthSuccess(String userType);
         void onAuthFailure(String message);
     }
 
@@ -47,8 +47,7 @@ public class LoginModel {
                             if (dataSnapshot.exists()) {
                                 String userType = dataSnapshot.child("type").getValue(String.class);
                                 if (userType != null && !userType.isEmpty()) {
-                                    User user = dataSnapshot.getValue(User.class);
-                                    callback.onAuthSuccess(user);
+                                    callback.onAuthSuccess(userType);
                                 } else {
                                     callback.onAuthFailure("User type not found.");
                                 }
