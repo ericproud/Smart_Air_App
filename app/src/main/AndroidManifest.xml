@@ -78,6 +78,9 @@
             android:name=".CheckinHistoryScreen"
             android:exported="false" />
         <activity
+            android:name="login_module.LoginView"
+            android:exported="false" />
+        <activity
             android:name=".ViewHistoryScreen"
             android:exported="false" />
         <activity
@@ -100,10 +103,6 @@
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
