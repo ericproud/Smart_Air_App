@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,26 +11,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
         <activity
+            android:name=".ResetPasswordScreen"
+            android:exported="false" />
+        <activity
             android:name=".ManageSharingScreen"
             android:exported="false" />
         <activity
-            android:name=".RegisterAsDoctor"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterAsParent"
+            android:name=".TriageScreen"
             android:exported="false" />
         <activity
             android:name=".TemplateActivity"
             android:exported="false" />
         <activity
+            android:name=".login_module.LoginView"
+            android:exported="false" />
+        <activity
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity
-            android:name=".ChildHomeScreen"
+            android:name=".ManageChildAccount"
             android:exported="false" />
         <activity
             android:name=".DoctorHomeScreen"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".AddChildScreen"
             android:exported="false" />
@@ -40,9 +42,6 @@
             android:exported="false" />
         <activity
             android:name=".ChildOnboardingScreen1"
-            android:exported="false" />
-        <activity
-            android:name=".DoctorHomeScreen"
             android:exported="false" />
         <activity
             android:name=".ChildOnboardingScreen2"
@@ -60,19 +59,22 @@
             android:name=".ParentOnboardingScreen3"
             android:exported="false" />
         <activity
+            android:name=".ParentHomeScreen"
+            android:exported="false" />
+        <activity
             android:name=".ProviderOnboardingScreen1"
             android:exported="false" />
         <activity
-            android:name=".ProviderOnboardingScreen2"
+            android:name=".ChildHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".ProviderOnboardingScreen3"
+            android:name=".StreaksAndBadges"
             android:exported="false" />
         <activity
-            android:name=".ControllerLoggingScreen"
+            android:name=".DoctorHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".ControllerScheduleScreen"
+            android:name=".ParentChildHomeScreen"
             android:exported="false" />
         <activity
             android:name=".CheckinHistoryScreen"
@@ -98,6 +100,12 @@
         <activity android:name=".ParentHomeScreen"
             android:exported="false" />
         <activity
+            android:name=".log_rescue_attempt.LogRescueAttemptActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ManageChildAccount"
+            android:exported="false" />
+        <activity
             android:name=".StartScreen"
             android:exported="true" >
             <intent-filter>
@@ -106,5 +114,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>
