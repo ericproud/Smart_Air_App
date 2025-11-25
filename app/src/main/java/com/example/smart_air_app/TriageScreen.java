@@ -1,6 +1,7 @@
 package com.example.smart_air_app;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.Button;
@@ -32,6 +33,24 @@ public class TriageScreen extends AppCompatActivity {
         return btnRescueNo.isChecked() || btnRescueYes.isChecked();
     }
 
+    boolean validPEF() {
+        // Returns true when PEF is valid (double)
+        // Otherwise highlights the PEF field red
+
+        TextInputEditText inputBoxPEF = findViewById(R.id.inputPEF);
+        double PEFvalue;
+        if (inputBoxPEF.getText() == null || inputBoxPEF.getText().toString().trim().isEmpty()) {
+            return true; // Empty or whitespace PEF is valid since PEF is optional
+        }
+        try {
+            Double value = Double.parseDouble(inputBoxPEF.getText().toString().trim());
+        } catch (NumberFormatException e) { // If PEF is a non-number
+            inputBoxPEF.setTextColor(Color.RED);
+            return false;
+        }
+        return true;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,11 +73,15 @@ public class TriageScreen extends AppCompatActivity {
         Chip redFlag2 = findViewById(R.id.btnBlueGray);
 
         emergencyBtn.setOnClickListener(view -> {
-            startActivity(new Intent(TriageScreen.this, EmergencyScreen.class));
+            if (validPEF()) {
+                startActivity(new Intent(TriageScreen.this, EmergencyScreen.class));
+            }
         });
 
         homeStepsBtn.setOnClickListener(view -> {
-            startActivity(new Intent(TriageScreen.this, VideoSBSInhallerUse.class));
+            if (validPEF()) {
+                startActivity(new Intent(TriageScreen.this, VideoSBSInhallerUse.class));
+            }
         });
 
         redFlagsGroup.setOnCheckedStateChangeListener((chipGroup, checkedIds) -> {
@@ -149,21 +172,28 @@ public class TriageScreen extends AppCompatActivity {
 
     }
 
+    // These buttons already redirect the user to their respective screens (emergency & homesteps)
+
     public void emergencyButtonPressed(View view) {
 
-        TriageEntry entry = createTriageEntry();
-        saveTriageToDatabase(entry);
+        if (validPEF()) {
+            TriageEntry entry = createTriageEntry();
+            saveTriageToDatabase(entry);
+        }
 
     }
 
     public void btnHomeSteps(View view) {
 
-        TriageEntry entry = createTriageEntry();
-        saveTriageToDatabase(entry);
+        if (validPEF()) {
+            TriageEntry entry = createTriageEntry();
+            saveTriageToDatabase(entry);
+        }
 
     }
 
     public void saveTriageToDatabase(TriageEntry entry) {
+        // This method saves the TriageEntry into the database
 
         // Get current child UID
         String childUID = FirebaseAuth.getInstance().getUid();
