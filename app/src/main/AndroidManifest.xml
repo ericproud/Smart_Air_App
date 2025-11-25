@@ -11,7 +11,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
         <activity
-            android:name=".MainActivity"
+            android:name=".ResetPasswordScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ManageSharingScreen"
             android:exported="false" />
         <activity
             android:name=".TriageScreen"
@@ -29,10 +32,40 @@
             android:name=".ManageChildAccount"
             android:exported="false" />
         <activity
+            android:name=".DoctorHomeScreen"
+            android:exported="false" />
+        <activity
             android:name=".AddChildScreen"
             android:exported="false" />
         <activity
+            android:name=".ParentChildHomeScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ChildOnboardingScreen1"
+            android:exported="false" />
+        <activity
+            android:name=".DoctorHomeScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ChildOnboardingScreen2"
+            android:exported="false" />
+        <activity
+            android:name=".ChildOnboardingScreen3"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen1"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen2"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen3"
+            android:exported="false" />
+        <activity
             android:name=".ParentHomeScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderOnboardingScreen1"
             android:exported="false" />
         <activity
             android:name=".ChildHomeScreen"
@@ -50,6 +83,9 @@
             android:name=".CheckinHistoryScreen"
             android:exported="false" />
         <activity
+            android:name="login_module.LoginView"
+            android:exported="false" />
+        <activity
             android:name=".ViewHistoryScreen"
             android:exported="false" />
         <activity
@@ -59,11 +95,20 @@
             android:name=".InventoryScreen"
             android:exported="false" />
         <activity
-            android:name=".LogRescueAttemptScreen"
+            android:name=".login_module.LoginView"
+            android:exported="false" />
+        <activity
+            android:name=".StreaksAndBadges"
+            android:exported="false"/>
+        <activity
+            android:name=".VideoSBSInhallerUse"
+            android:exported="false" />
+        <activity
+            android:name=".log_rescue_attempt.LogRescueAttemptActivity"
             android:exported="false" />
         <activity
             android:name=".StartScreen"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
