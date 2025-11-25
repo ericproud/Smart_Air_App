@@ -1,5 +1,6 @@
 package com.example.smart_air_app.inventory;
 
+import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.TimeZone;
 import android.os.Bundle;
@@ -15,7 +16,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.ChildHomeScreen;
+import com.example.smart_air_app.ParentChildHomeScreen;
 import com.example.smart_air_app.R;
+import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -125,6 +130,14 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
         controllerSaveButton.setOnClickListener(v -> {
             Medicine m = collectEditMedicine(1);
             presenter.onSave(1, m);
+        });
+
+
+        MaterialToolbar toolbar = findViewById(R.id.materialToolbar);
+        toolbar.setNavigationOnClickListener(view -> {
+            Intent intent = new Intent(InventoryActivity.this, ParentChildHomeScreen.class);
+            intent.putExtra("childUID", childUID);
+            startActivity(intent);
         });
 
 
