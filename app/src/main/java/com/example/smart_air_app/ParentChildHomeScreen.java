@@ -10,6 +10,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.inventory.InventoryActivity;
+
 public class ParentChildHomeScreen extends AppCompatActivity {
 
     @Override
@@ -23,10 +25,12 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             return insets;
         });
 
-        String childUID = getIntent().getStringExtra("childUID");
+
+        Intent childData = getIntent();
+        String childUserId = childData.getStringExtra("childUID");
         String childName = getIntent().getStringExtra("childName");
 
-
+        TextView childNameView = findViewById(R.id.childsName);
         Button parentDailyCheckinButton = findViewById(R.id.parentDailyCheckInButton);
         Button parentLogControllerUsageButton = findViewById(R.id.parentLogControllerUsageButton);
         Button parentLogRescueAttemptButton = findViewById(R.id.parentLogRescueAttemptButton);
@@ -36,6 +40,13 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         Button parentSummaryChartsButton = findViewById(R.id.parentSummaryChartsButton);
         Button parentManageAccountButton = findViewById(R.id.parentManageAccountButton);
 
+        parentInventoryButton.setOnClickListener(view -> {
+            Intent intent = new Intent(ParentChildHomeScreen.this, InventoryActivity.class);
+            intent.putExtra("childUID", childUserId);
+            startActivity(intent);
+        });
+
+        childNameView.setText(childName);
         parentManageAccountButton.setOnClickListener(v -> {
             Intent intent = new Intent(ParentChildHomeScreen.this, ManageChildAccount.class);
             intent.putExtra("childUID", childUID);

@@ -13,13 +13,16 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.ChildHomeScreen;
+import com.example.smart_air_app.ParentChildHomeScreen;
 import com.example.smart_air_app.R;
+import com.example.smart_air_app.user_classes.Child;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -51,6 +54,26 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
         RescueAttemptRepository repo = new FirebaseRescueAttemptRepository();
         LogRescueAttemptPresenter presenter = new LogRescueAttemptPresenterImpl(this, repo);
 
+
+        if (getIntent().hasExtra("childUID")) { // child logged in through parent
+            String childUID = getIntent().getStringExtra("childUID");
+            repo.setUid(childUID);
+
+            toolbar.setNavigationOnClickListener(view -> {
+                Intent intent = new Intent(LogRescueAttemptActivity.this, ParentChildHomeScreen.class);
+                intent.putExtra("childUID", childUID);
+                startActivity(intent);
+            });
+
+        } else {
+            repo.setUid(FirebaseAuth.getInstance().getUid()); // child logged in normally
+            toolbar.setNavigationOnClickListener(view -> {
+                Intent intent = new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class);
+                startActivity(intent);
+            });
+
+        }
+
         dosageInput = findViewById(R.id.dosageInput);
         chipGroupTriggers = findViewById(R.id.chipGroupTriggers);
         chipGroupTriggersError = findViewById(R.id.chipGroupTriggersError);
@@ -61,10 +84,6 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
         triageIncidentToggleButton = findViewById(R.id.triageIncidentToggleButton);
         Button submit = findViewById(R.id.submitRescueAttemptButton);
         toolbar = findViewById(R.id.materialToolbar);
-
-        toolbar.setNavigationOnClickListener(view -> {
-            startActivity(new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class));
-        });
 
         // default check no
         triageIncidentToggleButton.check(triageIncidentToggleButton.getChildAt(1).getId());
