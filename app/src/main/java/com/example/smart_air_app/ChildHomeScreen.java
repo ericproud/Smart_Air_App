@@ -12,6 +12,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 
+import controller_log.ControllerLoggingScreen;
+
 public class ChildHomeScreen extends AppCompatActivity {
 
     @Override
@@ -28,6 +30,13 @@ public class ChildHomeScreen extends AppCompatActivity {
         Button logRescueAttempt = findViewById(R.id.parentLogRescueAttemptButton);
         logRescueAttempt.setOnClickListener(view -> {
             startActivity(new Intent(ChildHomeScreen.this, LogRescueAttemptActivity.class));
+        });
+
+        Button logController = findViewById(R.id.parentLogControllerUsageButton);
+        logController.setOnClickListener(v->{
+            Intent intent = new Intent(ChildHomeScreen.this, ControllerLoggingScreen.class);
+            intent.putExtra("childId", getIntent().getStringExtra("childId"));
+            startActivity(intent);
         });
     }
 }

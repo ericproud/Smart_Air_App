@@ -1,4 +1,4 @@
-package com.example.smart_air_app;
+package controller_log;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +15,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.smart_air_app.R;
+
 
 public class ControllerScheduleScreen extends AppCompatActivity {
     @Override

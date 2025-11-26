@@ -46,15 +46,6 @@
         app:layout_constraintStart_toEndOf="@+id/timeButton"
         app:layout_constraintTop_toBottomOf="@+id/controllerUseScheduleButton" />
 
-    <Spinner
-        android:id="@+id/medicineSpinner"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView8"
-        app:layout_constraintTop_toBottomOf="@+id/timeButton" />
-
     <EditText
         android:id="@+id/amountInputText"
         android:layout_width="wrap_content"
@@ -65,24 +56,24 @@
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/medicineSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/selectDateButton" />
 
     <Button
         android:id="@+id/techniqueHelperButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:text="Technique Helper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rescueSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/setPBButton" />
 
     <TextView
         android:id="@+id/PEFText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Log PEF (optional)"
+        android:text="Log pre PEF (optional)"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/techniqueHelperButton" />
@@ -101,48 +92,38 @@
         android:id="@+id/postControllerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="31dp"
         android:text="Post Controller Usage: "
         app:layout_constraintEnd_toStartOf="@+id/postControllerInput"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preControllerUseText" />
+        app:layout_constraintTop_toBottomOf="@+id/feelingSpinner" />
 
     <TextView
         android:id="@+id/currentBest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="20dp"
         android:text="Current Personal Best:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postControllerText" />
-
-    <TextView
-        android:id="@+id/setPersonalBestText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Set Personal Best: "
-        app:layout_constraintEnd_toStartOf="@+id/personalBestInput"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentBest" />
+        app:layout_constraintTop_toBottomOf="@+id/preControllerInput" />
 
     <TextView
         android:id="@+id/currentZoneText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:text="Today's Zone: "
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.474"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setPersonalBestText" />
+        app:layout_constraintTop_toBottomOf="@+id/currentBest" />
 
     <Button
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="15dp"
         android:text="Submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/backButton"
@@ -152,7 +133,7 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="15dp"
         android:text="Back"
         app:layout_constraintEnd_toStartOf="@+id/submitButton"
         app:layout_constraintHorizontal_bias="0.068"
@@ -160,28 +141,16 @@
         app:layout_constraintTop_toBottomOf="@+id/currentZoneText" />
 
     <EditText
-        android:id="@+id/personalBestInput"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="23dp"
-        android:ems="10"
-        android:hint="new highest score"
-        android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/setPersonalBestText"
-        app:layout_constraintTop_toBottomOf="@+id/currentBest" />
-
-    <EditText
         android:id="@+id/postControllerInput"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Rating after controller"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/postControllerText"
-        app:layout_constraintTop_toBottomOf="@+id/preControllerUseText" />
+        app:layout_constraintTop_toBottomOf="@+id/feelingSpinner" />
 
     <EditText
         android:id="@+id/preControllerInput"
@@ -215,32 +184,33 @@
         app:layout_constraintTop_toBottomOf="@+id/amountInputText" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/selectedDateText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/medicineSpinner"
+        android:layout_marginTop="40dp"
+        android:text="Selected Date:"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/selectDateButton"
+        app:layout_constraintTop_toBottomOf="@+id/selectedTimeText" />
+
+    <Button
+        android:id="@+id/selectDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Select Date"
+        app:layout_constraintEnd_toStartOf="@+id/selectedDateText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/timeButton" />
 
-    <Spinner
-        android:id="@+id/rescueSpinner"
-        android:layout_width="250dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/label3"
-        app:layout_constraintTop_toBottomOf="@+id/feelingSpinner" />
-
-    <TextView
-        android:id="@+id/label3"
+    <Button
+        android:id="@+id/setPBButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:text="Controller or Rescue:"
-        app:layout_constraintEnd_toStartOf="@+id/rescueSpinner"
+        android:layout_marginTop="12dp"
+        android:text="Set Personal Best"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label2" />
+        app:layout_constraintTop_toBottomOf="@+id/postControllerInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
