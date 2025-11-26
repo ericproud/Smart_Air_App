@@ -7,6 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".DoctorHomeScreen">
 
+    <EditText
+        android:id="@+id/enterOTC"
+        android:layout_width="300sp"
+        android:layout_height="60dp"
+        android:ems="10"
+        android:hint="Enter one time code"
+        android:inputType="text"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.078" />
+
     <Button
         android:id="@+id/controllerAdherenceButton"
         android:layout_width="300dp"
@@ -22,7 +36,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/patientName" />
+
+    <Button
+        android:id="@+id/submitOTCButton"
+        android:layout_width="300dp"
+        android:layout_height="70sp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="56dp"
+        android:backgroundTint="#673AB7"
+        android:text="SUBMIT OTC"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enterOTC" />
 
     <Button
         android:id="@+id/rescueLogsButton"
@@ -89,7 +120,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/patientName"
         android:layout_width="411dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -104,29 +135,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/patientSpinner" />
 
-    <TextView
-        android:id="@+id/searchForPatients"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Search for Patient:"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
     <Spinner
         android:id="@+id/patientSpinner"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:paddingStart="20dp"
         android:scrollbarSize="20sp"
         android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchForPatients" />
+        app:layout_constraintTop_toBottomOf="@+id/submitOTCButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
