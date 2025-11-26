@@ -3,6 +3,7 @@ package com.example.smart_air_app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,7 +50,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         childNameView.setText(childName);
         parentManageAccountButton.setOnClickListener(v -> {
             Intent intent = new Intent(ParentChildHomeScreen.this, ManageChildAccount.class);
-            intent.putExtra("childUID", childUID);
+            intent.putExtra("childUID", childUserId);
             intent.putExtra("childName", childName);
             startActivity(intent);
         });
