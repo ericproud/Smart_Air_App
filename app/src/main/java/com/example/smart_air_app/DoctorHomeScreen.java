@@ -43,7 +43,6 @@ public class DoctorHomeScreen extends AppCompatActivity {
             enterOTC = findViewById(R.id.enterOTC);
             submitOTCButton = findViewById(R.id.submitOTCButton);
 
-            // Get patient names from db, make array mapping patient name to patient UID
             getPatientUIDs();
             setUpOTC();
 
@@ -79,6 +78,7 @@ public class DoctorHomeScreen extends AppCompatActivity {
     }
 
     void getPatientNames() {
+        // Get patient names from children linked to doctor from db
         for (String patientUID : patientUIDs) {
             dbRef.child("Users").child(patientUID).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
