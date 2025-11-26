@@ -4,13 +4,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TriageEntry {
 
-    private static int numTriages = 0; // Number of total triage entries across all users
-    private String childUID;
-    private int triageID;
+    private String triageID;
     private boolean[] redFlags = new boolean[3];
     // redFlags[0]: can't speak full sentences
     // redFlags[1]: chest pulling in/retractions
@@ -21,10 +20,7 @@ public class TriageEntry {
 
     public TriageEntry() { // need a public empty constructor?
 
-        this.triageID = numTriages;
-        numTriages++;
-
-        childUID = "-1";
+        this.triageID = UUID.randomUUID().toString();
         redFlags[0] = false;
         redFlags[1] = false;
         redFlags[2] = false;
@@ -35,17 +31,14 @@ public class TriageEntry {
 
     public TriageEntry(boolean[] redFlags, boolean recentRescue, double PEF, boolean emergency) {
 
-        this.triageID = numTriages;
-        numTriages++;
-
-        this.childUID = "-1";
+        this.triageID = UUID.randomUUID().toString();
         this.redFlags = redFlags;
         this.recentRescue = recentRescue;
         this.PEF = PEF;
         this.emergency = emergency;
     }
 
-    public int getTriageID() {
+    public String getTriageID() {
         return triageID;
     }
 
@@ -75,10 +68,6 @@ public class TriageEntry {
 
     public void setPEF(double value) {
         PEF = value;
-    }
-
-    public String getChildUID() {
-        return childUID;
     }
 
     public boolean getEmergencyStatus() {

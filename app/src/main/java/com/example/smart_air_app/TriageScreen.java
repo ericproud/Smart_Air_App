@@ -1,5 +1,7 @@
 package com.example.smart_air_app;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.Button;
@@ -10,11 +12,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.view.View;
 import android.widget.TextView;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
+import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.triage.TriageEntry;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -22,7 +22,6 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class TriageScreen extends AppCompatActivity {
@@ -32,6 +31,24 @@ public class TriageScreen extends AppCompatActivity {
         MaterialButton btnRescueYes = findViewById(R.id.btnRescueYes);
         MaterialButton btnRescueNo = findViewById(R.id.btnRescueNo);
         return btnRescueNo.isChecked() || btnRescueYes.isChecked();
+    }
+
+    boolean validPEF() {
+        // Returns true when PEF is valid (double)
+        // Otherwise highlights the PEF field red
+
+        TextInputEditText inputBoxPEF = findViewById(R.id.inputPEF);
+        double PEFvalue;
+        if (inputBoxPEF.getText() == null || inputBoxPEF.getText().toString().trim().isEmpty()) {
+            return true; // Empty or whitespace PEF is valid since PEF is optional
+        }
+        try {
+            Double value = Double.parseDouble(inputBoxPEF.getText().toString().trim());
+        } catch (NumberFormatException e) { // If PEF is a non-number
+            inputBoxPEF.setTextColor(Color.RED);
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -46,7 +63,7 @@ public class TriageScreen extends AppCompatActivity {
         });
 
         ChipGroup redFlagsGroup = findViewById(R.id.redFlagsGroup);
-        Button emergencyBtn = findViewById(R.id.btnEmergency);
+        Button emergencyBtn = findViewById(R.id.btnFeelingBetter);
         Button homeStepsBtn = findViewById(R.id.btnHomeSteps);
         MaterialButton btnRescueYes = findViewById(R.id.btnRescueYes);
         MaterialButton btnRescueNo = findViewById(R.id.btnRescueNo);
@@ -107,7 +124,7 @@ public class TriageScreen extends AppCompatActivity {
             @Override
             public void onFinish() {
                 timerText.setText("00:00");
-                emergencyButtonPressed(findViewById(R.id.btnEmergency));
+                emergencyButtonPressed(findViewById(R.id.btnFeelingBetter));
             }
         };
 
@@ -143,21 +160,30 @@ public class TriageScreen extends AppCompatActivity {
 
     }
 
+    // These buttons already redirect the user to their respective screens (emergency & homesteps)
+
     public void emergencyButtonPressed(View view) {
 
-        TriageEntry entry = createTriageEntry();
-        saveTriageToDatabase(entry);
+        if (validPEF()) {
+            TriageEntry entry = createTriageEntry();
+            saveTriageToDatabase(entry);
+            startActivity(new Intent(TriageScreen.this, EmergencyScreen.class));
+        }
 
     }
 
     public void btnHomeSteps(View view) {
 
-        TriageEntry entry = createTriageEntry();
-        saveTriageToDatabase(entry);
+        if (validPEF()) {
+            TriageEntry entry = createTriageEntry();
+            saveTriageToDatabase(entry);
+            startActivity(new Intent(TriageScreen.this, VideoSBSInhallerUse.class));
+        }
 
     }
 
     public void saveTriageToDatabase(TriageEntry entry) {
+        // This method saves the TriageEntry into the database
 
         // Get current child UID
         String childUID = FirebaseAuth.getInstance().getUid();
@@ -167,46 +193,46 @@ public class TriageScreen extends AppCompatActivity {
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("PEF")
                 .setValue(entry.getPEF());
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("childUID")
-                .setValue(entry.getChildUID());
+                .setValue(childUID);
 
         // Firebase doesn't accept arrays, so save a boolean for each red flag
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("NoFullSentences")
                 .setValue(entry.getRedFlag(0));
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("Retractions")
                 .setValue(entry.getRedFlag(1));
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("BlueGrayLipsNails")
                 .setValue(entry.getRedFlag(2));
 
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("RecentRescueDone")
                 .setValue(entry.getRecentRescue());
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")
                 .child(childUID)
-                .child("TriageID" + Integer.toString(entry.getTriageID()))
+                .child("TriageID" + entry.getTriageID())
                 .child("emergencyStatus")
                 .setValue(entry.getEmergencyStatus());
 
