@@ -1,11 +1,17 @@
 package controller_log;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -17,7 +23,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smart_air_app.R;
+import com.example.smart_air_app.utils.DateValidator;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+//loading in doesn't work
 
 public class ControllerScheduleScreen extends AppCompatActivity {
     @Override
@@ -31,23 +43,128 @@ public class ControllerScheduleScreen extends AppCompatActivity {
             return insets;
         });
 
-        Button backButton = findViewById(R.id.back_button);
-        backButton.setOnClickListener(v -> finish());
+        int[] selectedSchedule = {-1};
+
+        int[] doseAmount = {-1};
+        String[] time = {""};
 
         //this is the medicine the user needs to take
-        String[] medicine_to_use = {"A", "B", "C", "CHANGE LATER"};
+        List<String> schedule = new ArrayList<>();
+        String id = getIntent().getStringExtra("childId");
 
         RecyclerView controllerSchedule = findViewById(R.id.controller_schedule);
+        CustomStringAdapter listAdapter = new CustomStringAdapter(schedule);
         controllerSchedule.setLayoutManager(new LinearLayoutManager(this));
-        controllerSchedule.setAdapter(new CustomStringAdapter(medicine_to_use));
+        controllerSchedule.setAdapter(listAdapter);
+
+        Spinner selectedTask = findViewById(R.id.scheduledUsage);
+        ArrayAdapter<String> selectedAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, schedule
+        );
+        selectedAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        selectedTask.setAdapter(selectedAdapter);
+
+        helperSchedule(id, schedule, listAdapter, selectedAdapter);
+
+        selectedTask.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedSchedule[0] = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedSchedule[0] = -1;
+            }
+        });
+
+        Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(v -> {
+            ControllerDatabase.ControllerScheduleSaver(id, schedule);
+            finish();
+        });
+
+        Button deleteSelected = findViewById(R.id.deleteButton);
+        deleteSelected.setOnClickListener(v->{
+            if (selectedSchedule[0] >= 0 && selectedSchedule[0] < schedule.size()) {
+                schedule.remove(selectedSchedule[0]);
+                //this ensures the user only deletes on thing at a time
+                selectedSchedule[0] = -1;
+                selectedAdapter.notifyDataSetChanged();;
+                listAdapter.notifyDataSetChanged();
+            }
+        });
+
+        TextView doseInput = findViewById(R.id.doseAmountText);
+
+        doseInput.setOnFocusChangeListener((v, focus) -> {
+            if (!focus) {
+                String input = doseInput.getText().toString().trim();
+                int val = -1;
+                try {
+                    val = Integer.parseInt(input);
+                    if (val <= 0) {
+                        val = -1;
+                    }
+                }
+                catch (NumberFormatException e) {
+                    val = -1;
+                }
+
+                if (val != -1) {
+                    doseAmount[0] = val;
+                }
+            }
+        });
+
+        Button timeButton = findViewById(R.id.timeButton);
+        TextView timeText = findViewById(R.id.timeText);
+
+        timeButton.setOnClickListener(v->{
+                Calendar c = Calendar.getInstance();
+                //set default time or start time to the current time
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                int minute = c.get(Calendar.MINUTE);
+
+                TimePickerDialog dialog = new TimePickerDialog(this,
+                        (view, selectedHour, selectedMinute) -> {
+                            //these lines are what we do with the selected time, the rest of this code is the constructor
+                            if (selectedMinute == 0) {
+                                time[0] = selectedHour + ":0" + selectedMinute;
+                            }
+                            else {
+                                time[0] = selectedHour + ":" + selectedMinute;
+                            }
+                            timeText.setText("Selected Time: " + time[0]);
+                        }, hour, minute, true
+                );
+
+                dialog.show();
+        });
+
+        Button addToSchedule = findViewById(R.id.addButton);
+
+        addToSchedule.setOnClickListener(v->{
+            if (!time[0].equals("") && doseAmount[0] != -1) {
+                String entry = "Time: " + time[0] + " Amount: " + doseAmount[0];
+                if (schedule.contains(entry)) {
+                    //handle this later
+                }
+                else {
+                    schedule.add(entry);
+                    selectedAdapter.notifyDataSetChanged();;
+                    listAdapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     //like the adapter design pattern. this allows use to use a String[] on the recycleview which lists what the user needs to take
     //prints exactly what's in the medicine_to_use
     private static class CustomStringAdapter extends RecyclerView.Adapter<CustomStringAdapter.ViewHolder> {
-        private String[] to_print;
+        private List<String> to_print;
 
-        public CustomStringAdapter(String[] to_print) {
+        public CustomStringAdapter(List<String> to_print) {
             this.to_print = to_print;
         }
 
@@ -69,12 +186,25 @@ public class ControllerScheduleScreen extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ViewHolder obj, int pos) {
-            obj.text.setText(to_print[pos]);
+            obj.text.setText(to_print.get(pos));
         }
 
         @Override
         public int getItemCount() {
-            return to_print.length;
+            return to_print.size();
         }
+    }
+
+    private void helperSchedule(String id, List<String> schedule, CustomStringAdapter stringAdapter, ArrayAdapter<String> arrayAdapter) {
+        //this is used to load in the List<String> of when to take medicine and how much from the databes
+        ControllerDatabase.ControllerScheduleLoader(id, loaded_schedule ->{
+            Toast.makeText(this, "read in: " + loaded_schedule.size() + " entries", Toast.LENGTH_SHORT).show();
+            for (String toDo : loaded_schedule) {
+                schedule.add(toDo);
+            }
+
+            stringAdapter.notifyDataSetChanged();;
+            arrayAdapter.notifyDataSetChanged();
+        });
     }
 }

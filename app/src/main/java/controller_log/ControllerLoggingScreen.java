@@ -4,8 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,22 +19,23 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.R;
+import com.example.smart_air_app.VideoSBSInhallerUse;
 import com.example.smart_air_app.utils.DateValidator;
 
 import java.util.Calendar;
 
 /*
-do personal best stuff
+TO DO:
+use the get intent when the parent child home screen or whatever works properly
 */
 
 public class ControllerLoggingScreen extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_controller_logging_screen);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main),(v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -47,6 +46,10 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         if (getIntent().getStringExtra("childId") == null) {
             Toast.makeText(this, "child id was null", Toast.LENGTH_SHORT).show();
         }
+        else {
+            Toast.makeText(this, getIntent().getStringExtra("childId"), Toast.LENGTH_SHORT).show();
+        }
+
         String id = "rR8IM0i012OxkTxPNOoT1KkUpsJ2";
 
         Button scheduleButton = findViewById(R.id.controllerUseScheduleButton);
@@ -55,20 +58,21 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         TextView doseAmount = findViewById(R.id.amountInputText);
         Spinner feelingSpinner = findViewById(R.id.feelingSpinner);
         Button pbButton = findViewById(R.id.setPBButton);
+        TextView pbInput = findViewById(R.id.personalBestInput);
         Button techniqueHelperRedirect = findViewById(R.id.techniqueHelperButton);
         TextView preController = findViewById(R.id.preControllerInput);
         TextView postController = findViewById(R.id.postControllerInput);
-        TextView personalBest = findViewById(R.id.currentBest);
         TextView currentZone = findViewById(R.id.currentZoneText);
         TextView dateText = findViewById(R.id.selectedDateText);
         Button submitButton = findViewById(R.id.submitButton);
         Button backButton = findViewById(R.id.backButton);
+        TextView personalBest = findViewById(R.id.currentBest);
 
         String[] feeling = {"Better", "Same", "Worse"};
 
-        //get from the database
-        //this is used to display the current personal best
-        int personal_best = 67;
+        int[] personal_best = {-1};
+
+        helperPB(id, personal_best);
 
         ControllerLog inputs = new ControllerLog();
         inputs.setPreInput(-69);
@@ -81,13 +85,12 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         String[] postInput = {""};
         String[] date = {""};
 
-        //use .addOnCompleteListener for these
-
         //calculate this to display the current zone of the user
         String[] currZone = {"N/A"};
 
         scheduleButton.setOnClickListener(v ->{
             Intent intent = new Intent(ControllerLoggingScreen.this, ControllerScheduleScreen.class);
+            intent.putExtra("childId", id);
             startActivity(intent);
         });
 
@@ -108,7 +111,6 @@ public class ControllerLoggingScreen extends AppCompatActivity {
                         date[0] = DateValidator.makeDateString(selectedDay, selectedMonth + 1, selectedYear);
                         dateText.setText("Selected time: " + date[0]);
                         inputs.setDate(date[0]);
-                        //public static String makeDateString(int day, int month, int year) {
                     },
                     year, month, day
             );
@@ -133,22 +135,30 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
                 feeling_chosen[0] = "";
                 inputs.setFeeling(null);
             }
         });
 
         pbButton.setOnClickListener(v->{
-            //DO THIS LATER
+            String pbText = pbInput.getText().toString().trim();
+
+            int pbParsed = intParser(pbText);
+
+            if (pbParsed != -69) {
+                inputs.setPB(pbParsed);
+                ControllerDatabase.personalBestLogger(id, inputs);
+                if (pbParsed > personal_best[0]) {
+                    personal_best[0] = pbParsed;
+                    personalBest.setText("Current Personal Best: " + personal_best[0]);
+                }
+            }
         });
 
         techniqueHelperRedirect.setOnClickListener(v-> {
-            //redirect to the technique helper page once that's done
-            Toast.makeText(this, "redirect to technique helper page", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ControllerLoggingScreen.this, VideoSBSInhallerUse.class);
+            startActivity(intent);
         });
-
-        personalBest.setText("Current Personal Best: " + personal_best);
 
         currentZone.setText("Today's Zone: " + currZone[0]);
 
@@ -190,10 +200,12 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         //when input the PEF calculate the currZone
         postController.setOnFocusChangeListener((v, focus) -> {
             if (!focus) {
+                Toast.makeText(this, "here", Toast.LENGTH_SHORT).show();
                 String text = postController.getText().toString().trim();
                 int textNum = intParser(text);
-                if (textNum != -69 && personal_best != -1) {
-                    double ratio = 1.0 * textNum / personal_best;
+                Toast.makeText(this, "" + textNum, Toast.LENGTH_SHORT).show();
+                if (textNum != -69 && personal_best[0] != -1) {
+                    double ratio = 1.0 * textNum / personal_best[0];
                     if (ratio >= 0.8) {
                         currZone[0] = "Green";
                     }
@@ -203,6 +215,10 @@ public class ControllerLoggingScreen extends AppCompatActivity {
                     else {
                         currZone[0] = "Red";
                     }
+                    currentZone.setText("Today's Zone: " + currZone[0]);
+                }
+                else {
+                    currentZone.setText("Today's Zone: N/A");
                 }
             }
         });
@@ -271,5 +287,22 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    private void helperPB(String id, int[] personal_best) {
+        TextView personalBest = findViewById(R.id.currentBest);
+
+        //this is used to display the current personal best and calculate zones
+        ControllerDatabase.personalBestGetter(id, value -> {
+            Toast.makeText(this, "AAAAAAAA " + value, Toast.LENGTH_SHORT).show();
+            if (value > 0) {
+                personal_best[0] = value;
+                personalBest.setText("Current Personal Best: " + personal_best[0]);
+            }
+            else {
+                personal_best[0] = -1;
+                personalBest.setText("Current Personal Best: N/A");
+            }
+        });
     }
 }

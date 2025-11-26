@@ -1,5 +1,7 @@
 package controller_log;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -8,8 +10,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ControllerDatabase {
     private static FirebaseDatabase fdb = FirebaseDatabase.getInstance();
+
+    public interface ControllerCallBack {
+        void onResult(int value);
+    }
+
+    public interface ScheduleCallBack {
+        void onResult(List<String> steps);
+    }
 
     public static void logControllerDatabase(String id, ControllerLog info) {
         DatabaseReference d_ref = fdb.getReference("Inventory").child(id);
@@ -84,5 +97,136 @@ public class ControllerDatabase {
                 //hopefully this doesn't run
             }
         });
+    }
+
+    public static void personalBestGetter(String id, ControllerCallBack callback)
+    {
+        DatabaseReference d_ref = fdb.getReference("Users").child(id);
+
+        d_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    DatabaseReference u_ref = d_ref.child("personalBest");
+
+                    u_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Integer pb = snapshot.getValue(Integer.class);
+                            if (pb != null && pb > 0) {
+                                callback.onResult(pb);
+                            }
+                            else {
+                                callback.onResult(-1);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            //if this happens you are very unlucky
+                        }
+                    });
+                }
+                else {
+                    callback.onResult(-1);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //hopefully this doesn't happen
+            }
+        });
+    }
+
+    public static void personalBestLogger(String id, ControllerLog inputs)
+    {
+        DatabaseReference d_ref = fdb.getReference("Users").child(id);
+
+        d_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    DatabaseReference u_ref = d_ref.child("personalBest");
+
+                    u_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Integer set_pb = snapshot.getValue(Integer.class);
+                            int toDoPB = 0;
+
+                            if (set_pb != null && set_pb > inputs.getPB()) {
+                                toDoPB = set_pb;
+                            }
+                            else {
+                                toDoPB = inputs.getPB();
+                            }
+
+                            u_ref.setValue(toDoPB);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            //hopefully this never happens
+                        }
+                    });
+                }
+                else {
+                    DatabaseReference u_ref = d_ref.child("personalBest");
+
+                    u_ref.setValue(inputs.getPB());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //hopefully this never runs
+            }
+        });
+    }
+
+    public static void ControllerScheduleLoader(String id, ScheduleCallBack callback) {
+        DatabaseReference d_ref = fdb.getReference("ControllerSchedule").child(id);
+
+        d_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    DatabaseReference u_ref = d_ref.child("Schedule");
+
+                    u_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            List<String> schedule = new ArrayList<>();
+                            for (DataSnapshot val: snapshot.getChildren()) {
+                                if (val != null) {
+                                    schedule.add(val.getValue(String.class));
+                                }
+                            }
+                            callback.onResult(schedule);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            //if this happens you are very unlucky
+                        }
+                    });
+                }
+                else {
+                    callback.onResult(new ArrayList<String>());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                //in the java gods we pray this does not happen
+            }
+        });
+    }
+
+    public static void ControllerScheduleSaver(String id, List<String> schedule) {
+        DatabaseReference d_ref = fdb.getReference("ControllerSchedule").child(id).child("Schedule");
+
+        d_ref.setValue(schedule);
     }
 }

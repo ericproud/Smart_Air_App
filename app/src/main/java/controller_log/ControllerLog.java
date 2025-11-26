@@ -8,12 +8,13 @@ public class ControllerLog {
     private int doseInput;
     private int preInput;
     private int postInput;
+    private int pb;
 
     @Override
     public String toString() {
         return "controller_log: \nfeeling: " + feeling + "\ndose input: "
                 + doseInput + "\npre input: " + preInput + "\npost input: " + postInput
-                + "\n";
+                + "\npb: " + pb + "\n";
     }
 
     public void setFeeling(String feeling) {
@@ -68,5 +69,13 @@ public class ControllerLog {
 
     public int getPostInput() {
         return postInput;
+    }
+
+    public void setPB(int pb) {
+        this.pb = pb;
+    }
+
+    public int getPB() {
+        return pb;
     }
 }
