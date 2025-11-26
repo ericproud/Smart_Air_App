@@ -8,71 +8,71 @@
     tools:context=".DoctorHomeScreen">
 
     <Button
-        android:id="@+id/doctorView3MonthHistory"
-        android:layout_width="300dp"
-        android:layout_height="70sp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="56dp"
-        android:backgroundTint="#673AB7"
-        android:text="3 MONTH HISTORY"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-    <Button
-        android:id="@+id/doctorView6MonthHistory"
+        android:id="@+id/controllerAdherenceButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
         android:layout_marginStart="55dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="56dp"
         android:backgroundTint="#673AB7"
-        android:text="6 MONTH HISTORY"
+        android:text="CONTROLLER ADHERENCE"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/doctorView3MonthHistory" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
-        android:id="@+id/doctorView3MonthSummary"
-        android:layout_width="300dp"
-        android:layout_height="70sp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="56dp"
-        android:backgroundTint="#673AB7"
-        android:text="3 MONTH SUMMARY"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <Button
-        android:id="@+id/doctorView6MonthSummary"
+        android:id="@+id/rescueLogsButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
         android:layout_marginStart="55dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="56dp"
         android:backgroundTint="#673AB7"
-        android:text="6 MONTH SUMMARY"
+        android:text="RESCUE LOGS"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/controllerAdherenceButton" />
+
+    <Button
+        android:id="@+id/triageIncidentsButton"
+        android:layout_width="300dp"
+        android:layout_height="70sp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="56dp"
+        android:backgroundTint="#673AB7"
+        android:text="TRIAGE INCIDENTS"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rescueLogsButton" />
+
+    <Button
+        android:id="@+id/summaryChartsButton"
+        android:layout_width="300dp"
+        android:layout_height="70sp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="56dp"
+        android:backgroundTint="#673AB7"
+        android:text="SUMMARY CHARTS"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/doctorView3MonthSummary" />
+        app:layout_constraintTop_toBottomOf="@+id/triageIncidentsButton" />
 
     <TextView
         android:id="@+id/textView2"
@@ -89,50 +89,20 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="411dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:background="#673AB7"
-        android:paddingStart="5sp"
-        android:text="DAILY CHECKIN HISTORY"
-        android:textAlignment="center"
-        android:textColor="#FFFDFD"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
-
-    <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textView"
         android:layout_width="411dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:background="#673AB7"
         android:paddingStart="5sp"
-        android:text="PROVIDER REPORTS"
+        android:text="CHOOSE A PATIENT"
         android:textAlignment="center"
         android:textColor="#FFFDFD"
-        android:textSize="25sp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/doctorView6MonthHistory" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/inputPatientName"
-        android:layout_width="309dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:height="50dp"
-        android:hint="name"
-        android:maxHeight="50dp"
-        android:minHeight="50dp"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchForPatients" />
+        app:layout_constraintTop_toBottomOf="@+id/patientSpinner" />
 
     <TextView
         android:id="@+id/searchForPatients"
@@ -147,15 +117,16 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/patientSpinner"
         android:layout_width="409dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:paddingStart="20dp"
         android:scrollbarSize="20sp"
         android:textAlignment="textStart"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputPatientName" />
+        app:layout_constraintTop_toBottomOf="@+id/searchForPatients" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
