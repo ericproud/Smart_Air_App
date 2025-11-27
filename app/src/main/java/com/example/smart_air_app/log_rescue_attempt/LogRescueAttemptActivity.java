@@ -55,25 +55,6 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
         LogRescueAttemptPresenter presenter = new LogRescueAttemptPresenterImpl(this, repo);
 
 
-        if (getIntent().hasExtra("childUID")) { // child logged in through parent
-            String childUID = getIntent().getStringExtra("childUID");
-            repo.setUid(childUID);
-
-            toolbar.setNavigationOnClickListener(view -> {
-                Intent intent = new Intent(LogRescueAttemptActivity.this, ParentChildHomeScreen.class);
-                intent.putExtra("childUID", childUID);
-                startActivity(intent);
-            });
-
-        } else {
-            repo.setUid(FirebaseAuth.getInstance().getUid()); // child logged in normally
-            toolbar.setNavigationOnClickListener(view -> {
-                Intent intent = new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class);
-                startActivity(intent);
-            });
-
-        }
-
         dosageInput = findViewById(R.id.dosageInput);
         chipGroupTriggers = findViewById(R.id.chipGroupTriggers);
         chipGroupTriggersError = findViewById(R.id.chipGroupTriggersError);
@@ -87,6 +68,27 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
 
         // default check no
         triageIncidentToggleButton.check(triageIncidentToggleButton.getChildAt(1).getId());
+
+        if (getIntent().hasExtra("childUID")) { // child logged in through parent
+            String childUID = getIntent().getStringExtra("childUID");
+            String childName = getIntent().getStringExtra("childName");
+            repo.setUid(childUID);
+
+            toolbar.setNavigationOnClickListener(view -> {
+                Intent intent = new Intent(LogRescueAttemptActivity.this, ParentChildHomeScreen.class);
+                intent.putExtra("childUID", childUID);
+                intent.putExtra("childName", childName);
+                startActivity(intent);
+            });
+
+        } else {
+            repo.setUid(FirebaseAuth.getInstance().getUid()); // child logged in normally
+            toolbar.setNavigationOnClickListener(view -> {
+                Intent intent = new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class);
+                startActivity(intent);
+            });
+
+        }
 
         submit.setOnClickListener(button -> {
             var dosageText = dosageInput.getEditText().getText();
