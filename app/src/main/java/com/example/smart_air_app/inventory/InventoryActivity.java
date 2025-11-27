@@ -118,6 +118,7 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
         controllerSaveButton = findViewById(R.id.controllerSaveIcon);
 
         String childUID = getIntent().getStringExtra("childUID");
+        String childName = getIntent().getStringExtra("childName");
         InventoryPresenter presenter = new InventoryPresenterImpl(childUID, this, new FirebaseInventoryRepository());
 
         quickReliefEditButton.setOnClickListener(v -> presenter.onEditToggle(0));
@@ -137,6 +138,7 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
         toolbar.setNavigationOnClickListener(view -> {
             Intent intent = new Intent(InventoryActivity.this, ParentChildHomeScreen.class);
             intent.putExtra("childUID", childUID);
+            intent.putExtra("childName", childName);
             startActivity(intent);
         });
 
