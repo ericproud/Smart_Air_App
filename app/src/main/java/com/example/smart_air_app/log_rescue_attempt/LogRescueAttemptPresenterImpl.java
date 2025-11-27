@@ -1,9 +1,9 @@
 package com.example.smart_air_app.log_rescue_attempt;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import java.util.EnumSet;
+import com.google.firebase.Timestamp;
+
 import java.util.List;
 
 public class LogRescueAttemptPresenterImpl implements  LogRescueAttemptPresenter{
@@ -50,9 +50,10 @@ public class LogRescueAttemptPresenterImpl implements  LogRescueAttemptPresenter
         info.setPeakFlowBefore(peakFlowBefore);
         info.setPeakFlowAfter(peakFlowAfter);
         info.setTriageIncident(triageIncident);
+        info.setDate(Timestamp.now());
 
         Log.i("info", info.toString());
-        repo.saveRescueAttempt(info, new RescueAttemptRepository.RepoCallback() {
+        repo.saveRescueAttempt(info, new RescueAttemptRepository.SaveCallback() {
             @Override
             public void onSuccess() {
                 System.out.println("Success");
