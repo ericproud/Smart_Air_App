@@ -43,8 +43,9 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         Button parentIncidentLogButton = findViewById(R.id.parentIncidentLogButton);
 
         parentIncidentLogButton.setOnClickListener(view -> {
-            System.out.println("Hello world!!!!!!!");
-            startActivity(new Intent(ParentChildHomeScreen.this, IncidentLog.class));
+            Intent intent = new Intent(ParentChildHomeScreen.this, IncidentLog.class);
+            intent.putExtra("childUID", childUserId);
+            startActivity(intent);
         });
 
         parentInventoryButton.setOnClickListener(view -> {
