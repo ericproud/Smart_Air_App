@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
         <activity
+            android:name=".IncidentLog"
+            android:exported="false" />
+        <activity
             android:name=".EmergencyScreen"
             android:exported="false" />
         <activity
@@ -78,6 +81,9 @@
             android:name=".ParentHomeScreen"
             android:exported="false" />
         <activity
+            android:name=".ParentHomeScreen"
+            android:exported="false" />
+        <activity
             android:name=".ProviderOnboardingScreen1"
             android:exported="false" />
         <activity
@@ -103,8 +109,6 @@
             android:exported="false" />
         <activity
             android:name=".VideoSBSInhallerUse"
-            android:exported="false" />
-        <activity android:name=".ParentHomeScreen"
             android:exported="false" />
         <activity
             android:name=".log_rescue_attempt.LogRescueAttemptActivity"
