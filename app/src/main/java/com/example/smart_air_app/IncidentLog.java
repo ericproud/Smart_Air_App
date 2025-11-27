@@ -55,12 +55,17 @@ public class IncidentLog extends AppCompatActivity {
 
             // Go thru each triage ID
             for (DataSnapshot triage : triageList.getChildren()) {
-                // Convert snapshot into your TriageEntry class
-                TriageEntry entry = triage.getValue(TriageEntry.class);
+                // Convert snapshot into TriageEntry
+                boolean noFullSentences = triage.child("NoFullSentences").getValue(Boolean.class);
+                boolean retractions = triage.child("Retractions").getValue(Boolean.class);
+                boolean blueGray = triage.child("BlueGrayLipsNails").getValue(Boolean.class);
+                boolean[] redFlags = {noFullSentences, retractions, blueGray};
+                boolean recentRescue = triage.child("RecentRescueDone").getValue(Boolean.class);
+                double PEF = triage.child("PEF").getValue(Double.class);
+                boolean emergency = triage.child("emergencyStatus").getValue(Boolean.class);
 
-                if (entry != null) {
-                    addTriageToScreen(entry);
-                }
+                TriageEntry entry = new TriageEntry(redFlags, recentRescue, PEF, emergency);
+                addTriageToScreen(entry);
             }
         });
 
@@ -71,19 +76,54 @@ public class IncidentLog extends AppCompatActivity {
         // Create TextView for display triage info
         TextView triageInfo = new TextView(this);
 
+        String redFlagsText = "";
+        if (!entry.getRedFlag(0) && !entry.getRedFlag(1) && !entry.getRedFlag(2)) {
+            // No red flags
+            redFlagsText = "None\n";
+        } else {
+            if (entry.getRedFlag(0)) {
+                redFlagsText += "Can't speak full sentences\n";
+            }
+            if (entry.getRedFlag(1)) {
+                redFlagsText += "Chest pulling in (retractions)\n";
+            }
+            if (entry.getRedFlag(2)) {
+                redFlagsText += "Blue/gray lips or nails\n";
+            }
+        }
+
+        String recentRescueText;
+        if (entry.getRecentRescue()) {
+            recentRescueText = "Rescue inhaler was used recently\n";
+        } else {
+            recentRescueText = "Rescue inhaler was NOT used recently\n";
+        }
+
+        String guidanceShown;
+        if (entry.getEmergencyStatus()) {
+            guidanceShown = "Child was advised to call emergency services (911)\n";
+        } else {
+            guidanceShown = "Child was given home steps to improve their condition\n";
+        }
+
+        String PEFText;
+        if (entry.getPEF() == -1) {
+            PEFText = "Child did not enter a PEF value\n";
+        } else {
+            PEFText = "PEF: " + entry.getPEF();
+        }
+
         triageInfo.setText(
-                "Triage ID: " + entry.getTriageID() + "\n" +
-                        "No Full Sentences: " + entry.getRedFlag(0) + "\n" +
-                        "Retractions: " + entry.getRedFlag(1) + "\n" +
-                        "Blue/Gray Lips/Nails: " + entry.getRedFlag(2) + "\n" +
-                        "Recent Rescue Done: " + entry.getRecentRescue() + "\n" +
-                        "PEF: " + entry.getPEF() + "\n" +
-                        "Emergency: " + entry.getEmergencyStatus() + "\n"
+                "Red flags:\n" +
+                        redFlagsText + "\n" +
+                        recentRescueText + "\n" +
+                        PEFText + "\n\n" +
+                        guidanceShown + "\n"
         );
 
         triageInfo.setPadding(20, 20, 20, 20);
         triageInfo.setTextSize(16f);
-        triageInfo.setBackgroundColor(Color.parseColor("#EEEEEE"));
+        triageInfo.setBackgroundColor(Color.parseColor("#90D5FF"));
 
         // Add spacing between entries
         LinearLayout.LayoutParams params =
