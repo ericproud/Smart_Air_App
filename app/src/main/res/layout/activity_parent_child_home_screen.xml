@@ -78,6 +78,20 @@
         app:layout_constraintTop_toBottomOf="@+id/parentSummaryChartsButton" />
 
     <Button
+        android:id="@+id/parentIncidentLogButton"
+        android:layout_width="300dp"
+        android:layout_height="70sp"
+        android:layout_marginTop="90dp"
+        android:backgroundTint="#673AB7"
+        android:text="INCIDENT LOG"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/parentSummaryChartsButton" />
+
+    <Button
         android:id="@+id/parentEmergencyTriageButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
