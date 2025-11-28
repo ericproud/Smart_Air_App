@@ -63,69 +63,174 @@ public class ProviderReportScreen extends AppCompatActivity {
     }
 
     void buildPDF() {
-        PdfDocument summaryPDF = new PdfDocument();
-        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
-        PdfDocument.Page page = summaryPDF.startPage(pageInfo);
-        Canvas canvas = page.getCanvas();
+        dbRef.child("Permissions").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot permissionsSnapshot) {
+                PdfDocument summaryPDF = new PdfDocument();
+                PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
+                PdfDocument.Page page = summaryPDF.startPage(pageInfo);
+                Canvas canvas = page.getCanvas();
 
-        // Paint for title
-        Paint titlePaint = new Paint();
-        titlePaint.setTextSize(24);
-        titlePaint.setFakeBoldText(true);
+                // Paint for title
+                Paint titlePaint = new Paint();
+                titlePaint.setTextSize(24);
+                titlePaint.setFakeBoldText(true);
 
-        // Paint for regular text
-        Paint textPaint = new Paint();
-        textPaint.setTextSize(16);
+                // Paint for regular text
+                Paint textPaint = new Paint();
+                textPaint.setTextSize(16);
 
-        mapOfFields.put("Shortness of breath", "8");
-        mapOfFields.put("Chest tightness", "5");
-        mapOfFields.put("Chest pain", "3");
-        mapOfFields.put("Wheezing", "1");
-        mapOfFields.put("Trouble sleeping", "0");
-        mapOfFields.put("Coughing", "3");
-        mapOfFields.put("Other", "22");
-        mapOfFields.put("Controller Adherence", "0%");
-        mapOfFields.put("Rescue Attempts Per Day", "0");
+                mapOfFields.put("Shortness of breath", "8");
+                mapOfFields.put("Chest tightness", "5");
+                mapOfFields.put("Chest pain", "3");
+                mapOfFields.put("Wheezing", "1");
+                mapOfFields.put("Trouble sleeping", "0");
+                mapOfFields.put("Coughing", "3");
+                mapOfFields.put("Other", "22");
+                mapOfFields.put("Controller Adherence", "0%");
+                mapOfFields.put("Rescue Attempts Per Day", "0");
 
-        canvas.drawText("Summary Report: " + childName, 50, 50, titlePaint);
+                canvas.drawText("Summary Report: " + childName, 50, 50, titlePaint);
 
-        canvas.drawText("Controller Adherence: " + mapOfFields.get("Controller Adherence"), 50, 100, textPaint);
+                if (permissionsSnapshot.child("controller adherence summary").getValue(Boolean.class)) {
+                    canvas.drawText("Controller Adherence: " + mapOfFields.get("Controller Adherence"), 50, 100, textPaint);
+                }
+                else {
+                    canvas.drawText("Controller Adherence: NOT PROVIDED", 50, 100, textPaint);
+                }
 
-        canvas.drawText("Rescue Attempts Per Day: " + mapOfFields.get("Rescue Attempts Per Day"), 50, 150, textPaint);
+                if (permissionsSnapshot.child("rescue logs").getValue(Boolean.class)) {
+                    canvas.drawText("Rescue Attempts Per Day: " + mapOfFields.get("Controller Adherence"), 50, 150, textPaint);
+                }
+                else {
+                    canvas.drawText("Rescue Attempts Per Day: NOT PROVIDED", 50, 150, textPaint);
+                }
 
-        canvas.drawText("Symptom Burdens (days):", 50, 200, textPaint);
+                if (permissionsSnapshot.child("symptoms").getValue(Boolean.class) || permissionsSnapshot.child("summary charts").getValue(Boolean.class)) {
+                    canvas.drawText("Symptom Burdens (days): ", 50, 200, textPaint);
+                    drawSymptomHorizontalBarGraph(canvas, 50, 220, 500, 300);
+                }
+                else {
+                    canvas.drawText("Symptom Burdens (days): NOT PROVIDED", 50, 200, textPaint);
+                }
 
-        drawSymptomHorizontalBarGraph(canvas, 50, 220, 500, 300);
+                if (permissionsSnapshot.child("pef").getValue(Boolean.class) || permissionsSnapshot.child("summary charts").getValue(Boolean.class)) {
+                    canvas.drawText("Monthly PEF Zone Distribution: ", 50, 540, textPaint);
+                    drawPEFDistribution(canvas, 50, 550, 560, 200); // More space on second page
+                }
+                else {
+                    canvas.drawText("Monthly PEF Zone Distribution: NOT PROVIDED", 50, 540, textPaint);
+                }
 
-        canvas.drawText("Monthly PEF Zone Distribution:", 50, 540, textPaint);
-        drawPEFDistribution(canvas, 50, 550, 560, 200); // More space on second page
+                summaryPDF.finishPage(page);
 
-        summaryPDF.finishPage(page);;
+                PdfDocument.PageInfo page2Info = new PdfDocument.PageInfo.Builder(595, 842, 2).create();
+                PdfDocument.Page page2 = summaryPDF.startPage(page2Info);
+                Canvas canvas2 = page2.getCanvas();
 
-        String timeStamp = String.valueOf(System.currentTimeMillis());
-        File file = new File(getExternalFilesDir(null), "MyGeneratedPDF" + timeStamp + ".pdf");
+                if (permissionsSnapshot.child("triage incidents").getValue(Boolean.class)) {
+                    canvas2.drawText("Notable Triage Incidents: ", 50, 50, textPaint);
+                    dbRef.child("TriageEntries").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot triageSnapshot) {
+                            float currentY = 100; // Start below the title
 
-        try {
-            summaryPDF.writeTo(new FileOutputStream(file));
-        } catch (Exception e) {
-            Toast.makeText(this, "Error writing PDF", Toast.LENGTH_SHORT).show();
-            return;
-        }
+                            Paint textPaint = new Paint();
+                            textPaint.setTextSize(12);
+                            textPaint.setColor(Color.BLACK);
 
-        summaryPDF.close();
+                            Paint labelPaint = new Paint();
+                            labelPaint.setTextSize(12);
+                            labelPaint.setColor(Color.BLACK);
+                            labelPaint.setFakeBoldText(true);
 
-        Uri uri = FileProvider.getUriForFile(this,
-                getPackageName() + ".provider", file);
+                            int numTriages = 0;
+                            // Loop through each triage ID
+                            for (DataSnapshot triageEntry : triageSnapshot.getChildren()) {
+                                if (!triageSnapshot.exists() || triageSnapshot.getChildrenCount() == 0) {
+                                    canvas2.drawText("No triage incidents recorded", 70, currentY, textPaint);
+                                }
+                                if (numTriages > 3) {
+                                    return;
+                                }
+                                // Get triage data
+                                Boolean blueGrayLipsNails = triageEntry.child("BlueGrayLipsNails").getValue(Boolean.class);
+                                Boolean noFullSentences = triageEntry.child("NoFullSentences").getValue(Boolean.class);
+                                Long PEF = triageEntry.child("PEF").getValue(Long.class);
+                                Boolean recentRescueDone = triageEntry.child("RecentRescueDone").getValue(Boolean.class);
+                                Boolean retractions = triageEntry.child("Retractions").getValue(Boolean.class);
+                                Boolean emergencyStatus = triageEntry.child("emergencyStatus").getValue(Boolean.class);
 
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, "application/pdf");
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                if (PEF == null) {
+                                    return;
+                                }
+                                if (!emergencyStatus) {
+                                    return;
+                                }
 
-        try {
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(this, "No PDF viewer installed", Toast.LENGTH_SHORT).show();
-        }
+                                // Draw triage details
+                                canvas2.drawText("PEF: " + PEF, 100, currentY, textPaint);
+                                currentY += 20;
+
+                                canvas2.drawText("Emergency: " + (emergencyStatus ? "YES" : "NO"), 100, currentY, textPaint);
+                                currentY += 20;
+
+                                canvas2.drawText("Blue/Gray Lips/Nails: " + (blueGrayLipsNails ? "YES" : "NO"), 100, currentY, textPaint);
+                                currentY += 20;
+
+                                canvas2.drawText("Cannot Speak Full Sentences" + (noFullSentences ? "YES" : "NO"), 90, currentY, textPaint);
+                                currentY += 20;
+
+                                canvas2.drawText("Chest Retractions" + (retractions ? "YES" : "NO"), 90, currentY, textPaint);
+                                currentY += 20;
+
+                                canvas2.drawText("Recent Rescue Controller Use: " + (recentRescueDone ? "YES" : "NO"), 90, currentY, textPaint);
+                                currentY += 20;
+
+                                currentY += 20; // Space between triage entries
+
+                                numTriages++;
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError error) {
+                        }
+                    });
+                }
+                else {
+                    canvas2.drawText("Notable Triage Incidents: NOT PROVIDED", 50, 200, textPaint);
+                }
+
+
+
+                summaryPDF.finishPage(page2);
+
+                String timeStamp = String.valueOf(System.currentTimeMillis());
+                File file = new File(getExternalFilesDir(null), "MyGeneratedPDF" + timeStamp + ".pdf");
+
+                try {
+                    summaryPDF.writeTo(new FileOutputStream(file));
+                } catch (Exception e) {
+                }
+
+                summaryPDF.close();
+
+                Uri uri = FileProvider.getUriForFile(ProviderReportScreen.this,
+                        getPackageName() + ".provider", file);
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setDataAndType(uri, "application/pdf");
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                try {
+                    startActivity(intent);
+                } catch (Exception e) {
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
     }
     void setFields() {
         fieldsToLoad = 1;
