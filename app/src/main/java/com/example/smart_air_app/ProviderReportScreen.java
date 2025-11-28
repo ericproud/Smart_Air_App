@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ProviderReportScreen extends AppCompatActivity {
     String childUID;
@@ -36,6 +37,8 @@ public class ProviderReportScreen extends AppCompatActivity {
     TextView screenName;
     HashMap<String, String> mapOfFields;
     DatabaseReference dbRef;
+    int fieldsToLoad = 1;
+    int fieldsLoaded = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +52,13 @@ public class ProviderReportScreen extends AppCompatActivity {
         });
 
         dbRef = FirebaseDatabase.getInstance().getReference();
-        childUID = getIntent().getStringExtra("childUID");
-        childName = getIntent().getStringExtra("childName");
+        childUID = getIntent().getStringExtra("patientUID");
+        childName = getIntent().getStringExtra("patientName");
         screenName = findViewById(R.id.screenName);
         screenName.setText(childName + "'s Report");
         mapOfFields = new HashMap<>();
 
+        setFields();
     }
 
     void buildPDF() {
@@ -103,18 +107,20 @@ public class ProviderReportScreen extends AppCompatActivity {
 
         summaryPDF.finishPage(page);
 
-        String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
-        File file = new File(path, "MyGeneratedPDF.pdf");
+        File file = new File(getExternalFilesDir(null), "MyGeneratedPDF.pdf");
 
         try {
             summaryPDF.writeTo(new FileOutputStream(file));
-        } catch (IOException e) {
-            Toast.makeText(this, "Error creating PDF", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Error writing PDF", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         summaryPDF.close();
 
-        Uri uri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", file);
+        Uri uri = FileProvider.getUriForFile(this,
+                getPackageName() + ".provider", file);
+
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, "application/pdf");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -122,14 +128,23 @@ public class ProviderReportScreen extends AppCompatActivity {
         try {
             startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(this, "Error opening PDF", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No PDF viewer installed", Toast.LENGTH_SHORT).show();
+        }
+    }
+    void setFields() {
+        fieldsToLoad = 1;
+        fieldsLoaded = 0;
+        //setControllerAdherence();
+        buildPDF();
+    }
+
+    void setFieldLoaded() {
+        fieldsLoaded++;
+        if (fieldsLoaded == fieldsToLoad) {
+            buildPDF();
         }
     }
 
-    void setFields() {
-        setControllerAdherence();
-
-    }
 
     void setControllerAdherence() {
         dbRef.child("ControllerLogs").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -152,9 +167,13 @@ public class ProviderReportScreen extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 long expectedLogs = snapshot.getChildrenCount();
+                if (expectedLogs == 0) {
+                    expectedLogs = 1;
+                }
                 long adherence = (logCount / expectedLogs) * 100;
                 int adherenceInt = (int) adherence;
                 mapOfFields.put("Controller Adherence", Integer.toString(adherenceInt) + "%");
+                setFieldLoaded();
             }
             @Override
             public void onCancelled(DatabaseError error) {

@@ -129,17 +129,16 @@ public class DoctorHomeScreen extends AppCompatActivity {
         Button rescueLogsButton = findViewById(R.id.rescueLogsButton);
         Button triageIncidentsButton = findViewById(R.id.triageIncidentsButton);
         Button summaryChartsButton = findViewById(R.id.summaryChartsButton);
-        /*
         controllerAdherenceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DoctorHomeScreen.this, DoctorControllerAdherenceScreen.class);
+                Intent intent = new Intent(DoctorHomeScreen.this, ProviderReportScreen.class);
                 intent.putExtra("patientName", patientName);
-                intent.putExtra("PatientUID", patientUID);
+                intent.putExtra("patientUID", patientUID);
                 startActivity(intent);
             }
         });
-
+        /*
         rescueLogsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

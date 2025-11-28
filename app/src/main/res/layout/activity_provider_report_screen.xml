@@ -87,7 +87,7 @@
         app:layout_constraintVertical_bias="0.101" />
 
     <TextView
-        android:id="@+id/controller Adherence"
+        android:id="@+id/controllerAdherence"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -96,7 +96,7 @@
         app:layout_constraintTop_toBottomOf="@+id/dateRangeText" />
 
     <TextView
-        android:id="@+id/controller Adherence2"
+        android:id="@+id/controllerAdherence2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -107,13 +107,13 @@
         app:layout_constraintTop_toBottomOf="@+id/dateRangeText" />
 
     <TextView
-        android:id="@+id/controller Adherence"
+        android:id="@+id/controllerAdherence3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="Controller Adherence (%):"
         android:textSize="25sp"
-        app:layout_constraintTop_toBottomOf="@+id/controller Adherence"
+        app:layout_constraintTop_toBottomOf="@+id/controllerAdherence"
         tools:layout_editor_absoluteX="0dp" />
 
     <TextView
