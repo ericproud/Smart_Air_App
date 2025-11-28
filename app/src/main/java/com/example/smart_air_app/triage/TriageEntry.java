@@ -18,15 +18,8 @@ public class TriageEntry {
     private double PEF;
     private boolean emergency;
 
-    public TriageEntry() { // need a public empty constructor?
+    public TriageEntry() {
 
-        this.triageID = UUID.randomUUID().toString();
-        redFlags[0] = false;
-        redFlags[1] = false;
-        redFlags[2] = false;
-        recentRescue = false;
-        PEF = -1;
-        emergency = false;
     }
 
     public TriageEntry(boolean[] redFlags, boolean recentRescue, double PEF, boolean emergency) {

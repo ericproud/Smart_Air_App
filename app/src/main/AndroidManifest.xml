@@ -24,6 +24,9 @@
             android:name=".ProviderReportScreen"
             android:exported="false" />
         <activity
+            android:name=".IncidentLog"
+            android:exported="false" />
+        <activity
             android:name=".EmergencyScreen"
             android:exported="false" />
         <activity
@@ -73,6 +76,9 @@
             android:exported="false" />
         <activity
             android:name=".ParentOnboardingScreen3"
+            android:exported="false" />
+        <activity
+            android:name=".ParentHomeScreen"
             android:exported="false" />
         <activity
             android:name=".ParentHomeScreen"

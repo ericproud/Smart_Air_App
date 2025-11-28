@@ -71,24 +71,12 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
 
         if (getIntent().hasExtra("childUID")) { // child logged in through parent
             String childUID = getIntent().getStringExtra("childUID");
-            String childName = getIntent().getStringExtra("childName");
             repo.setUid(childUID);
-
-            toolbar.setNavigationOnClickListener(view -> {
-                Intent intent = new Intent(LogRescueAttemptActivity.this, ParentChildHomeScreen.class);
-                intent.putExtra("childUID", childUID);
-                intent.putExtra("childName", childName);
-                startActivity(intent);
-            });
-
         } else {
             repo.setUid(FirebaseAuth.getInstance().getUid()); // child logged in normally
-            toolbar.setNavigationOnClickListener(view -> {
-                Intent intent = new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class);
-                startActivity(intent);
-            });
-
         }
+
+        toolbar.setNavigationOnClickListener(v -> finish());
 
         submit.setOnClickListener(button -> {
             var dosageText = dosageInput.getEditText().getText();
@@ -180,6 +168,6 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
 
     @Override
     public void navigateToSuccessScreen() {
-        startActivity(new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class));
+        finish();
     }
 }
