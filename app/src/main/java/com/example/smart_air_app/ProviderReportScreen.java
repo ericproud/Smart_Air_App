@@ -2,6 +2,7 @@ package com.example.smart_air_app;
 
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
@@ -76,16 +77,15 @@ public class ProviderReportScreen extends AppCompatActivity {
         Paint textPaint = new Paint();
         textPaint.setTextSize(16);
 
-        mapOfFields.put("Shortness of breath", "0");
-        mapOfFields.put("Chest tightness", "0");
-        mapOfFields.put("Chest pain", "0");
-        mapOfFields.put("Wheezing", "0");
+        mapOfFields.put("Shortness of breath", "8");
+        mapOfFields.put("Chest tightness", "5");
+        mapOfFields.put("Chest pain", "3");
+        mapOfFields.put("Wheezing", "1");
         mapOfFields.put("Trouble sleeping", "0");
-        mapOfFields.put("Coughing", "0");
-        mapOfFields.put("Other", "0");
+        mapOfFields.put("Coughing", "3");
+        mapOfFields.put("Other", "22");
         mapOfFields.put("Controller Adherence", "0%");
         mapOfFields.put("Rescue Attempts Per Day", "0");
-
 
         canvas.drawText("Summary Report: " + childName, 50, 50, titlePaint);
 
@@ -95,19 +95,15 @@ public class ProviderReportScreen extends AppCompatActivity {
 
         canvas.drawText("Symptom Burdens (days):", 50, 200, textPaint);
 
-        canvas.drawText("Shortness of breath: " + mapOfFields.get("Shortness of breath"), 100, 250, textPaint);
-        canvas.drawText("Chest tightness: " + mapOfFields.get("Chest tightness"), 100, 300, textPaint);
-        canvas.drawText("Chest pain: " + mapOfFields.get("Chest pain"), 100, 350, textPaint);
-        canvas.drawText("Wheezing: " + mapOfFields.get("Wheezing"), 100, 400, textPaint);
-        canvas.drawText("Trouble sleeping: " + mapOfFields.get("Trouble sleeping"), 100, 450, textPaint);
-        canvas.drawText("Coughing: " + mapOfFields.get("Coughing"), 100, 500, textPaint);
-        canvas.drawText("Other: " + mapOfFields.get("Other"), 100, 550, textPaint);
+        drawSymptomHorizontalBarGraph(canvas, 50, 220, 500, 300);
 
-        canvas.drawText("Zone distribution:", 50, 600, textPaint);
+        canvas.drawText("Monthly PEF Zone Distribution:", 50, 540, textPaint);
+        drawPEFDistribution(canvas, 50, 550, 560, 200); // More space on second page
 
-        summaryPDF.finishPage(page);
+        summaryPDF.finishPage(page);;
 
-        File file = new File(getExternalFilesDir(null), "MyGeneratedPDF.pdf");
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        File file = new File(getExternalFilesDir(null), "MyGeneratedPDF" + timeStamp + ".pdf");
 
         try {
             summaryPDF.writeTo(new FileOutputStream(file));
@@ -145,39 +141,162 @@ public class ProviderReportScreen extends AppCompatActivity {
         }
     }
 
+    void drawPEFDistribution(Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
+        // PLACEHOLDER DATA TO BE REPLACED
+        float[][] zoneDistribution = {
+                {60, 30, 10},
+                {50, 40, 10},
+                {70, 20, 10},
+                {40, 40, 20},
+                {80, 15, 5},
+                {65, 25, 10}
+        };
 
-    void setControllerAdherence() {
-        dbRef.child("ControllerLogs").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                long logCount = 0;
-                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                    logCount = childSnapshot.getChildrenCount();
-                }
-                calculateControllerAdherence(logCount);
+        // PLACEHOLDER MONTHS TO BE REPLACED
+        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun"};
+
+        int[] zoneColors = {Color.GREEN, Color.YELLOW, Color.RED};
+
+        int monthCount = months.length;
+        int zonesPerMonth = 3;
+
+        // Calculate dimensions
+        float groupWidth = chartWidth / monthCount;
+        float barWidth = groupWidth * 0.7f / zonesPerMonth;
+        float barSpacing = groupWidth * 0.3f / (zonesPerMonth + 1);
+
+        // Loop through months
+        for (int month = 0; month < monthCount; month++) {
+            float groupStartX = startX + (month * groupWidth);
+
+            // Loop through zone (R, Y, G)
+            for (int zone = 0; zone < zonesPerMonth; zone++) {
+                // Make bar for zone
+                float barLeft = groupStartX + barSpacing + (zone * (barWidth + barSpacing));
+                float barHeight = (zoneDistribution[month][zone] / 100f) * chartHeight;
+                float barTop = startY + chartHeight - barHeight;
+
+                Paint barPaint = new Paint();
+                barPaint.setColor(zoneColors[zone]);
+                canvas.drawRect(barLeft, barTop, barLeft + barWidth, startY + chartHeight, barPaint);
             }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
-        });
+            // Month Label
+            Paint monthPaint = new Paint();
+            monthPaint.setTextSize(14);
+            monthPaint.setColor(Color.BLACK);
+            monthPaint.setTextAlign(Paint.Align.CENTER);
+            canvas.drawText(months[month], groupStartX + (groupWidth / 2), startY + chartHeight + 20, monthPaint);
+        }
+
+        // Y axis
+        Paint axisPaint = new Paint();
+        axisPaint.setColor(Color.BLACK);
+        axisPaint.setStrokeWidth(2);
+        canvas.drawLine(startX - 5, startY, startX - 5, startY + chartHeight, axisPaint);
+
+        // X axis
+        canvas.drawLine(startX - 5, startY + chartHeight, startX + chartWidth, startY + chartHeight, axisPaint);
+
+        // % labels for Y axis
+        Paint labelPaint = new Paint();
+        labelPaint.setTextSize(14);
+        labelPaint.setColor(Color.BLACK);
+        String[] yLabels = {"100%", "75%", "50%", "25%", "0%"};
+        float[] yPositions = {startY, startY + chartHeight * 0.25f, startY + chartHeight * 0.5f,
+                startY + chartHeight * 0.75f, startY + chartHeight};
+        for (int i = 0; i < yLabels.length; i++) {
+            canvas.drawText(yLabels[i], startX - 25, yPositions[i] + 4, labelPaint);
+        }
     }
-    void calculateControllerAdherence(long logCount) {
-        dbRef.child("ControllerSchedule").child(childUID).child("Schedule").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                long expectedLogs = snapshot.getChildrenCount();
-                if (expectedLogs == 0) {
-                    expectedLogs = 1;
-                }
-                long adherence = (logCount / expectedLogs) * 100;
-                int adherenceInt = (int) adherence;
-                mapOfFields.put("Controller Adherence", Integer.toString(adherenceInt) + "%");
-                setFieldLoaded();
+
+    void drawSymptomHorizontalBarGraph(Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
+        String[] symptoms = {
+                "Shortness of breath", "Chest tightness", "Chest pain",
+                "Wheezing", "Trouble sleeping", "Coughing", "Other"
+        };
+
+        int[] symptomColors = {
+                Color.RED,
+                Color.BLUE,
+                Color.GREEN,
+                Color.MAGENTA,
+                Color.CYAN,
+                Color.YELLOW,
+                Color.GRAY
+        };
+
+        // Get count of days for each symptom
+        int[] symptomCounts = new int[symptoms.length];
+        for (int i = 0; i < symptoms.length; i++) {
+            try {
+                symptomCounts[i] = Integer.parseInt(mapOfFields.get(symptoms[i]));
+            } catch (NumberFormatException e) {
+                symptomCounts[i] = 0;
             }
-            @Override
-            public void onCancelled(DatabaseError error) {
+        }
+
+        // Find max value for scaling
+        int maxCount = 1;
+        for (int count : symptomCounts) {
+            if (count > maxCount) {
+                maxCount = count;
             }
-        });
+        }
+
+        float barHeight = 25f;
+        float barSpacing = 8f;
+        float maxBarWidth = chartWidth * 0.6f;
+        float labelWidth = chartWidth * 0.35f;
+
+        Paint barPaint = new Paint();
+        barPaint.setStyle(Paint.Style.FILL);
+
+        Paint textPaint = new Paint();
+        textPaint.setTextSize(12);
+        textPaint.setColor(Color.BLACK);
+
+        // Draw bars
+        for (int i = 0; i < symptoms.length; i++) {
+            float barTop = startY + (i * (barHeight + barSpacing));
+            float barWidth = (symptomCounts[i] / (float) maxCount) * maxBarWidth;
+
+            // Set colour
+            barPaint.setColor(symptomColors[i]);
+
+            // Draw bar
+            canvas.drawRect(startX + labelWidth, barTop, startX + labelWidth + barWidth, barTop + barHeight, barPaint);
+
+            // Draw label
+            canvas.drawText(symptoms[i], startX, barTop + barHeight - 8, textPaint);
+
+            // Draw count
+            textPaint.setTextAlign(Paint.Align.RIGHT);
+            canvas.drawText(symptomCounts[i] + " days", startX + labelWidth - 5, barTop + barHeight - 8, textPaint);
+            textPaint.setTextAlign(Paint.Align.LEFT);
+        }
+        // Draw legend
+        drawSymptomLegend(canvas, startX, startY + (symptoms.length * (barHeight + barSpacing)) + 20, symptoms, symptomColors);
+    }
+
+    void drawSymptomLegend(Canvas canvas, float startX, float startY, String[] symptoms, int[] colors) {
+        Paint textPaint = new Paint();
+        textPaint.setTextSize(14);
+        textPaint.setColor(Color.BLACK);
+
+        int columns = 4;
+
+        for (int i = 0; i < symptoms.length; i++) {
+            int column = i % columns;
+            int row = i / columns;
+
+            float xPos = startX + (column * 150);
+            float yPos = startY + (row * 20);
+
+            Paint colorPaint = new Paint();
+            colorPaint.setColor(colors[i]);
+            canvas.drawRect(xPos, yPos, xPos + 12, yPos + 12, colorPaint);
+            canvas.drawText(symptoms[i], xPos + 18, yPos + 10, textPaint);
+        }
     }
 }
