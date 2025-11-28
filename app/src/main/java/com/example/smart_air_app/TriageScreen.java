@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.TextView;
 
 
-import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.triage.TriageEntry;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
