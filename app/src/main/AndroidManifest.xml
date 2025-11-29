@@ -69,9 +69,6 @@
             android:name=".ParentOnboardingScreen3"
             android:exported="false" />
         <activity
-            android:name=".ParentHomeScreen"
-            android:exported="false" />
-        <activity
             android:name=".ProviderOnboardingScreen1"
             android:exported="false" />
         <activity
@@ -83,9 +80,6 @@
         <activity
             android:name="controller_log.ControllerLoggingScreen"
             android:exported="false" />
-        <activity
-            android:name="controller_log.ControllerScheduleScreen"
-            android:exported="false"/>
         <activity
             android:name="CheckinHistoryScreen"
             android:exported="false" />
