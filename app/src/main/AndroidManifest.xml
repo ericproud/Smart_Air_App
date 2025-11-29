@@ -35,19 +35,10 @@
             android:name=".login_module.LoginView"
             android:exported="false" />
         <activity
-            android:name=".login_module.LoginView"
-            android:exported="false" />
-        <activity
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity
             android:name=".ManageChildAccount"
-            android:exported="false" />
-        <activity
-            android:name=".ManageChildAccount"
-            android:exported="false" />
-        <activity
-            android:name=".DoctorHomeScreen"
             android:exported="false" />
         <activity
             android:name=".DoctorHomeScreen"
@@ -58,9 +49,8 @@
         <activity
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
-        <activity
-            android:name=".ParentChildHomeScreen"
-            android:exported="false" />
+        <activity android:name=".ParentHomeScreen"
+            android:exported="false"/>
         <activity
             android:name=".ChildOnboardingScreen1"
             android:exported="false" />

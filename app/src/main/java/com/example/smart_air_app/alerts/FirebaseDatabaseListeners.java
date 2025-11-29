@@ -3,17 +3,12 @@ package com.example.smart_air_app.alerts;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-import com.example.smart_air_app.user_classes.Child;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,11 +21,10 @@ public class FirebaseDatabaseListeners {
 
     private static FirebaseDatabaseListeners instance;
     private static final FirebaseDatabase db = FirebaseDatabase.getInstance();
-    private Context context;
     private String parentId;
     private final List<EntryListeners<?>> entryListeners = List.of(
-            new TriageListeners(db.getReference("TriageEntries"))
-
+            new TriageListeners(db.getReference("TriageEntries")),
+            new InventoryListeners(db.getReference("Inventory"))
 
     );
 
@@ -44,7 +38,6 @@ public class FirebaseDatabaseListeners {
     }
 
     public void setContext(Context context) {
-        this.context = context;
         entryListeners.forEach(l -> l.setContext(context));
     }
 
