@@ -1,11 +1,14 @@
 package com.example.smart_air_app;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.Button;
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -27,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 
 public class TriageScreen extends AppCompatActivity {
+
+    public static Activity currentActivity;
 
     boolean yesornoChecked() {
         // Returns true when either yes or no is checked
@@ -56,6 +61,7 @@ public class TriageScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentActivity = this;
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_triage_screen);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -166,7 +172,8 @@ public class TriageScreen extends AppCompatActivity {
 
     }
 
-    // These buttons already redirect the user to their respective screens (emergency & homesteps)
+
+
 
     public void emergencyButtonPressed(View view) {
 
