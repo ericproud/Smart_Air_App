@@ -17,6 +17,8 @@ import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.utils.Logout;
 import com.google.android.material.button.MaterialButton;
 
+import controller_log.ControllerLoggingScreen;
+
 public class ParentChildHomeScreen extends AppCompatActivity {
 
     private String childUserId;
@@ -59,6 +61,10 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
         emergencyButton.setOnClickListener(view -> {
             startActivityWithChildInfo(TriageScreen.class);
+        });
+        
+        logControllerButton.setOnClickListener(v-> {
+            startActivityWithChildInfo(ControllerLoggingScreen.class);
         });
 
         logRescueButton.setOnClickListener(view -> {
