@@ -2,11 +2,12 @@ package com.example.smart_air_app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,11 +17,14 @@ import com.example.smart_air_app.inventory.InventoryActivity;
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.google.android.material.button.MaterialButton;
 
+import controller_log.ControllerLoggingScreen;
+import controller_log.PEFZones;
+import controller_log.PEFZonesDatabase;
+
 public class ParentChildHomeScreen extends AppCompatActivity {
 
     private String childUserId;
     private String childName;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +50,21 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         MaterialButton streaksAndBadgesButton = findViewById(R.id.btnStreaks);
         MaterialButton summaryChartsButton = findViewById(R.id.btnSummaryCharts);
         MaterialButton manageAccountButton = findViewById(R.id.btnManageAccount);
+        MaterialButton setPB = findViewById(R.id.setPBButton);
 
-        TextView todaysZone = findViewById(R.id.textTodaysZone);
         TextView lastRescueTime = findViewById(R.id.textLastRescueTime);
         TextView weeklyRescueCount = findViewById(R.id.textWeeklyCount);
         FrameLayout chartContainer = findViewById(R.id.chartContainer);
 
         childNameText.setText(childName);
+
+        PEFZones zone = new PEFZones();
+        helperPB(childUserId, zone);
+
+
+        logControllerButton.setOnClickListener(v -> {
+            startActivityWithChildInfo(ControllerLoggingScreen.class);
+        });
 
         logRescueButton.setOnClickListener(view -> {
             startActivityWithChildInfo(LogRescueAttemptActivity.class);
@@ -65,6 +77,43 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         manageAccountButton.setOnClickListener(v -> {
             startActivityWithChildInfo(ManageChildAccount.class);
         });
+
+        setPB.setOnClickListener(v-> {
+            AlertDialog.Builder build = new AlertDialog.Builder(this);
+            build.setTitle("Enter Personal Best");
+
+            final EditText inputText = new EditText(this);
+            inputText.setHint("Enter Personal Best (Eg 67)");
+            build.setView(inputText);
+
+            build.setPositiveButton("Confirm", (d, w) -> {
+                String input = inputText.getText().toString().trim();
+                try {
+                    int int_input = Integer.parseInt(input);
+
+                    //using a lambda expression to ensure asynch calls work
+                    PEFZonesDatabase.loadPEFZones(childUserId, (pb, highest_pef, date) ->{
+                        PEFZones zone2 = new PEFZones();
+
+                        zone2.setPB(pb);
+                        zone2.setHighest_pef(highest_pef);
+                        zone2.setDate(date);
+
+                        zone2.setPB(int_input);
+
+                        PEFZonesDatabase.savePEFZones(childUserId, zone2);
+                    });
+                }
+                catch (NumberFormatException e) {
+                }
+            });
+
+            build.setNegativeButton("Cancel", (d, w) -> {
+               d.cancel();
+            });
+
+            build.show();
+        });
     }
 
     private void startActivityWithChildInfo(Class<?> cls) {
@@ -72,5 +121,15 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         intent.putExtra("childUID", childUserId);
         intent.putExtra("childName", childName);
         startActivity(intent);
+    }
+
+    private void helperPB(String id, PEFZones pefZone) {
+        TextView todaysZone = findViewById(R.id.textTodaysZone);
+
+        //loading in the pef zone object which contains the pb which is what we want
+        PEFZonesDatabase.loadPEFZones(id, (pb, pef, date) -> {
+            pefZone.initializePEF(pb, pef, date);
+            todaysZone.setText("Today's Zone: " + pefZone.calculateZone());
+        });
     }
 }

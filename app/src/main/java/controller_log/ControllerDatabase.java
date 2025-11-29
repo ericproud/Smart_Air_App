@@ -1,7 +1,5 @@
 package controller_log;
 
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -117,7 +115,7 @@ public class ControllerDatabase {
                             Integer remaining = snapshot.getValue(Integer.class);
 
                             //ensuring we deal with good non null pointer values so we don't crash
-                            if (remaining != null && remaining > 0) {
+                            if (remaining != null) {
                                 int temp_remaining = remaining - deduct;
 
                                 //ensuring temp_remaining >= 0 so we have valid inventory

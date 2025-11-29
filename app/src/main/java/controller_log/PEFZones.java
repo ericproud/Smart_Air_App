@@ -21,7 +21,7 @@ public class PEFZones {
 
     //calculates the zone (red, yellow, green or N/A if pb isn't given or highest_pef isn't given
     public String calculateZone() {
-        if (date == null || pb == -1 || date.equals("") || highest_pef < 0) {
+        if (date == null || pb == -1 || pb == 0 || date.equals("") || highest_pef < 0) {
             return "N/A";
         }
 
@@ -55,8 +55,12 @@ public class PEFZones {
     public void setHighest_pef(int highest_pef) {
         String currDate = DateValidator.getTodaysDate();
 
+        if (date == null) {
+            this.date = currDate;
+            this.highest_pef = highest_pef;
+        }
         //if the highest pef hasn't been set today then we save it immediately and the date
-        if (!date.equals(currDate)) {
+        else if (!date.equals(currDate)) {
             this.highest_pef = highest_pef;
             this.date = currDate;
         }
@@ -65,12 +69,6 @@ public class PEFZones {
         if (highest_pef > this.highest_pef) {
             this.highest_pef = highest_pef;
         }
-    }
-
-    //this forces to set the highest_pef and date without validation USE AT OWN RISK!!!!
-    public void forceSetHighest_pef(int highest_pef, String date) {
-        this.highest_pef = highest_pef;
-        this.date = date;
     }
 
     public void setDate(String date) {
