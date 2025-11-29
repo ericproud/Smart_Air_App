@@ -12,26 +12,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
         <activity
+            android:name=".IncidentLog"
+            android:exported="false" />
+        <activity
+            android:name=".EmergencyScreen"
+            android:exported="false" />
+        <activity
+            android:name=".ResetPasswordScreen"
+            android:exported="false" />
+        <activity
             android:name=".ManageSharingScreen"
             android:exported="false" />
         <activity
-            android:name=".RegisterAsDoctor"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterAsParent"
+            android:name=".TriageScreen"
             android:exported="false" />
         <activity
             android:name=".TemplateActivity"
             android:exported="false" />
         <activity
+            android:name=".login_module.LoginView"
+            android:exported="false" />
+        <activity
             android:name=".RegisterScreen"
             android:exported="false" />
         <activity
-            android:name=".ChildHomeScreen"
+            android:name=".ManageChildAccount"
             android:exported="false" />
         <activity
             android:name=".DoctorHomeScreen"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".ParentHomeScreen"
             android:exported="false"/>
@@ -60,20 +69,23 @@
             android:name=".ParentOnboardingScreen3"
             android:exported="false" />
         <activity
+            android:name=".ParentHomeScreen"
+            android:exported="false" />
+        <activity
             android:name=".ProviderOnboardingScreen1"
             android:exported="false" />
         <activity
-            android:name=".ProviderOnboardingScreen2"
+            android:name=".ChildHomeScreen"
             android:exported="false" />
         <activity
-            android:name=".ProviderOnboardingScreen3"
+            android:name=".StreaksAndBadges"
             android:exported="false" />
         <activity
             android:name="controller_log.ControllerLoggingScreen"
             android:exported="false" />
         <activity
             android:name="controller_log.ControllerScheduleScreen"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name="CheckinHistoryScreen"
             android:exported="false" />
@@ -84,21 +96,14 @@
             android:name=".DailyCheckIn"
             android:exported="false" />
         <activity
-            android:name=".InventoryScreen"
-            android:exported="false" />
-        <activity
-            android:name=".StreaksAndBadges"
-            android:exported="false" />
-        <activity
-            android:name=".login_module.LoginView"
+            android:name=".inventory.InventoryActivity"
             android:exported="false" />
         <activity
             android:name=".VideoSBSInhallerUse"
             android:exported="false" />
         <activity
             android:name=".log_rescue_attempt.LogRescueAttemptActivity"
-            android:exported="false"
-        />
+            android:exported="false" />
         <activity
             android:name=".StartScreen"
             android:exported="true">

@@ -16,6 +16,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.inventory.FirebaseInventoryRepository;
+import com.example.smart_air_app.inventory.InventoryRepository;
 import com.example.smart_air_app.user_classes.Child;
 import com.example.smart_air_app.utils.DateValidator;
 import com.example.smart_air_app.utils.FormHelperFunctions;
@@ -87,8 +89,6 @@ public class AddChildScreen extends AppCompatActivity {
         String password = inputPassword.getText().toString().trim();
 
         HashMap<String, Boolean> permissions = new HashMap<>();
-        HashMap<String, Integer> inventoryRemaining = new HashMap<>();
-        HashMap<String, String> inventoryExpiresOn = new HashMap<>();
         HashMap<String, Integer> streaks = new HashMap<>();
         HashMap<String, Integer> badges = new HashMap<>();
 
@@ -99,12 +99,6 @@ public class AddChildScreen extends AppCompatActivity {
         permissions.put("pef", false);
         permissions.put("triage incidents", false);
         permissions.put("summary charts", false);
-
-        inventoryRemaining.put("controller medicine puffs remaining", 0);
-        inventoryRemaining.put("rescue inhaler puffs remaining", 0);
-
-        inventoryExpiresOn.put("controller medicine expiry date", DateValidator.getTodaysDate());
-        inventoryExpiresOn.put("rescue inhaler expiry date", DateValidator.getTodaysDate());
 
         streaks.put("consecutive controller use days", 0);
         streaks.put("consecutive technique conpleted days", 0);
@@ -124,9 +118,12 @@ public class AddChildScreen extends AppCompatActivity {
                         FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newChild);
                         FirebaseDatabase.getInstance().getReference("Badges").child(uID).setValue(badges);
                         FirebaseDatabase.getInstance().getReference("Permissions").child(uID).setValue(permissions);
-                        FirebaseDatabase.getInstance().getReference("InventoryRemaining").child(uID).setValue(inventoryRemaining);
-                        FirebaseDatabase.getInstance().getReference("InventoryExpiresOn").child(uID).setValue(inventoryExpiresOn);
                         FirebaseDatabase.getInstance().getReference("Streaks").child(uID).setValue(streaks);
+
+                        FirebaseInventoryRepository inv = new FirebaseInventoryRepository();
+                        inv.setUid(uID);
+                        inv.initInventory();
+
                         FirebaseDatabase.getInstance().getReference("Users").child(parentUID).child("children").child(uID).setValue(true);
                         childAuth.signOut();
                         startActivity(new Intent(AddChildScreen.this, ParentHomeScreen.class));

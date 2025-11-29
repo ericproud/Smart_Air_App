@@ -74,6 +74,7 @@
                 android:hint="Enter PEF (optional)">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/inputPEF"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -95,24 +96,27 @@
             android:text="Red flags: Select all that apply" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup2"
+            android:id="@+id/redFlagsGroup"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             app:chipSpacingVertical="0dp">
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/btnNoFullSentences"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Can't speak full sentences" />
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/btnRetractions"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Retractions (chest pulling in)" />
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/btnBlueGray"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -130,56 +134,72 @@
 
 
         <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggleButton"
+            android:id="@+id/btnRescueGroup"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:singleSelection="true">
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/btnRescueYes"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checkable="true"
                 android:text="Yes" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnRescueNo"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checkable="true"
                 android:text="No" />
 
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <Button
+            android:id="@+id/btnHomeSteps"
             style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="32dp"
-            android:text="Start Home Steps"
-            android:textAllCaps="true"
             android:enabled="false"
+            android:text="Start Home Steps"
+            android:onClick="btnHomeSteps"
+            android:textAllCaps="true"
             android:textSize="16dp" />
 
         <Button
+            android:id="@+id/btnFeelingBetter"
             style="@style/Widget.Material3.Button.IconButton.Filled"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_marginLeft="32dp"
             android:layout_marginTop="16dp"
             android:layout_marginRight="32dp"
-            android:text="Call Emergency Now"
-            android:textAllCaps="true"
             android:enabled="false"
+            android:text="Call Emergency Now"
+            android:onClick="emergencyButtonPressed"
+            android:textAllCaps="true"
             android:textSize="16dp" />
 
         <TextView
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="40dp"
-            android:text="This is guidance, not a diagnosis. If in doubt, call emergency." />
+            android:layout_height="80dp"
+            android:layout_marginTop="30dp"
+            android:text="This is guidance, not a diagnosis. If in doubt, call emergency. Automatically escalating to emergency status if symptoms don't improve or new red flags appear within 10 minutes." />
+
+        <TextView
+            android:id="@+id/emergencyTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:00"
+            android:textSize="30sp"
+            android:layout_marginTop="20dp"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

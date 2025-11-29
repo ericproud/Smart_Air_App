@@ -124,49 +124,49 @@
             <com.google.android.material.chip.Chip
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:id="@+id/chipExercise"
+                android:id="@+id/toggleControllerMedicine"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="Exercise"/>
 
             <com.google.android.material.chip.Chip
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:id="@+id/chipPollen"
+                android:id="@+id/toggleRescueMedicine"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="Pollen"/>
 
             <com.google.android.material.chip.Chip
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:id="@+id/chipColdAir"
+                android:id="@+id/toggleTriage"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="Cold air"/>
 
             <com.google.android.material.chip.Chip
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:id="@+id/chipDust"
+                android:id="@+id/togglePEF"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="Dust"/>
 
             <com.google.android.material.chip.Chip
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:id="@+id/chipSmoke"
+                android:id="@+id/toggleSymptoms"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="Smoke"/>
 
             <com.google.android.material.chip.Chip
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:id="@+id/chipStress"
+                android:id="@+id/toggleTriggers"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="Stress"/>
 
             <com.google.android.material.chip.Chip
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:id="@+id/chipOtherTrigger"
+                android:id="@+id/toggleSummaries"
                 style="@style/Widget.Material3.Chip.Suggestion"
                 android:text="Other"/>
 

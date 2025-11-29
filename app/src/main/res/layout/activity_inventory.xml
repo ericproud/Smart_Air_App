@@ -68,24 +68,14 @@
                     android:id="@+id/quickReliefView"
                     >
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Medicine A"
-                            android:textColor="@color/md_theme_onPrimaryContainer"
-                            android:textSize="24dp"
-                            android:textStyle="bold" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text=" (quick relief)"
-                            android:textColor="@color/md_theme_onPrimaryContainer"
-                            android:layout_marginLeft="8dp"/>
-                    </LinearLayout>
+                        android:text="Quick-Relief Medicine"
+                        android:textColor="@color/md_theme_onPrimaryContainer"
+                        android:textSize="24dp"
+                        android:textStyle="bold"
+                        android:id="@+id/quickReliefName"/>
 
 
                     <LinearLayout
@@ -95,20 +85,29 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="44dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="45"
                             android:textColor="@color/md_theme_onPrimaryContainer"
                             android:textSize="32dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:id="@+id/quickReliefRemaining"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=" / "
+                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textSize="16dp" />
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="/ 200 puffs"
+                            android:text="200"
                             android:textColor="@color/md_theme_onPrimaryContainer"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            android:id="@+id/quickReliefTotal"/>
                     </LinearLayout>
 
                     <TextView
@@ -116,21 +115,21 @@
                         android:layout_height="wrap_content"
                         android:text="22.5% available"
                         android:textColor="@color/md_theme_onPrimaryContainer"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        android:id="@+id/quickReliefPercentage"/>
 
                     <com.google.android.material.progressindicator.LinearProgressIndicator
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:indeterminate="false"
-                        android:max="200"
-                        android:progress="45"
                         app:indicatorColor="@color/md_theme_onPrimaryContainer"
                         app:indicatorTrackGapSize="0px"
                         app:trackColor="@color/md_theme_onPrimaryContainer_highContrast"
                         app:trackCornerRadius="16dp"
                         app:trackStopIndicatorSize="0dp"
-                        app:trackThickness="32dp" />
+                        app:trackThickness="32dp"
+                        android:id="@+id/quickReliefProgress" />
 
                     <TextView
                         style="@style/TextAppearance.AppCompat.Subhead"
@@ -146,7 +145,8 @@
                         android:text="11/15/2025"
                         android:textColor="@color/md_theme_onPrimaryContainer"
                         android:textSize="24dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:id="@+id/quickReliefLastPurchased"/>
 
                     <TextView
                         style="@style/TextAppearance.AppCompat.Subhead"
@@ -162,13 +162,15 @@
                         android:text="11/22/2025"
                         android:textColor="@color/md_theme_onPrimaryContainer"
                         android:textSize="24dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:id="@+id/quickReliefExpires"/>
 
                     <LinearLayout
                         android:layout_width="309dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:id="@+id/quickReliefReportedBy">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -181,9 +183,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="parent"
-                            android:textColor="@color/md_theme_onPrimaryContainer"
+                            android:textColor="@color/md_theme_outlineVariant"
                             android:textSize="16dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:tag="parent"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -199,7 +202,8 @@
                             android:text="child"
                             android:textColor="@color/md_theme_outlineVariant"
                             android:textSize="16dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:tag="child"/>
 
 
                     </LinearLayout>
@@ -214,10 +218,13 @@
                     android:id="@+id/quickReliefEdit"
                     android:visibility="gone">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="Medicine Name" />
+                        android:text="Quick-Relief Medicine"
+                        android:textColor="@color/md_theme_onPrimaryContainer"
+                        android:textSize="24dp"
+                        android:textStyle="bold" />
 
 
                     <LinearLayout
@@ -232,7 +239,8 @@
                             android:textSize="32dp"
                             android:textStyle="bold"
                             android:hint="#"
-                            android:inputType="number"/>
+                            android:inputType="number"
+                            android:id="@+id/quickReliefRemainingInput"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -246,7 +254,8 @@
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
                             android:hint="total "
-                            android:inputType="number"/>
+                            android:inputType="number"
+                            android:id="@+id/quickReliefTotalInput"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -254,27 +263,27 @@
                             android:text=" doses"/>
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="22.5% available"
-                        android:textColor="@color/md_theme_onPrimaryContainer"
-                        android:textStyle="italic" />
+<!--                    <TextView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="22.5% available"-->
+<!--                        android:textColor="@color/md_theme_onPrimaryContainer"-->
+<!--                        android:textStyle="italic" />-->
 
-                    <com.google.android.material.progressindicator.LinearProgressIndicator
-                        android:id="@+id/linear_progress_indicator"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:indeterminate="false"
-                        android:max="200"
-                        android:progress="45"
-                        app:indicatorColor="@color/md_theme_onPrimaryContainer"
-                        app:indicatorTrackGapSize="0px"
-                        app:trackColor="@color/md_theme_onPrimaryContainer_highContrast"
-                        app:trackCornerRadius="16dp"
-                        app:trackStopIndicatorSize="0dp"
-                        app:trackThickness="32dp" />
+<!--                    <com.google.android.material.progressindicator.LinearProgressIndicator-->
+<!--                        android:id="@+id/linear_progress_indicator"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="4dp"-->
+<!--                        android:indeterminate="false"-->
+<!--                        android:max="200"-->
+<!--                        android:progress="45"-->
+<!--                        app:indicatorColor="@color/md_theme_onPrimaryContainer"-->
+<!--                        app:indicatorTrackGapSize="0px"-->
+<!--                        app:trackColor="@color/md_theme_onPrimaryContainer_highContrast"-->
+<!--                        app:trackCornerRadius="16dp"-->
+<!--                        app:trackStopIndicatorSize="0dp"-->
+<!--                        app:trackThickness="32dp" />-->
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -288,13 +297,14 @@
                         >
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/quickReliefPurchased"
+                            android:id="@+id/quickReliefLastPurchasedInput"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:clickable="true"
                             android:inputType="none"
                             android:textSize="14sp"
+                            android:paddingEnd="48dp"
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -310,13 +320,14 @@
                         android:layout_marginTop="8dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/quickReliefExpires"
+                            android:id="@+id/quickReliefExpiresInput"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:clickable="true"
                             android:inputType="none"
                             android:textSize="14sp"
+                            android:paddingEnd="48dp"
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -337,7 +348,7 @@
                             android:textSize="12dp" />
 
                         <com.google.android.material.button.MaterialButtonToggleGroup
-                            android:id="@+id/toggleButton"
+                            android:id="@+id/quickReliefReportedByToggle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:singleSelection="true"
@@ -345,7 +356,7 @@
                             >
 
                             <com.google.android.material.button.MaterialButton
-                                android:id="@+id/button1"
+                                android:id="@+id/btnRescueYes"
                                 style="?attr/materialButtonOutlinedStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -353,16 +364,18 @@
                                 android:textSize="12dp"
                                 android:text="Parent"
                                 android:checked="true"
+                                android:tag="parent"
                                 />
 
                             <com.google.android.material.button.MaterialButton
-                                android:id="@+id/button2"
+                                android:id="@+id/btnRescueNo"
                                 style="?attr/materialButtonOutlinedStyle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:minHeight="32dp"
                                 android:textSize="12dp"
-                                android:text="Child" />
+                                android:text="Child"
+                                android:tag="child"/>
 
                         </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -371,8 +384,8 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:layout_gravity="bottom|end"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
@@ -381,6 +394,19 @@
                     android:src="@drawable/edit_24px"
                     app:tint="@color/md_theme_onPrimaryContainer"
                     android:id="@+id/quickReliefEditIcon"/>
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginRight="48dp"
+                    android:layout_marginBottom="8dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/save_24px"
+                    app:tint="@color/md_theme_onPrimaryContainer"
+                    android:id="@+id/quickReliefSaveIcon"
+                    android:visibility="gone"/>
             </FrameLayout>
 
         </com.google.android.material.card.MaterialCardView>
@@ -406,24 +432,14 @@
                         android:padding="16dp"
                         android:id="@+id/controllerView">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Medicine B"
-                                android:textColor="@color/md_theme_onSecondaryContainer"
-                                android:textSize="24dp"
-                                android:textStyle="bold" />
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text=" (controller)"
-                                android:textColor="@color/md_theme_onSecondaryContainer"
-                                android:layout_marginLeft="8dp"/>
-                        </LinearLayout>
+                            android:text="Controller Medicine"
+                            android:textColor="@color/md_theme_onSecondaryContainer"
+                            android:textSize="24dp"
+                            android:textStyle="bold"
+                            android:id="@+id/controllerName"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -432,18 +448,34 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="44dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="45"
                                 android:textColor="@color/md_theme_onSecondaryContainer"
                                 android:textSize="32dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:id="@+id/controllerRemaining"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=" / "
+                                android:textColor="@color/md_theme_onSecondaryContainer"
+                                android:textSize="16dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="200"
+                                android:textColor="@color/md_theme_onSecondaryContainer"
+                                android:textSize="16dp"
+                                android:id="@+id/controllerTotal"/>
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="/ 200 puffs"
+                                android:text=" puffs"
                                 android:textColor="@color/md_theme_onSecondaryContainer"
                                 android:textSize="16dp" />
                         </LinearLayout>
@@ -453,21 +485,21 @@
                             android:layout_height="wrap_content"
                             android:text="22.5% available"
                             android:textColor="@color/md_theme_onSecondaryContainer"
-                            android:textStyle="italic" />
+                            android:textStyle="italic"
+                            android:id="@+id/controllerPercentage"/>
 
                         <com.google.android.material.progressindicator.LinearProgressIndicator
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:indeterminate="false"
-                            android:max="200"
-                            android:progress="45"
                             app:indicatorColor="@color/md_theme_onSecondaryContainer"
                             app:indicatorTrackGapSize="0px"
                             app:trackColor="@color/md_theme_onSecondaryContainer_highContrast"
                             app:trackCornerRadius="16dp"
                             app:trackStopIndicatorSize="0dp"
-                            app:trackThickness="32dp" />
+                            app:trackThickness="32dp"
+                            android:id="@+id/controllerProgress"/>
 
                         <TextView
                             style="@style/TextAppearance.AppCompat.Subhead"
@@ -483,7 +515,8 @@
                             android:text="11/15/2025"
                             android:textColor="@color/md_theme_onSecondaryContainer"
                             android:textSize="24dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:id="@+id/controllerLastPurchased"/>
 
                         <TextView
                             style="@style/TextAppearance.AppCompat.Subhead"
@@ -499,13 +532,15 @@
                             android:text="11/22/2025"
                             android:textColor="@color/md_theme_onSecondaryContainer"
                             android:textSize="24dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:id="@+id/controllerExpires"/>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:id="@+id/controllerReportedBy">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -518,9 +553,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="parent"
-                                android:textColor="@color/md_theme_onSecondaryContainer"
+                                android:textColor="@color/md_theme_outlineVariant"
                                 android:textSize="16dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:tag="parent"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -536,24 +572,12 @@
                                 android:text="child"
                                 android:textColor="@color/md_theme_outlineVariant"
                                 android:textSize="16dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:tag="child"/>
 
 
                         </LinearLayout>
                     </LinearLayout>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|end"
-                        android:layout_marginRight="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/edit_24px"
-                        app:tint="@color/md_theme_onSecondaryContainer"
-                        android:id="@+id/controllerEditIcon"/>
-
                     <!--  EDIT -->
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -563,10 +587,13 @@
                         android:visibility="gone"
                         android:id="@+id/controllerEdit">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="Medicine Name"/>
+                            android:text="Controller Medicine"
+                            android:textColor="@color/md_theme_onSecondaryContainer"
+                            android:textSize="24dp"
+                            android:textStyle="bold" />
 
 
                         <LinearLayout
@@ -581,7 +608,8 @@
                                 android:textSize="32dp"
                                 android:textStyle="bold"
                                 android:hint="#"
-                                android:inputType="number"/>
+                                android:inputType="number"
+                                android:id="@+id/controllerRemainingInput"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -595,34 +623,14 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="16dp"
                                 android:hint="total "
-                                android:inputType="number"/>
+                                android:inputType="number"
+                                android:id="@+id/controllerTotalInput"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text=" doses"/>
                         </LinearLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="22.5% available"
-                            android:textColor="@color/md_theme_onSecondaryContainer"
-                            android:textStyle="italic" />
-
-                        <com.google.android.material.progressindicator.LinearProgressIndicator
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:indeterminate="false"
-                            android:max="200"
-                            android:progress="45"
-                            app:indicatorColor="@color/md_theme_onSecondaryContainer"
-                            app:indicatorTrackGapSize="0px"
-                            app:trackColor="@color/md_theme_onSecondaryContainer_highContrast"
-                            app:trackCornerRadius="16dp"
-                            app:trackStopIndicatorSize="0dp"
-                            app:trackThickness="32dp" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
@@ -636,13 +644,14 @@
                             >
 
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/controllerPurchased"
+                                android:id="@+id/controllerLastPurchasedInput"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:focusable="false"
                                 android:clickable="true"
                                 android:inputType="none"
                                 android:textSize="14sp"
+                                android:paddingEnd="48dp"
                                 />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -658,13 +667,14 @@
                             android:layout_marginTop="8dp">
 
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/controllerExpires"
+                                android:id="@+id/controllerExpiresInput"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:focusable="false"
                                 android:clickable="true"
                                 android:inputType="none"
                                 android:textSize="14sp"
+                                android:paddingEnd="48dp"
                                 />
 
                         </com.google.android.material.textfield.TextInputLayout>
@@ -689,6 +699,7 @@
                                 android:layout_height="wrap_content"
                                 app:singleSelection="true"
                                 app:selectionRequired="true"
+                                android:id="@+id/controllerReportedByToggle"
                                 >
 
                                 <com.google.android.material.button.MaterialButton
@@ -699,6 +710,7 @@
                                     android:textSize="12dp"
                                     android:text="Parent"
                                     android:checked="true"
+                                    android:tag="parent"
                                     />
 
                                 <com.google.android.material.button.MaterialButton
@@ -707,13 +719,39 @@
                                     android:layout_height="wrap_content"
                                     android:minHeight="32dp"
                                     android:textSize="12dp"
-                                    android:text="Child" />
+                                    android:text="Child"
+                                    android:tag="child"/>
 
                             </com.google.android.material.button.MaterialButtonToggleGroup>
 
 
                         </LinearLayout>
                     </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/edit_24px"
+                        app:tint="@color/md_theme_onSecondaryContainer"
+                        android:id="@+id/controllerEditIcon"/>
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginRight="48dp"
+                        android:layout_marginBottom="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/save_24px"
+                        app:tint="@color/md_theme_onSecondaryContainer"
+                        android:id="@+id/controllerSaveIcon"
+                        android:visibility="gone"/>
 
                 </FrameLayout>
 

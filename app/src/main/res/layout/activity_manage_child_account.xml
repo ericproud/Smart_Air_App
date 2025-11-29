@@ -8,10 +8,24 @@
     tools:context=".ManageChildAccount">
 
     <Button
-        android:id="@+id/manageChildPermissions"
+        android:id="@+id/generateOTCButton"
         android:layout_width="300dp"
         android:layout_height="70dp"
         android:layout_marginTop="15dp"
+        android:backgroundTint="#673AB7"
+        android:text="GENERATE OTC"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchBox" />
+
+    <Button
+        android:id="@+id/manageChildPermissions"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="#673AB7"
         android:text="MANAGE SHARING PERMISSIONS"
         android:textColor="#FFFFFF"
@@ -19,50 +33,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sendOTCButton" />
-
-    <Button
-        android:id="@+id/sendOTCButton"
-        android:layout_width="300dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="15dp"
-        android:backgroundTint="#673AB7"
-        android:text="SEND ONE TIME CODE TO DOCTOR"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/share" />
-
-    <TextView
-        android:id="@+id/searchForPatients8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Additional notes"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-    <TextView
-        android:id="@+id/share"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text=" Share account with doctor"
-        android:textSize="25sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchBox" />
+        app:layout_constraintTop_toBottomOf="@+id/OTCText" />
 
     <Button
         android:id="@+id/revokeProviderAccessButton"
         android:layout_width="300dp"
         android:layout_height="70dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#673AB7"
         android:text="REVOKE PROVIDER ACCESS"
         android:textColor="#FFFFFF"
@@ -76,7 +53,7 @@
         android:id="@+id/searchForPatients13"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:text="Revoking access will remove all permissions granted by sharing this account immediately"
         android:textAlignment="center"
         android:textSize="18sp"
@@ -84,6 +61,27 @@
         app:layout_constraintHorizontal_bias="0.472"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/manageChildPermissions" />
+
+    <TextView
+        android:id="@+id/searchForPatients8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Additional notes"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <TextView
+        android:id="@+id/OTCText"
+        android:layout_width="300sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/generateOTCButton" />
 
     <TextView
         android:id="@+id/textView7"
@@ -112,8 +110,13 @@
             android:id="@+id/additionalNotes"
             android:layout_width="304dp"
             android:layout_height="100dp"
-            tools:layout_editor_absoluteX="2dp"
-            tools:layout_editor_absoluteY="5dp" />
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="3dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

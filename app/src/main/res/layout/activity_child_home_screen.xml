@@ -9,7 +9,7 @@
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/childsName"
         android:layout_width="411dp"
         android:layout_height="wrap_content"
         android:background="#673AB7"
@@ -29,7 +29,7 @@
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/childsName"
         app:layout_constraintVertical_bias="0.0"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -58,7 +58,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="56dp"
         android:backgroundTint="#673AB7"
-        android:text="EMERGENCY TRIAGE"
+        android:text="HAVING TROUBLE BREATHING?"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +81,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/childsName" />
 
     <Button
         android:id="@+id/parentLogRescueAttemptButton"
