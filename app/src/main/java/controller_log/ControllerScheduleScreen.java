@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -47,7 +46,7 @@ public class ControllerScheduleScreen extends AppCompatActivity {
 
         //this is the medicine the user needs to take
         List<String> schedule = new ArrayList<>();
-        String id = getIntent().getStringExtra("childId");
+        String id = getIntent().getStringExtra("childUID");
 
         //this recycle view displays the schedule
         RecyclerView controllerSchedule = findViewById(R.id.controller_schedule);
@@ -206,7 +205,6 @@ public class ControllerScheduleScreen extends AppCompatActivity {
     private void helperSchedule(String id, List<String> schedule, CustomStringAdapter stringAdapter, ArrayAdapter<String> arrayAdapter) {
         //this is used to load in the List<String> of when to take medicine and how much from the databes
         ControllerDatabase.ControllerScheduleLoader(id, loaded_schedule ->{
-            Toast.makeText(this, "read in: " + loaded_schedule.size() + " entries", Toast.LENGTH_SHORT).show();
             for (String toDo : loaded_schedule) {
                 schedule.add(toDo);
             }
