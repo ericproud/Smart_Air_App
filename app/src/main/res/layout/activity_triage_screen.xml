@@ -89,6 +89,15 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/textPEFZone"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="10dp"
+            android:text="PEF Zone: " />
+
+        <TextView
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
             android:layout_height="24dp"

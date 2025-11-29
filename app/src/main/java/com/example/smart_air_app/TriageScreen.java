@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.triage.TriageEntry;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
@@ -62,6 +63,10 @@ public class TriageScreen extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Back button
+        MaterialToolbar toolbar = findViewById(R.id.materialToolbar);
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         ChipGroup redFlagsGroup = findViewById(R.id.redFlagsGroup);
         Button emergencyBtn = findViewById(R.id.btnFeelingBetter);

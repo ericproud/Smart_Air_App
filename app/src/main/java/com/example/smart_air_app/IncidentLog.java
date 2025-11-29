@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.triage.TriageEntry;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +41,10 @@ public class IncidentLog extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Back button
+        MaterialToolbar toolbar = findViewById(R.id.materialToolbar);
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         incidentLogField = findViewById(R.id.incidentLogField);
 
