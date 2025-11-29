@@ -16,6 +16,8 @@ import com.example.smart_air_app.inventory.InventoryActivity;
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.google.android.material.button.MaterialButton;
 
+import controller_log.ControllerLoggingScreen;
+
 public class ParentChildHomeScreen extends AppCompatActivity {
 
     private String childUserId;
@@ -54,6 +56,10 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         FrameLayout chartContainer = findViewById(R.id.chartContainer);
 
         childNameText.setText(childName);
+
+        logControllerButton.setOnClickListener(v-> {
+            startActivityWithChildInfo(ControllerLoggingScreen.class);
+        });
 
         logRescueButton.setOnClickListener(view -> {
             startActivityWithChildInfo(LogRescueAttemptActivity.class);
