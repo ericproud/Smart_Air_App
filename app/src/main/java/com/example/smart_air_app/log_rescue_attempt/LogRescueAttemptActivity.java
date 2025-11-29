@@ -92,6 +92,8 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
             });
         }
 
+        toolbar.setNavigationOnClickListener(v -> finish());
+
         submit.setOnClickListener(button -> {
             var dosageText = dosageInput.getEditText().getText();
             var peakFlowBeforeText = peakFlowBeforeInput.getEditText().getText();

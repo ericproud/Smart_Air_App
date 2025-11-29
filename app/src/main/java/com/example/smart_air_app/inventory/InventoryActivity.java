@@ -135,12 +135,7 @@ public class InventoryActivity extends AppCompatActivity implements InventoryVie
 
 
         MaterialToolbar toolbar = findViewById(R.id.materialToolbar);
-        toolbar.setNavigationOnClickListener(view -> {
-            Intent intent = new Intent(InventoryActivity.this, ParentChildHomeScreen.class);
-            intent.putExtra("childUID", childUID);
-            intent.putExtra("childName", childName);
-            startActivity(intent);
-        });
+        toolbar.setNavigationOnClickListener(view -> finish());
 
 
         attachDatePicker(quickReliefLastPurchasedInput);
