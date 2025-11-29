@@ -88,7 +88,6 @@ public class IncidentLog extends AppCompatActivity {
                 addTriageToScreen(entry, realDate);
             }
         });
-
     }
 
     @SuppressLint("SetTextI18n") // Added to get rid of annoying warning in code about long string

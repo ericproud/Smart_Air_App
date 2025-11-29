@@ -332,6 +332,15 @@
                 android:text="Incident Log"
                 android:layout_marginTop="8dp" />
 
+            <!-- Medicine Logs -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMedicineLog"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Medicine Logs"
+                android:layout_marginTop="8dp" />
+
             <!-- Summary Charts -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSummaryCharts"

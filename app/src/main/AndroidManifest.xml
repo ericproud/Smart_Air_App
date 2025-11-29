@@ -11,6 +11,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
+        <activity
+            android:name=".MedicineLogs"
+            android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -20,6 +24,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
         <activity
             android:name=".IncidentLog"
             android:exported="false" />
@@ -52,7 +57,7 @@
             android:exported="false" />
         <activity
             android:name=".ParentHomeScreen"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".AddChildScreen"
             android:exported="false" />
@@ -90,7 +95,7 @@
             android:name="controller_log.ControllerLoggingScreen"
             android:exported="false" />
         <activity
-            android:name="CheckinHistoryScreen"
+            android:name=".CheckinHistoryScreen"
             android:exported="false" />
         <activity
             android:name=".ViewHistoryScreen"
