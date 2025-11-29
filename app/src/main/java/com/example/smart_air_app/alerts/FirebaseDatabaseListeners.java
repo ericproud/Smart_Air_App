@@ -24,7 +24,8 @@ public class FirebaseDatabaseListeners {
     private String parentId;
     private final List<EntryListeners<?>> entryListeners = List.of(
             new TriageListeners(db.getReference("TriageEntries")),
-            new InventoryListeners(db.getReference("Inventory"))
+            new InventoryListeners(db.getReference("Inventory")),
+            new RescueListeners(db.getReference("RescueAttempts"))
 
     );
 
@@ -103,6 +104,7 @@ public class FirebaseDatabaseListeners {
     public void attachListeners() {
         loadChildren(map -> {
             map.forEach(this::attachListeners);
+            System.out.println(map);
         });
     }
 
