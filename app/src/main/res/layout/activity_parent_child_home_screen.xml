@@ -296,6 +296,15 @@
                 android:text="Emergency Triage"
                 android:layout_marginTop="8dp" />
 
+            <!-- Set Personal Best -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/setPBButton"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Set Personal Best"
+                android:layout_marginTop="8dp" />
+
             <!-- Inventory -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnInventory"
