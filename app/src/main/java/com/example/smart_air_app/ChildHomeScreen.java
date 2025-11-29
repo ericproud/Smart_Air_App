@@ -32,17 +32,17 @@ public class ChildHomeScreen extends AppCompatActivity {
             startActivity(new Intent(ChildHomeScreen.this, LogRescueAttemptActivity.class));
         });
 
-<<<<<<< HEAD
         Button logController = findViewById(R.id.parentLogControllerUsageButton);
         logController.setOnClickListener(v->{
             Intent intent = new Intent(ChildHomeScreen.this, ControllerLoggingScreen.class);
             intent.putExtra("childId", getIntent().getStringExtra("childId"));
             startActivity(intent);
-=======
+
+        });
+
         Button triageButton = findViewById(R.id.parentEmergencyTriageButton);
         triageButton.setOnClickListener(view -> {
             startActivity(new Intent(ChildHomeScreen.this, TriageScreen.class));
->>>>>>> master
         });
     }
 }
