@@ -57,6 +57,10 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
         childNameText.setText(childName);
 
+        emergencyButton.setOnClickListener(view -> {
+            startActivityWithChildInfo(TriageScreen.class);
+        });
+
         logRescueButton.setOnClickListener(view -> {
             startActivityWithChildInfo(LogRescueAttemptActivity.class);
         });

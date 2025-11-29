@@ -293,7 +293,7 @@
                 style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Emergency Triage"
+                android:text="Having Trouble Breathing?"
                 android:layout_marginTop="8dp" />
 
             <!-- Set Personal Best -->
