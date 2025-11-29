@@ -21,6 +21,7 @@ import com.example.smart_air_app.inventory.InventoryRepository;
 import com.example.smart_air_app.user_classes.Child;
 import com.example.smart_air_app.utils.DateValidator;
 import com.example.smart_air_app.utils.FormHelperFunctions;
+import com.google.firebase.Firebase;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -123,6 +124,11 @@ public class AddChildScreen extends AppCompatActivity {
                         FirebaseInventoryRepository inv = new FirebaseInventoryRepository();
                         inv.setUid(uID);
                         inv.initInventory();
+
+                        // NEEDED for alerts to work
+                        FirebaseDatabase.getInstance().getReference("Triage").child(uID).setValue(null);
+                        FirebaseDatabase.getInstance().getReference("RescueAttempts").child(uID).setValue(null);
+
 
                         FirebaseDatabase.getInstance().getReference("Users").child(parentUID).child("children").child(uID).setValue(true);
                         childAuth.signOut();

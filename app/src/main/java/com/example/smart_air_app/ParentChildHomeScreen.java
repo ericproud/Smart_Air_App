@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.inventory.InventoryActivity;
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
+import com.example.smart_air_app.utils.NotificationUtils;
 import com.google.android.material.button.MaterialButton;
 
 public class ParentChildHomeScreen extends AppCompatActivity {
