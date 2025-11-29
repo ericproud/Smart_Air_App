@@ -17,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.utils.Logout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,22 +35,28 @@ public class DoctorHomeScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_doctor_home_screen);
+
+        patientSpinner = findViewById(R.id.patientSpinner);
+        patientName = findViewById(R.id.patientName);
+        enterOTC = findViewById(R.id.enterOTC);
+        submitOTCButton = findViewById(R.id.submitOTCButton);
+        doctorLogout = findViewById(R.id.doctorLogout);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-
-            patientSpinner = findViewById(R.id.patientSpinner);
-            patientName = findViewById(R.id.patientName);
-            enterOTC = findViewById(R.id.enterOTC);
-            submitOTCButton = findViewById(R.id.submitOTCButton);
 
             getPatientUIDs();
             setUpOTC();
 
             return insets;
         });
-    }
 
+        doctorLogout.setOnClickListener(v -> {
+            Logout.logout(this);
+        });
+    }
+    Button doctorLogout;
     Spinner patientSpinner;
     TextView patientName;
     EditText enterOTC;

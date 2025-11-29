@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.inventory.InventoryActivity;
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
+import com.example.smart_air_app.utils.Logout;
 import com.google.android.material.button.MaterialButton;
 
 public class ParentChildHomeScreen extends AppCompatActivity {
@@ -47,6 +48,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         MaterialButton summaryChartsButton = findViewById(R.id.btnSummaryCharts);
         MaterialButton manageAccountButton = findViewById(R.id.btnManageAccount);
         MaterialButton incidentLogButton = findViewById(R.id.btnIncidentLog);
+        MaterialButton logoutButton = findViewById(R.id.btnLogout);
 
         TextView todaysZone = findViewById(R.id.textTodaysZone);
         TextView lastRescueTime = findViewById(R.id.textLastRescueTime);
@@ -69,6 +71,10 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
         incidentLogButton.setOnClickListener(view -> {
             startActivityWithChildInfo(IncidentLog.class);
+        });
+
+        logoutButton.setOnClickListener(v -> {
+            Logout.logout(this);
         });
     }
 
