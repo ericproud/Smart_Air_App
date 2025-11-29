@@ -23,6 +23,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 public class TriageScreen extends AppCompatActivity {
 
@@ -189,6 +190,13 @@ public class TriageScreen extends AppCompatActivity {
         String childUID = FirebaseAuth.getInstance().getUid();
 
         System.out.println(entry.getTriageID());
+
+        FirebaseDatabase.getInstance()
+                .getReference("TriageEntries")
+                .child(childUID)
+                .child("TriageID" + entry.getTriageID())
+                .child("dateTime")
+                .setValue(ServerValue.TIMESTAMP);
 
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")

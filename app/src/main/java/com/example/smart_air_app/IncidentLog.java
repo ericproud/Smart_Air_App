@@ -14,9 +14,17 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.triage.TriageEntry;
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 public class IncidentLog extends AppCompatActivity {
 
@@ -40,11 +48,12 @@ public class IncidentLog extends AppCompatActivity {
     }
 
     void loadTriageEntries(String childUID) {
-       DatabaseReference ref = FirebaseDatabase.getInstance()
-               .getReference("TriageEntries")
-               .child(childUID);
 
-        ref.get().addOnCompleteListener(task -> {
+        FirebaseDatabase.getInstance()
+               .getReference("TriageEntries")
+               .child(childUID)
+               .get()
+               .addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 return;
             }
@@ -53,8 +62,17 @@ public class IncidentLog extends AppCompatActivity {
                 return;
             }
 
-            // Go thru each triage ID
+            // Sort triages by dateTime
+            List<DataSnapshot> triages = new ArrayList<>();
             for (DataSnapshot triage : triageList.getChildren()) {
+                triages.add(triage);
+            }
+
+            triages.sort(Comparator.comparing(o ->
+                    o.child("dateTime").getValue(Long.class)
+            ));
+
+            for (DataSnapshot triage : triages) {
                 // Convert snapshot into TriageEntry
                 boolean noFullSentences = triage.child("NoFullSentences").getValue(Boolean.class);
                 boolean retractions = triage.child("Retractions").getValue(Boolean.class);
@@ -63,16 +81,18 @@ public class IncidentLog extends AppCompatActivity {
                 boolean recentRescue = triage.child("RecentRescueDone").getValue(Boolean.class);
                 double PEF = triage.child("PEF").getValue(Double.class);
                 boolean emergency = triage.child("emergencyStatus").getValue(Boolean.class);
+                long realDate = triage.child("dateTime").getValue(Long.class);
+
 
                 TriageEntry entry = new TriageEntry(redFlags, recentRescue, PEF, emergency);
-                addTriageToScreen(entry);
+                addTriageToScreen(entry, realDate);
             }
         });
 
     }
 
     @SuppressLint("SetTextI18n") // Added to get rid of annoying warning in code about long string
-    void addTriageToScreen(TriageEntry entry) {
+    void addTriageToScreen(TriageEntry entry, long realDate) {
         // Create TextView for display triage info
         TextView triageInfo = new TextView(this);
 
@@ -101,9 +121,9 @@ public class IncidentLog extends AppCompatActivity {
 
         String guidanceShown;
         if (entry.getEmergencyStatus()) {
-            guidanceShown = "Child was advised to call emergency services (911)\n";
+            guidanceShown = "Child was advised to call emergency services (911)";
         } else {
-            guidanceShown = "Child was given home steps to improve their condition\n";
+            guidanceShown = "Child was given home steps to improve their condition";
         }
 
         String PEFText;
@@ -113,12 +133,16 @@ public class IncidentLog extends AppCompatActivity {
             PEFText = "PEF: " + entry.getPEF();
         }
 
+        Date date = new Date(realDate);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
         triageInfo.setText(
+                "Date: " + dateFormat.format(date) + "\n\n" +
                 "Red flags:\n" +
                         redFlagsText + "\n" +
                         recentRescueText + "\n" +
                         PEFText + "\n\n" +
-                        guidanceShown + "\n"
+                        guidanceShown
         );
 
         triageInfo.setPadding(20, 20, 20, 20);
