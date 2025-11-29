@@ -64,8 +64,7 @@ public class ParentHomeScreen extends AppCompatActivity {
             }
         });
 
-        NotificationUtils.requestNotificationPermission(this);
-
+        NotificationUtils.ensurePermissionAndChannel(this);
         fdl.setContext(getApplicationContext());
         fdl.setParentId(FirebaseAuth.getInstance().getUid());
         fdl.attachListeners();
