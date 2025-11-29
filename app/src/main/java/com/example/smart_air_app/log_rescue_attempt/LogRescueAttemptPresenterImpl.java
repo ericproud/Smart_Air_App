@@ -50,7 +50,6 @@ public class LogRescueAttemptPresenterImpl implements  LogRescueAttemptPresenter
         info.setPeakFlowBefore(peakFlowBefore);
         info.setPeakFlowAfter(peakFlowAfter);
         info.setTriageIncident(triageIncident);
-        info.setDate(Timestamp.now());
 
         Log.i("info", info.toString());
         repo.saveRescueAttempt(info, new RescueAttemptRepository.SaveCallback() {

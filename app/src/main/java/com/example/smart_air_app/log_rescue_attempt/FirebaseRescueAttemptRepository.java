@@ -6,6 +6,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -18,11 +19,15 @@ public class FirebaseRescueAttemptRepository implements RescueAttemptRepository 
     public void saveRescueAttempt(RescueAttempt attempt, SaveCallback callback) {
         String userId = uid;
 
-        DatabaseReference ref = db.getReference().child("RescueAttempts").child(userId);
+        DatabaseReference ref = db.getReference().child("RescueAttempts").child(userId).push();
 
-        ref.push().setValue(attempt)
+        ref.setValue(attempt)
                 .addOnFailureListener(e -> callback.onError(e.getMessage()))
-                .addOnSuccessListener(v -> callback.onSuccess());
+                .addOnSuccessListener(v -> {
+                    ref.child("timestamp").setValue(ServerValue.TIMESTAMP)
+                            .addOnSuccessListener(v2 -> callback.onSuccess())
+                            .addOnFailureListener(e -> callback.onError(e.getMessage()));
+                });
     }
 
     @Override

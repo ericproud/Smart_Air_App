@@ -13,7 +13,7 @@ public class RescueAttempt {
     private double peakFlowBefore;
     private double peakFlowAfter;
     private boolean triageIncident;
-    private Timestamp date;
+    private long timestamp;
 
     @Override
     public String toString() {
@@ -24,7 +24,7 @@ public class RescueAttempt {
                 ", peakFlowBefore=" + peakFlowBefore +
                 ", peakFlowAfter=" + peakFlowAfter +
                 ", triageIncident=" + triageIncident +
-                ", date=" + date +
+                ", timestamp=" + timestamp +
                 '}';
     }
 
@@ -76,11 +76,11 @@ public class RescueAttempt {
         return triageIncident;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }
