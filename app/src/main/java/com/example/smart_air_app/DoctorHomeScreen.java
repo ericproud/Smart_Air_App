@@ -1,5 +1,6 @@
 package com.example.smart_air_app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.utils.BuildPDFs;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,20 +30,41 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DoctorHomeScreen extends AppCompatActivity {
+    String childUID;
+    String childName;
+    HashMap<String, String> mapOfFields;
+    DatabaseReference dbRef;
+    int fieldsToLoad = 1;
+    int fieldsLoaded = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_doctor_home_screen);
+
+        patientSpinner = findViewById(R.id.patientSpinner);
+        patientName = findViewById(R.id.patientName);
+        enterOTC = findViewById(R.id.enterOTC);
+        submitOTCButton = findViewById(R.id.submitOTCButton);
+
+        dbRef = FirebaseDatabase.getInstance().getReference();
+        childUID = getIntent().getStringExtra("patientUID");
+        childName = getIntent().getStringExtra("patientName");
+        mapOfFields = new HashMap<>();
+        mapOfFields.put("Shortness of breath", "8");
+        mapOfFields.put("Chest tightness", "5");
+        mapOfFields.put("Chest pain", "3");
+        mapOfFields.put("Wheezing", "1");
+        mapOfFields.put("Trouble sleeping", "0");
+        mapOfFields.put("Coughing", "3");
+        mapOfFields.put("Other", "22");
+        mapOfFields.put("Controller Adherence", "0%");
+        mapOfFields.put("Rescue Attempts Per Day", "0");
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-
-            patientSpinner = findViewById(R.id.patientSpinner);
-            patientName = findViewById(R.id.patientName);
-            enterOTC = findViewById(R.id.enterOTC);
-            submitOTCButton = findViewById(R.id.submitOTCButton);
 
             getPatientUIDs();
             setUpOTC();
@@ -56,10 +79,10 @@ public class DoctorHomeScreen extends AppCompatActivity {
     Button submitOTCButton;
 
     String UID = FirebaseAuth.getInstance().getUid();
-    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     ArrayList<String> patientUIDs = new ArrayList<>();
     ArrayList<String> patientNames = new ArrayList<>();
     HashMap<String, String> patientNameToUID = new HashMap<>();
+
 
     void getPatientUIDs() {
         // Get patient UIDs from children linked to doctor from db
@@ -129,46 +152,13 @@ public class DoctorHomeScreen extends AppCompatActivity {
         Button rescueLogsButton = findViewById(R.id.rescueLogsButton);
         Button triageIncidentsButton = findViewById(R.id.triageIncidentsButton);
         Button summaryChartsButton = findViewById(R.id.summaryChartsButton);
-        controllerAdherenceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DoctorHomeScreen.this, ProviderReportScreen.class);
-                intent.putExtra("patientName", patientName);
-                intent.putExtra("patientUID", patientUID);
-                startActivity(intent);
-            }
-        });
-        /*
-        rescueLogsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DoctorHomeScreen.this, DoctorRescueLogsScreen.class);
-                intent.putExtra("patientName", patientName);
-                intent.putExtra("PatientUID", patientUID);
-                startActivity(intent);
-            }
-        });
-
-        triageIncidentsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DoctorHomeScreen.this, DoctorTriageIncidentsScreen.class);
-                intent.putExtra("patientName", patientName);
-                intent.putExtra("PatientUID", patientUID);
-                startActivity(intent);
-            }
-        });
 
         summaryChartsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DoctorHomeScreen.this, DoctorSummaryChartsScreen.class);
-                intent.putExtra("patientName", patientName);
-                intent.putExtra("PatientUID", patientUID);
-                startActivity(intent);
+                BuildPDFs.buildProviderReport(DoctorHomeScreen.this, dbRef, patientUID, patientName, mapOfFields);
             }
         });
-        */
     }
 
     void setUpOTC() {
