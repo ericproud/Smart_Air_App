@@ -20,7 +20,7 @@
         android:id="@+id/controllerUseScheduleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:text="Controller Usage Schedule"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,18 +62,18 @@
         android:id="@+id/techniqueHelperButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="Technique Helper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setPBButton" />
+        app:layout_constraintTop_toBottomOf="@+id/shortnessBreathInput" />
 
     <TextView
         android:id="@+id/PEFText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Log pre PEF (optional)"
+        android:text="Log PEF (optional)"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/techniqueHelperButton" />
@@ -82,7 +82,7 @@
         android:id="@+id/preControllerUseText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="31dp"
         android:text="Pre Controller Usage: "
         app:layout_constraintEnd_toStartOf="@+id/preControllerInput"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,21 +92,22 @@
         android:id="@+id/postControllerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="31dp"
+        android:layout_marginTop="35dp"
         android:text="Post Controller Usage: "
         app:layout_constraintEnd_toStartOf="@+id/postControllerInput"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/feelingSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/preControllerUseText" />
 
     <TextView
         android:id="@+id/currentBest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="Current Personal Best:"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/preControllerInput" />
+        app:layout_constraintTop_toBottomOf="@+id/postControllerInput" />
 
     <TextView
         android:id="@+id/currentZoneText"
@@ -123,7 +124,7 @@
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="Submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/backButton"
@@ -133,7 +134,7 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:text="Back"
         app:layout_constraintEnd_toStartOf="@+id/submitButton"
         app:layout_constraintHorizontal_bias="0.068"
@@ -143,20 +144,20 @@
     <EditText
         android:id="@+id/postControllerInput"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="15dp"
         android:ems="10"
         android:hint="Rating after controller"
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/postControllerText"
-        app:layout_constraintTop_toBottomOf="@+id/feelingSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/preControllerInput" />
 
     <EditText
         android:id="@+id/preControllerInput"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:hint="Rating before controller"
         android:inputType="numberDecimal"
@@ -168,7 +169,7 @@
         android:id="@+id/feelingSpinner"
         android:layout_width="300dp"
         android:layout_height="30dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/label2"
         app:layout_constraintTop_toBottomOf="@+id/amountInputText" />
@@ -177,7 +178,7 @@
         android:id="@+id/label2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="19dp"
         android:text="Breath Rating:"
         app:layout_constraintEnd_toStartOf="@+id/feelingSpinner"
         app:layout_constraintStart_toStartOf="parent"
@@ -207,11 +208,11 @@
         android:id="@+id/setPBButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="14dp"
         android:text="Set Personal Best"
         app:layout_constraintEnd_toStartOf="@+id/personalBestInput"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postControllerInput" />
+        app:layout_constraintTop_toBottomOf="@+id/feelingSpinner" />
 
     <EditText
         android:id="@+id/personalBestInput"
@@ -223,6 +224,18 @@
         android:inputType="numberSigned"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/setPBButton"
-        app:layout_constraintTop_toBottomOf="@+id/postControllerInput" />
+        app:layout_constraintTop_toBottomOf="@+id/feelingSpinner" />
+
+    <EditText
+        android:id="@+id/shortnessBreathInput"
+        android:layout_width="270dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Shortness Breath Rating (eg. 6)"
+        android:inputType="numberSigned"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setPBButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

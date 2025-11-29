@@ -27,6 +27,7 @@ import java.util.Calendar;
 /*
 TO DO:
 use the get intent when the parent child home screen or whatever works properly
+remove all Toast.makeText() also
 */
 
 public class ControllerLoggingScreen extends AppCompatActivity {
@@ -50,6 +51,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             Toast.makeText(this, getIntent().getStringExtra("childId"), Toast.LENGTH_SHORT).show();
         }
 
+        //change this to get from intent later
         String id = "rR8IM0i012OxkTxPNOoT1KkUpsJ2";
 
         Button scheduleButton = findViewById(R.id.controllerUseScheduleButton);
@@ -67,26 +69,27 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         Button submitButton = findViewById(R.id.submitButton);
         Button backButton = findViewById(R.id.backButton);
         TextView personalBest = findViewById(R.id.currentBest);
+        TextView breathShortnessText = findViewById(R.id.shortnessBreathInput);
 
         String[] feeling = {"Better", "Same", "Worse"};
 
-        int[] personal_best = {-1};
-
-        helperPB(id, personal_best);
-
+        //setting default values
         ControllerLog inputs = new ControllerLog();
         inputs.setPreInput(-69);
         inputs.setPostInput(-69);
         inputs.setDoseInput(-69);
+        inputs.setBreathShortness(-69);
+
+        //handles the pb, pef etc.
+        PEFZones zone = new PEFZones();
+        helperPB(id, zone);
 
         String[] feeling_chosen = {""};
         String[] doseInput = {""};
         String[] preInput = {""};
         String[] postInput = {""};
         String[] date = {""};
-
-        //calculate this to display the current zone of the user
-        String[] currZone = {"N/A"};
+        String[] breathShortness = {""};
 
         scheduleButton.setOnClickListener(v ->{
             Intent intent = new Intent(ControllerLoggingScreen.this, ControllerScheduleScreen.class);
@@ -146,12 +149,11 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             int pbParsed = intParser(pbText);
 
             if (pbParsed != -69) {
-                inputs.setPB(pbParsed);
-                ControllerDatabase.personalBestLogger(id, inputs);
-                if (pbParsed > personal_best[0]) {
-                    personal_best[0] = pbParsed;
-                    personalBest.setText("Current Personal Best: " + personal_best[0]);
+                if (pbParsed > zone.getPB()) {
+                    personalBest.setText("Current Personal Best: " + pbParsed);
                 }
+                zone.setPB(pbParsed);
+                PEFZonesDatabase.savePEFZones(id, zone);
             }
         });
 
@@ -160,7 +162,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             startActivity(intent);
         });
 
-        currentZone.setText("Today's Zone: " + currZone[0]);
+        currentZone.setText("Today's Zone: " + zone.calculateZone());
 
         //if submit button is clicked validate amount input for dosage and if valid then log to database
         //also if the inputs for the optional fields are there, log that after validation
@@ -168,11 +170,13 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             doseInput[0] = doseAmount.getText().toString().trim();
             preInput[0] = preController.getText().toString().trim();
             postInput[0] = postController.getText().toString().trim();
+            breathShortness[0] = breathShortnessText.getText().toString().trim();
 
             //intParser returns -69 as a signal that bad input was entered handle accordingly
             int doseInputAmount = intParser(doseInput[0]);
             int preInputAmount = intParser(preInput[0]);
             int postInputAmount = intParser(postInput[0]);
+            int breathShortnessInput = intParser(breathShortness[0]);
 
             if (doseInputAmount != -69) {
                 inputs.setDoseInput(doseInputAmount);
@@ -182,13 +186,21 @@ public class ControllerLoggingScreen extends AppCompatActivity {
                 inputs.setPreInput(preInputAmount);
             }
 
+            if (breathShortnessInput != -69) {
+                inputs.setBreathShortness(breathShortnessInput);
+            }
+
             if (postInputAmount != -69) {
                 inputs.setPostInput(postInputAmount);
-                inputs.setZone(currZone[0]);
+                zone.setHighest_pef(postInputAmount);
             }
 
             if (validSubmission(inputs)) {
                 ControllerDatabase.logControllerDatabase(id, inputs);
+
+                zone.setHighest_pef(postInputAmount);
+                PEFZonesDatabase.savePEFZones(id, zone);
+
                 Toast.makeText(this, "" + inputs.getDoseInput(), Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, "done", Toast.LENGTH_SHORT).show();
             }
@@ -200,22 +212,18 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         //when input the PEF calculate the currZone
         postController.setOnFocusChangeListener((v, focus) -> {
             if (!focus) {
-                Toast.makeText(this, "here", Toast.LENGTH_SHORT).show();
                 String text = postController.getText().toString().trim();
                 int textNum = intParser(text);
                 Toast.makeText(this, "" + textNum, Toast.LENGTH_SHORT).show();
-                if (textNum != -69 && personal_best[0] != -1) {
-                    double ratio = 1.0 * textNum / personal_best[0];
-                    if (ratio >= 0.8) {
-                        currZone[0] = "Green";
-                    }
-                    else if (ratio >= 0.5) {
-                        currZone[0] = "Yellow";
-                    }
-                    else {
-                        currZone[0] = "Red";
-                    }
-                    currentZone.setText("Today's Zone: " + currZone[0]);
+
+                if (textNum != -69) {
+                    int highest_pef = zone.getHighest_pef();
+                    String highest_pef_date = zone.getDate();
+
+                    zone.setHighest_pef(textNum);
+                    currentZone.setText("Today's Zone: " + zone.calculateZone());
+
+                    zone.forceSetHighest_pef(highest_pef, highest_pef_date);
                 }
                 else {
                     currentZone.setText("Today's Zone: N/A");
@@ -251,7 +259,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         TimePickerDialog dialog = new TimePickerDialog(this,
                 (view, selectedHour, selectedMinute) -> {
                     //these lines are what we do with the selected time, the rest of this code is the constructor
-                    if (selectedMinute == 0) {
+                    if (selectedMinute < 10) {
                         time[0] = selectedHour + ":0" + selectedMinute;
                     }
                     else {
@@ -281,26 +289,25 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             return false;
         }
 
-        if (inputs.getPostInput() == -69) {
-            Toast.makeText(this, "invalid post PEF", Toast.LENGTH_SHORT).show();
+        if (inputs.getBreathShortness() == -69) {
+            Toast.makeText(this, "invalid breath shortness", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         return true;
     }
 
-    private void helperPB(String id, int[] personal_best) {
+    private void helperPB(String id, PEFZones pefZone) {
         TextView personalBest = findViewById(R.id.currentBest);
 
-        //this is used to display the current personal best and calculate zones
-        ControllerDatabase.personalBestGetter(id, value -> {
-            Toast.makeText(this, "AAAAAAAA " + value, Toast.LENGTH_SHORT).show();
-            if (value > 0) {
-                personal_best[0] = value;
-                personalBest.setText("Current Personal Best: " + personal_best[0]);
+        //loading in the pef zone object which contains the pb which is what we want
+        PEFZonesDatabase.loadPEFZones(id, (pb, pef, date) -> {
+            pefZone.initializePEF(pb, pef, date);
+
+            if (pb > 0) {
+                personalBest.setText("Current Personal Best: " + pb);
             }
             else {
-                personal_best[0] = -1;
                 personalBest.setText("Current Personal Best: N/A");
             }
         });

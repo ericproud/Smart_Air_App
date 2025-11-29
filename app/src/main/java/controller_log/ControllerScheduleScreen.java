@@ -1,6 +1,5 @@
 package controller_log;
 
-import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,13 +22,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smart_air_app.R;
-import com.example.smart_air_app.utils.DateValidator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-//loading in doesn't work
 
 public class ControllerScheduleScreen extends AppCompatActivity {
     @Override
@@ -52,11 +49,13 @@ public class ControllerScheduleScreen extends AppCompatActivity {
         List<String> schedule = new ArrayList<>();
         String id = getIntent().getStringExtra("childId");
 
+        //this recycle view displays the schedule
         RecyclerView controllerSchedule = findViewById(R.id.controller_schedule);
         CustomStringAdapter listAdapter = new CustomStringAdapter(schedule);
         controllerSchedule.setLayoutManager(new LinearLayoutManager(this));
         controllerSchedule.setAdapter(listAdapter);
 
+        //this spinner is the event you wish to delete
         Spinner selectedTask = findViewById(R.id.scheduledUsage);
         ArrayAdapter<String> selectedAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, schedule
@@ -66,6 +65,7 @@ public class ControllerScheduleScreen extends AppCompatActivity {
 
         helperSchedule(id, schedule, listAdapter, selectedAdapter);
 
+        //handles what task/event was selected
         selectedTask.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -78,23 +78,25 @@ public class ControllerScheduleScreen extends AppCompatActivity {
             }
         });
 
+        //exits the page but saves the schedule one last time for safety
         Button backButton = findViewById(R.id.back_button);
         backButton.setOnClickListener(v -> {
             ControllerDatabase.ControllerScheduleSaver(id, schedule);
             finish();
         });
 
+        //deletes the event from the arraylist and saves it to the database
         Button deleteSelected = findViewById(R.id.deleteButton);
         deleteSelected.setOnClickListener(v->{
             if (selectedSchedule[0] >= 0 && selectedSchedule[0] < schedule.size()) {
                 schedule.remove(selectedSchedule[0]);
-                //this ensures the user only deletes on thing at a time
-                selectedSchedule[0] = -1;
                 selectedAdapter.notifyDataSetChanged();;
                 listAdapter.notifyDataSetChanged();
+                ControllerDatabase.ControllerScheduleSaver(id, schedule);
             }
         });
 
+        //handles getting does input for creating a new event for schedule
         TextView doseInput = findViewById(R.id.doseAmountText);
 
         doseInput.setOnFocusChangeListener((v, focus) -> {
@@ -117,6 +119,7 @@ public class ControllerScheduleScreen extends AppCompatActivity {
             }
         });
 
+        //handles time scheduled for controller use
         Button timeButton = findViewById(R.id.timeButton);
         TextView timeText = findViewById(R.id.timeText);
 
@@ -129,7 +132,7 @@ public class ControllerScheduleScreen extends AppCompatActivity {
                 TimePickerDialog dialog = new TimePickerDialog(this,
                         (view, selectedHour, selectedMinute) -> {
                             //these lines are what we do with the selected time, the rest of this code is the constructor
-                            if (selectedMinute == 0) {
+                            if (selectedMinute < 10) {
                                 time[0] = selectedHour + ":0" + selectedMinute;
                             }
                             else {
@@ -142,18 +145,22 @@ public class ControllerScheduleScreen extends AppCompatActivity {
                 dialog.show();
         });
 
+        //adds event to schedule
         Button addToSchedule = findViewById(R.id.addButton);
 
         addToSchedule.setOnClickListener(v->{
             if (!time[0].equals("") && doseAmount[0] != -1) {
                 String entry = "Time: " + time[0] + " Amount: " + doseAmount[0];
                 if (schedule.contains(entry)) {
-                    //handle this later
+                    //can change this if you want duplicate entries ie 4 puffs and 2 puffs at the same time
+                    //current assumption is no duplicate events
                 }
                 else {
+                    //adds it to the schedule, updates the screen and saves to the database
                     schedule.add(entry);
                     selectedAdapter.notifyDataSetChanged();;
                     listAdapter.notifyDataSetChanged();
+                    ControllerDatabase.ControllerScheduleSaver(id, schedule);
                 }
             }
         });
@@ -195,6 +202,7 @@ public class ControllerScheduleScreen extends AppCompatActivity {
         }
     }
 
+    //loads in the schedule from the database
     private void helperSchedule(String id, List<String> schedule, CustomStringAdapter stringAdapter, ArrayAdapter<String> arrayAdapter) {
         //this is used to load in the List<String> of when to take medicine and how much from the databes
         ControllerDatabase.ControllerScheduleLoader(id, loaded_schedule ->{

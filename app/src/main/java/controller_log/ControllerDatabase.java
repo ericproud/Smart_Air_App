@@ -16,175 +16,143 @@ import java.util.List;
 public class ControllerDatabase {
     private static FirebaseDatabase fdb = FirebaseDatabase.getInstance();
 
-    public interface ControllerCallBack {
-        void onResult(int value);
-    }
-
     public interface ScheduleCallBack {
         void onResult(List<String> steps);
     }
 
     public static void logControllerDatabase(String id, ControllerLog info) {
-        DatabaseReference d_ref = fdb.getReference("Inventory").child(id);
-        DatabaseReference c_ref = fdb.getReference("ControllerLogs").child(id);
+        //c_ref will update the controller logs
+        DatabaseReference c_ref = fdb.getReference("ControllerLogs").child(id)
+                .child(info.getDate()).child(info.getTime());
 
-        //updates inventory
-        d_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    //the user id exists in inventory so we can adjust it here
-                    DatabaseReference i_ref = d_ref.child("1").child("remaining");
-
-                    i_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Integer remainingVal = snapshot.getValue(Integer.class);
-                            if (remainingVal != null && remainingVal > 0) {
-                                int temp_remaining = remainingVal - info.getDoseInput();
-
-                                if (temp_remaining < 0) {
-                                    temp_remaining = 0;
-                                }
-
-                                i_ref.setValue(temp_remaining);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            //hopefully this never happens
-                        }
-                    });
-                }
-                else {
-                    //the user id does not exist in inventory so we store it using empty strings
-                    d_ref.child("1").child("expires").setValue("");
-                    d_ref.child("1").child("lastPurchased").setValue("");
-                    d_ref.child("1").child("remaining").setValue(200 - info.getDoseInput());
-                    d_ref.child("1").child("reportedBy").setValue("");
-                    d_ref.child("1").child("total").setValue(200);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                //pray this never happens
-            }
-        });
+        //if the controller log exists, this represents the difference between the 2 logs and updates the inventory accordingly
+        int[] toDeduct = {info.getDoseInput()};
 
         c_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                DatabaseReference to_log = c_ref.child(info.getDate()).child(info.getTime());
+                /*
+                if the log exists then we adjust inventory accordingly
+                if the first log said the user used 8 puffs then relogs it as 6 puffs, we do 6 - 8 = -2
+                so we subtract -2 or add 2 to the inventory rather then subtract 6 blindly. this is to prevent
+                double counting of logs which can trigger low canister warnings early
+                 */
+                if (snapshot.exists()) {
+                    DatabaseReference dose_ref = c_ref.child("amountUsed");
 
-                to_log.child("Date").setValue(info.getDate());
-                to_log.child("Amount Used").setValue(info.getDoseInput());
-                to_log.child("Breath Rating").setValue(info.getFeeling());
-                to_log.child("Post PEF").setValue(info.getPostInput());
-                to_log.child("Zone").setValue(info.getZone());
+                    dose_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Long loggedDose = snapshot.getValue(Long.class);
 
-                if (info.getPreInput() == -69) {
-                    to_log.child("Pre PEF").setValue(0);
+                            //validating it so we ensure we aren't dealing with null pointer and crashing the program or negative input
+                            if (loggedDose != null && loggedDose > 0) {
+                                toDeduct[0] -= loggedDose.intValue();
+                            }
+
+                            //saves the inventory and the controller logs with the new difference
+                            logControllerDatabase2(id, info, toDeduct[0]);
+                            logControllerLog(c_ref, info);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
                 }
                 else {
-                    to_log.child("Pre PEF").setValue(info.getPreInput());
+                    //saves the inventory and log using default values
+                    logControllerDatabase2(id, info, toDeduct[0]);
+                    logControllerLog(c_ref, info);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                //hopefully this doesn't run
             }
         });
     }
 
-    public static void personalBestGetter(String id, ControllerCallBack callback)
-    {
-        DatabaseReference d_ref = fdb.getReference("Users").child(id);
+    //handles logging controller usage
+    private static void logControllerLog(DatabaseReference ref, ControllerLog info) {
+        //saving the inputs as given
+        ref.child("Date").setValue(info.getDate());
+        ref.child("amountUsed").setValue(info.getDoseInput());
+        ref.child("breathRating").setValue(info.getFeeling());
+        ref.child("shortnessBreathRating").setValue(info.getBreathShortness());
+
+        //the following inputs are optional and may not have been given
+
+        //setting -1 if pre input wasn't given otherwise logging what was given
+        if (info.getPreInput() == -69) {
+            ref.child("Pre PEF").setValue(-1);
+        } else {
+            ref.child("Pre PEF").setValue(info.getPreInput());
+        }
+
+        //setting -1 if post input wasn't given otherwise logging what was given
+        if (info.getPostInput() == -69) {
+            ref.child("postPEF").setValue(-1);
+        } else {
+            ref.child("postPEF").setValue(info.getPostInput());
+        }
+    }
+
+    //this function updates the inventory and is called with the toDeduct value to get around asynch running issues
+    private static void logControllerDatabase2(String id, ControllerLog info, int deduct) {
+        //d_ref will update the inventory
+        DatabaseReference d_ref = fdb.getReference("Inventory").child(id).child("1");
 
         d_ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    DatabaseReference u_ref = d_ref.child("personalBest");
+                    DatabaseReference inv_ref = d_ref.child("remaining");
 
-                    u_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    //since the log exists we want specifically the "remaining" which should exist as the inventory log itself exists
+                    inv_ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Integer pb = snapshot.getValue(Integer.class);
-                            if (pb != null && pb > 0) {
-                                callback.onResult(pb);
-                            }
-                            else {
-                                callback.onResult(-1);
+                            //if the inventory exists we just update the amount used
+                            Integer remaining = snapshot.getValue(Integer.class);
+
+                            //ensuring we deal with good non null pointer values so we don't crash
+                            if (remaining != null && remaining > 0) {
+                                int temp_remaining = remaining - deduct;
+
+                                //ensuring temp_remaining >= 0 so we have valid inventory
+                                if (temp_remaining < 0) {
+                                    temp_remaining = 0;
+                                }
+
+                                //saving the non negative inventory
+                                inv_ref.setValue(temp_remaining);
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-                            //if this happens you are very unlucky
                         }
                     });
                 }
                 else {
-                    callback.onResult(-1);
+                    //if the inventory doesn't exist we fill it with dummy values to show the inventory manager this was used but not logged
+                    //the user id does not exist in inventory so we store it using empty strings
+                    d_ref.child("expires").setValue("");
+                    d_ref.child("lastPurchased").setValue("");
+                    d_ref.child("remaining").setValue(200 - info.getDoseInput());
+                    d_ref.child("reportedBy").setValue("");
+                    d_ref.child("total").setValue(200);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                //hopefully this doesn't happen
             }
         });
     }
 
-    public static void personalBestLogger(String id, ControllerLog inputs)
-    {
-        DatabaseReference d_ref = fdb.getReference("Users").child(id);
-
-        d_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    DatabaseReference u_ref = d_ref.child("personalBest");
-
-                    u_ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Integer set_pb = snapshot.getValue(Integer.class);
-                            int toDoPB = 0;
-
-                            if (set_pb != null && set_pb > inputs.getPB()) {
-                                toDoPB = set_pb;
-                            }
-                            else {
-                                toDoPB = inputs.getPB();
-                            }
-
-                            u_ref.setValue(toDoPB);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            //hopefully this never happens
-                        }
-                    });
-                }
-                else {
-                    DatabaseReference u_ref = d_ref.child("personalBest");
-
-                    u_ref.setValue(inputs.getPB());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                //hopefully this never runs
-            }
-        });
-    }
-
+    //loads the controller schedule
     public static void ControllerScheduleLoader(String id, ScheduleCallBack callback) {
         DatabaseReference d_ref = fdb.getReference("ControllerSchedule").child(id);
 
@@ -192,11 +160,13 @@ public class ControllerDatabase {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
+                    //u_ref is where the schedule for a user is
                     DatabaseReference u_ref = d_ref.child("Schedule");
 
                     u_ref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            //fill schedule with database info
                             List<String> schedule = new ArrayList<>();
                             for (DataSnapshot val: snapshot.getChildren()) {
                                 if (val != null) {
@@ -208,7 +178,6 @@ public class ControllerDatabase {
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-                            //if this happens you are very unlucky
                         }
                     });
                 }
@@ -219,11 +188,11 @@ public class ControllerDatabase {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                //in the java gods we pray this does not happen
             }
         });
     }
 
+    //saves the controller schedule
     public static void ControllerScheduleSaver(String id, List<String> schedule) {
         DatabaseReference d_ref = fdb.getReference("ControllerSchedule").child(id).child("Schedule");
 
