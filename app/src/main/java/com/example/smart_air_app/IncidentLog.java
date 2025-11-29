@@ -21,7 +21,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class IncidentLog extends AppCompatActivity {
 
@@ -45,11 +48,12 @@ public class IncidentLog extends AppCompatActivity {
     }
 
     void loadTriageEntries(String childUID) {
-       DatabaseReference ref = FirebaseDatabase.getInstance()
-               .getReference("TriageEntries")
-               .child(childUID);
 
-        ref.get().addOnCompleteListener(task -> {
+        FirebaseDatabase.getInstance()
+               .getReference("TriageEntries")
+               .child(childUID)
+               .get()
+               .addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
                 return;
             }
@@ -58,8 +62,17 @@ public class IncidentLog extends AppCompatActivity {
                 return;
             }
 
-            // Go thru each triage ID
+            // Sort triages by dateTime
+            List<DataSnapshot> triages = new ArrayList<>();
             for (DataSnapshot triage : triageList.getChildren()) {
+                triages.add(triage);
+            }
+
+            triages.sort(Comparator.comparing(o ->
+                    o.child("dateTime").getValue(Long.class)
+            ));
+
+            for (DataSnapshot triage : triages) {
                 // Convert snapshot into TriageEntry
                 boolean noFullSentences = triage.child("NoFullSentences").getValue(Boolean.class);
                 boolean retractions = triage.child("Retractions").getValue(Boolean.class);
