@@ -1,5 +1,7 @@
 package com.example.smart_air_app.log_rescue_attempt;
 
+import com.google.firebase.Timestamp;
+
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +13,7 @@ public class RescueAttempt {
     private double peakFlowBefore;
     private double peakFlowAfter;
     private boolean triageIncident;
+    private long timestamp;
 
     @Override
     public String toString() {
@@ -21,6 +24,7 @@ public class RescueAttempt {
                 ", peakFlowBefore=" + peakFlowBefore +
                 ", peakFlowAfter=" + peakFlowAfter +
                 ", triageIncident=" + triageIncident +
+                ", timestamp=" + timestamp +
                 '}';
     }
 
@@ -70,5 +74,13 @@ public class RescueAttempt {
 
     public boolean isTriageIncident() {
         return triageIncident;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

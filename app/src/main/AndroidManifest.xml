@@ -11,18 +11,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-        <activity
-            android:name=".ProviderReportScreen"
-            android:exported="false" />
         <activity
             android:name=".IncidentLog"
             android:exported="false" />
@@ -54,6 +42,9 @@
             android:name=".DoctorHomeScreen"
             android:exported="false" />
         <activity
+            android:name=".ParentHomeScreen"
+            android:exported="false"/>
+        <activity
             android:name=".AddChildScreen"
             android:exported="false" />
         <activity
@@ -78,12 +69,6 @@
             android:name=".ParentOnboardingScreen3"
             android:exported="false" />
         <activity
-            android:name=".ParentHomeScreen"
-            android:exported="false" />
-        <activity
-            android:name=".ParentHomeScreen"
-            android:exported="false" />
-        <activity
             android:name=".ProviderOnboardingScreen1"
             android:exported="false" />
         <activity
@@ -93,7 +78,10 @@
             android:name=".StreaksAndBadges"
             android:exported="false" />
         <activity
-            android:name=".CheckinHistoryScreen"
+            android:name="controller_log.ControllerLoggingScreen"
+            android:exported="false" />
+        <activity
+            android:name="CheckinHistoryScreen"
             android:exported="false" />
         <activity
             android:name=".ViewHistoryScreen"

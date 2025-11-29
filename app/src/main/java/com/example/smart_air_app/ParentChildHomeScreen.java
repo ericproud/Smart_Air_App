@@ -46,6 +46,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         MaterialButton streaksAndBadgesButton = findViewById(R.id.btnStreaks);
         MaterialButton summaryChartsButton = findViewById(R.id.btnSummaryCharts);
         MaterialButton manageAccountButton = findViewById(R.id.btnManageAccount);
+        MaterialButton incidentLogButton = findViewById(R.id.btnIncidentLog);
 
         TextView todaysZone = findViewById(R.id.textTodaysZone);
         TextView lastRescueTime = findViewById(R.id.textLastRescueTime);
@@ -64,6 +65,10 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
         manageAccountButton.setOnClickListener(v -> {
             startActivityWithChildInfo(ManageChildAccount.class);
+        });
+
+        incidentLogButton.setOnClickListener(view -> {
+            startActivityWithChildInfo(IncidentLog.class);
         });
     }
 
