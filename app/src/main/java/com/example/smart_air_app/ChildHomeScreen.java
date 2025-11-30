@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -14,6 +17,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import controller_log.ControllerLoggingScreen;
 import controller_log.PEFZones;
@@ -32,23 +40,51 @@ public class ChildHomeScreen extends AppCompatActivity {
             return insets;
         });
 
+        TextView todaysZone = findViewById(R.id.textTodaysZone);
+        TextView lastRescueTime = findViewById(R.id.textLastRescueTime);
+        TextView weeklyRescueCount = findViewById(R.id.textWeeklyCount);
+        FrameLayout chartContainer = findViewById(R.id.chartContainer);
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         String childUID = FirebaseAuth.getInstance().getUid();
+
+
+        TextView childNameText = findViewById(R.id.childsName);
+        dbRef.child("Users").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot childSnapshot) {
+                String firstName = childSnapshot.child("firstName").getValue(String.class);
+                String lastName = childSnapshot.child("lastName").getValue(String.class);
+                String childName = firstName + " " + lastName;
+                childNameText.setText(childName);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
+
+        String childName = childNameText.getText().toString();
 
         Button logRescueAttempt = findViewById(R.id.parentLogRescueAttemptButton);
         logRescueAttempt.setOnClickListener(view -> {
-            startActivity(new Intent(ChildHomeScreen.this, LogRescueAttemptActivity.class));
+            Intent intent = new Intent(ChildHomeScreen.this, LogRescueAttemptActivity.class);
+            intent.putExtra("childUID", childUID);
+            intent.putExtra("childName", childName);
+            startActivity(intent);
         });
 
         Button logController = findViewById(R.id.parentLogControllerUsageButton);
         logController.setOnClickListener(v->{
             Intent intent = new Intent(ChildHomeScreen.this, ControllerLoggingScreen.class);
             intent.putExtra("childUID", childUID);
+            intent.putExtra("childName", childName);
             startActivity(intent);
         });
 
         Button triageButton = findViewById(R.id.parentEmergencyTriageButton);
         triageButton.setOnClickListener(view -> {
-            startActivity(new Intent(ChildHomeScreen.this, TriageScreen.class));
+            Intent intent = new Intent(ChildHomeScreen.this, TriageScreen.class);
+            intent.putExtra("childUID", childUID);
+            intent.putExtra("childName", childName);
+            startActivity(intent);
         });
 
         Button childMedicineLogsButton = findViewById(R.id.childMedicineLogs);

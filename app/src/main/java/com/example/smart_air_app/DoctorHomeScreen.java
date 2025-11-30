@@ -148,9 +148,6 @@ public class DoctorHomeScreen extends AppCompatActivity {
     }
 
     void setButtons(String patientName, String patientUID){
-        Button controllerAdherenceButton = findViewById(R.id.controllerAdherenceButton);
-        Button rescueLogsButton = findViewById(R.id.rescueLogsButton);
-        Button triageIncidentsButton = findViewById(R.id.triageIncidentsButton);
         Button summaryChartsButton = findViewById(R.id.summaryChartsButton);
 
         summaryChartsButton.setOnClickListener(new View.OnClickListener() {
