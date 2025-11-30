@@ -93,6 +93,13 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             Logout.logout(this);
         });
 
+        PEFZones zone = new PEFZones();
+
+        PEFZonesDatabase.loadPEFZones(childUserId, (pb, pef, date) -> {
+            zone.initializePEF(pb, pef, date);
+            todaysZone.setText(zone.calculateZone());
+        });
+
         setPBButton.setOnClickListener(v -> {
             AlertDialog.Builder build = new AlertDialog.Builder(this);
             build.setTitle("Enter new PB");

@@ -45,11 +45,6 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
         final String ID = getIntent().getStringExtra("childUID");
 
-        String datetemp = DateValidator.makeDateString(28, 11, 2024);
-        PEFHistoryCalculator.CalculateAdherence(ID, datetemp, val -> {
-            //hehehaha
-        });
-
         Button scheduleButton = findViewById(R.id.controllerUseScheduleButton);
         Button timeSelector = findViewById(R.id.timeButton);
         Button dateSelector = findViewById(R.id.selectDateButton);
