@@ -3,6 +3,7 @@ package com.example.smart_air_app;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +78,7 @@ public class MedicineLogs extends AppCompatActivity {
             loadControllerMedicine(childUID);
         }
         if (logType.equals("Rescue Medicine")) {
-            //loadRescueMedicine(childUID);
+            loadRescueMedicine(childUID);
         }
     }
 
@@ -95,10 +96,10 @@ public class MedicineLogs extends AppCompatActivity {
                         String time = timeSnapshot.getKey();
                         Long amountUsed = timeSnapshot.child("amountUsed").getValue(Long.class);
                         String breathRating = timeSnapshot.child("breathRating").getValue(String.class);
-                        Long prePEF = timeSnapshot.child("Pre PEF").getValue(Long.class);
-                        Long postPEF = timeSnapshot.child("postPEF").getValue(Long.class);
+                        Long PEFbefore = timeSnapshot.child("Pre PEF").getValue(Long.class);
+                        Long PEFafter = timeSnapshot.child("postPEF").getValue(Long.class);
                         Long shortnessRating = timeSnapshot.child("shortnessBreathRating").getValue(Long.class);
-                        writeMedicineLog(date, time, amountUsed, breathRating, prePEF, postPEF, shortnessRating);
+                        writeControllerLog(date, time, amountUsed, breathRating, PEFbefore, PEFafter, shortnessRating);
                     }
                 }
             }
@@ -109,7 +110,84 @@ public class MedicineLogs extends AppCompatActivity {
         });
     }
 
-    void writeMedicineLog(String date, String time, Long amountUsed, String breathRating, Long prePEF, Long postPEF, Long shortnessRating) {
+    void loadRescueMedicine(String childUID) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance()
+                .getReference("RescueAttempts")
+                .child(childUID);
+
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+
+                    Long dosage = childSnapshot.child("dosage").getValue(Long.class);
+                    Long PEFbefore = childSnapshot.child("peakFlowBefore").getValue(Long.class);
+                    Long PEFafter = childSnapshot.child("peakFlowAfter").getValue(Long.class);
+                    Long timestamp = childSnapshot.child("timestamp").getValue(Long.class);
+                    Boolean isTriageIncident = childSnapshot.child("triageIncident").getValue(Boolean.class);
+
+                    List<String> symptomsList = new ArrayList<>();
+                    for (DataSnapshot symptomsSnapshot : childSnapshot.child("symptoms").getChildren()) {
+                        symptomsList.add(symptomsSnapshot.getValue(String.class));
+                    }
+
+                    List<String> triggersList = new ArrayList<>();
+                    for (DataSnapshot triggersSnapshot : childSnapshot.child("triggers").getChildren()) {
+                        triggersList.add(triggersSnapshot.getValue(String.class));
+                    }
+
+                    String symptoms = "    ";
+                    for (String s : symptomsList) {
+                        symptoms += s + "\n    ";
+                    }
+                    if (symptoms.equals("    ")) {
+                        symptoms = "    None";
+                    }
+
+                    String triggers = "    ";
+                    for (String t : triggersList) {
+                        triggers += t + "\n    ";
+                    }
+                    if (triggers.equals("    ")) {
+                        triggers = "    None";
+                    }
+
+                    String triageIncident = "";
+                    if (isTriageIncident) {
+                        triageIncident = "Yes";
+                    } else {
+                        triageIncident = "No";
+                    }
+
+                    if (dosage == null) {
+                        dosage = 0L;
+                    }
+
+                    if (PEFbefore == null) {
+                        PEFbefore = 0L;
+                    }
+
+                    if (PEFafter == null) {
+                        PEFafter = 0L;
+                    }
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd yy");
+                    String date = dateFormat.format(new Date(timestamp));
+
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                    String time = timeFormat.format(new Date(timestamp));
+
+                    writeRescueLog(date, time, dosage, PEFbefore, PEFafter, triageIncident, triggers, symptoms);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
+    }
+
+    void writeControllerLog(String date, String time, Long amountUsed, String breathRating, Long PEFbefore, Long PEFafter, Long shortnessRating) {
         TextView MedicineInfo = new TextView(this);
 
         MedicineInfo.setText(
@@ -117,11 +195,10 @@ public class MedicineLogs extends AppCompatActivity {
                         "Time: " + time + "\n" +
                         "Shortness Of Breath Rating: " + shortnessRating + "\n" +
                         "Dose Administered Used: " + amountUsed + "\n" +
-                        "PEF Before Administration: " + prePEF + "\n" +
-                        "PEF After Adiministration: " + postPEF + "\n" +
+                        "PEF Before Administration: " + PEFbefore + "\n" +
+                        "PEF After Adiministration: " + PEFafter + "\n" +
                         "Feeling After Usage: " + breathRating + "\n"
-                );
-
+        );
 
         MedicineInfo.setPadding(20, 20, 20, 20);
         MedicineInfo.setTextSize(16f);
@@ -137,6 +214,36 @@ public class MedicineLogs extends AppCompatActivity {
         MedicineInfo.setLayoutParams(params);
 
         // Add the view to your layout
+        MedicineLogField.addView(MedicineInfo);
+    }
+
+    void writeRescueLog(String date, String time, long dosage, long PEFbefore, long PEFafter, String isTriageIncident, String triggers, String symptoms) {
+        TextView MedicineInfo = new TextView(this);
+
+        MedicineInfo.setText(
+                "Date: " + date + "\n" +
+                        "Time: " + time + "\n" +
+                        "Was This A Triage Event?: " + isTriageIncident + "\n" +
+                        "Dose Administered Used: " + dosage + "\n" +
+                        "PEF Before Administration: " + PEFbefore + "\n" +
+                        "PEF After Adiministration: " + PEFafter + "\n" +
+                        "Triggers: \n" + triggers + "\n" +
+                        "Symptoms: \n" + symptoms + "\n"
+        );
+
+
+                MedicineInfo.setPadding(20, 20, 20, 20);
+        MedicineInfo.setTextSize(16f);
+        MedicineInfo.setBackgroundColor(Color.parseColor("#90D5FF"));
+
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 0, 24);
+
+        MedicineInfo.setLayoutParams(params);
+
         MedicineLogField.addView(MedicineInfo);
     }
 }

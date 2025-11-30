@@ -22,17 +22,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/buttonContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childsName"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp" />
-
     <Button
         android:id="@+id/parentLogControllerUsageButton"
         android:layout_width="300dp"
@@ -118,6 +107,22 @@
         app:layout_constraintTop_toBottomOf="@+id/parentEmergencyTriageButton" />
 
     <Button
+        android:id="@+id/parentStreaksAndBadgesButton2"
+        android:layout_width="300dp"
+        android:layout_height="70sp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="56dp"
+        android:backgroundTint="#673AB7"
+        android:text="STREAKS AND BADGES"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/parentEmergencyTriageButton" />
+
+    <Button
         android:id="@+id/setPEFButton"
         android:layout_width="300dp"
         android:layout_height="70sp"
@@ -131,9 +136,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parentStreaksAndBadgesButton" />
+        app:layout_constraintTop_toBottomOf="@+id/parentStreaksAndBadgesButton" /><![CDATA[
 
     />
+
+
+
+    ]]>
+
+    <Button
+        android:id="@+id/childMedicineLogs"
+        android:layout_width="300dp"
+        android:layout_height="70sp"
+        android:layout_marginStart="55dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="56dp"
+        android:backgroundTint="#673AB7"
+        android:text="Medicine Logs"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setPEFButton" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

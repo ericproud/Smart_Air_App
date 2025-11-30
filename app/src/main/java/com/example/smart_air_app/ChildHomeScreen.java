@@ -51,6 +51,13 @@ public class ChildHomeScreen extends AppCompatActivity {
             startActivity(new Intent(ChildHomeScreen.this, TriageScreen.class));
         });
 
+        Button childMedicineLogsButton = findViewById(R.id.childMedicineLogs);
+        childMedicineLogsButton.setOnClickListener(view -> {
+            Intent intent = new Intent(ChildHomeScreen.this, MedicineLogs.class);
+            intent.putExtra("childUID", childUID);
+            startActivity(intent);
+        });
+
         Button setPEFButton = findViewById(R.id.setPEFButton);
         setPEFButton.setOnClickListener(v -> {
             AlertDialog.Builder build = new AlertDialog.Builder(this);
