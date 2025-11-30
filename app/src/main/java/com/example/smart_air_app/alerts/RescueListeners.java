@@ -68,12 +68,12 @@ public class RescueListeners extends EntryListeners<ChildEventListener>{
             }
         };
 
-        listeners.add(l);
+        listeners.add(new EntryListener<>(childUserId, l));
         ref.child(childUserId).addChildEventListener(l);
     }
 
     @Override
     public void removeListeners() {
-        listeners.forEach(l -> ref.removeEventListener(l));
+        listeners.forEach(l -> ref.child(l.childUserId).removeEventListener(l.listener));
     }
 }

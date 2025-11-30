@@ -25,7 +25,8 @@ public class FirebaseDatabaseListeners {
     private final List<EntryListeners<?>> entryListeners = List.of(
             new TriageListeners(db.getReference("TriageEntries")),
             new InventoryListeners(db.getReference("Inventory")),
-            new RescueListeners(db.getReference("RescueAttempts"))
+            new RescueListeners(db.getReference("RescueAttempts")),
+            new ControllerListeners(db.getReference("ControllerLogs"))
 
     );
 

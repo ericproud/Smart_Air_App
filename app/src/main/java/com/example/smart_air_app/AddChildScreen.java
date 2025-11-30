@@ -131,6 +131,7 @@ public class AddChildScreen extends AppCompatActivity {
                         // needed for alerts
                         DatabaseReference triageRef = FirebaseDatabase.getInstance().getReference("Triage").child(uID);
                         DatabaseReference rescueRef = FirebaseDatabase.getInstance().getReference("RescueAttempts").child(uID);
+                        DatabaseReference controllerRef = FirebaseDatabase.getInstance().getReference("ControllerLogs").child(uID);
                         DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")
                                 .child(parentUID)
                                 .child("children")
@@ -138,8 +139,10 @@ public class AddChildScreen extends AppCompatActivity {
 
                         triageRef.setValue(null).addOnSuccessListener(aVoid1 -> {
                             rescueRef.setValue(null).addOnSuccessListener(aVoid2 -> {
-                                childRef.setValue(true).addOnSuccessListener(aVoid3 -> {
-                                    FirebaseDatabaseListeners.getInstance().attachListeners(uID, firstName + " " + lastName);
+                                controllerRef.setValue(null).addOnSuccessListener(aVoid4 -> {
+                                    childRef.setValue(true).addOnSuccessListener(aVoid3 -> {
+                                        FirebaseDatabaseListeners.getInstance().attachListeners(uID, firstName + " " + lastName);
+                                    }).addOnFailureListener(e -> {});
                                 }).addOnFailureListener(e -> {});
                             }).addOnFailureListener(e -> {});
                         }).addOnFailureListener(e -> {});

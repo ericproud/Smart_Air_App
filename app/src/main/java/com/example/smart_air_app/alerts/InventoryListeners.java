@@ -135,12 +135,13 @@ public class InventoryListeners extends EntryListeners<ValueEventListener> {
             }
         };
 
+        listeners.add(new EntryListener<>(childUserId, l));
         ref.child(childUserId).addValueEventListener(l);
     }
 
     @Override
     public void removeListeners() {
-        listeners.forEach(l -> ref.removeEventListener(l));
+        listeners.forEach(l -> ref.child(l.childUserId).removeEventListener(l.listener));
         handler.removeCallbacks(expiryChecker);
     }
 }

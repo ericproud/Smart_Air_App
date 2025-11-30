@@ -9,8 +9,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 
-public class TriageListeners extends EntryListeners<ChildEventListener> {
-    public TriageListeners(DatabaseReference ref) {
+public class ControllerListeners extends EntryListeners<ChildEventListener> {
+    public ControllerListeners(DatabaseReference ref) {
         super(ref);
     }
 
@@ -19,8 +19,11 @@ public class TriageListeners extends EntryListeners<ChildEventListener> {
         ChildEventListener l = new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                NotificationUtils.show(context, "WARNING: Triage Escalation",
-                        "Your child " + childName + " has escalated a triage.");
+                String rating = snapshot.child("breathRating").getValue(String.class);
+                if (rating != null && rating.equalsIgnoreCase("worse")) {
+                    NotificationUtils.show(context, "Controller Worse After Dose",
+                            String.format("Your child %s breathing has gotten worse after using a controller dose", childName));
+                }
             }
 
             @Override

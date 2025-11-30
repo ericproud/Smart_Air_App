@@ -9,8 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class EntryListeners<T> {
+
     protected DatabaseReference ref;
-    protected List<T> listeners;
+    protected List<EntryListener<T>> listeners;
 
     protected Context context;
 
