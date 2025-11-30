@@ -14,11 +14,15 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.smart_air_app.alerts.FirebaseDatabaseListeners;
+import com.example.smart_air_app.utils.NotificationUtils;
+import com.example.smart_air_app.utils.Logout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -30,6 +34,10 @@ public class ParentHomeScreen extends AppCompatActivity {
     List<String> childUIDs;
     LinearLayout container;
     Button addChildButton;
+    Button logoutButton;
+
+
+    private final FirebaseDatabaseListeners fdl = FirebaseDatabaseListeners.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,7 @@ public class ParentHomeScreen extends AppCompatActivity {
 
         container = findViewById(R.id.childButtonContainer);
         addChildButton = findViewById(R.id.addChildButton);
+        logoutButton = findViewById(R.id.parentLogoutButton);
 
         parentUID = FirebaseAuth.getInstance().getUid();
         dbRef = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -46,6 +55,10 @@ public class ParentHomeScreen extends AppCompatActivity {
         addChildButton.setOnClickListener(v -> {
             Intent intent = new Intent(ParentHomeScreen.this, AddChildScreen.class);
             startActivity(intent);
+        });
+
+        logoutButton.setOnClickListener(v -> {
+            Logout.logout(this);
         });
 
         dbRef.child(parentUID).child("children").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -61,7 +74,20 @@ public class ParentHomeScreen extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+
+        NotificationUtils.ensurePermissionAndChannel(this);
+        fdl.setContext(getApplicationContext());
+        fdl.setParentId(FirebaseAuth.getInstance().getUid());
+        fdl.attachListeners();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        fdl.removeListeners();
+
+    }
+
     void createChildButtons(List<String> childUIDs) {
         for (String childUID : childUIDs) {
             dbRef.child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {

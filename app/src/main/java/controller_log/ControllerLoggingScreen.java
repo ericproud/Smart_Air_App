@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,15 +21,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.R;
 import com.example.smart_air_app.VideoSBSInhallerUse;
+import com.example.smart_air_app.utils.AdherenceCalculator;
+import com.example.smart_air_app.utils.AdherenceResult;
 import com.example.smart_air_app.utils.DateValidator;
 
+import java.util.ArrayList;
 import java.util.Calendar;
-
-/*
-TO DO:
-use the get intent when the parent child home screen or whatever works properly
-remove all Toast.makeText() also
-*/
+import java.util.List;
 
 public class ControllerLoggingScreen extends AppCompatActivity {
     @Override
@@ -42,17 +41,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             return insets;
         });
 
-        //Toast.makeText(this, getIntent().getStringExtra("childId"), Toast.LENGTH_SHORT).show();
-
-        if (getIntent().getStringExtra("childId") == null) {
-            Toast.makeText(this, "child id was null", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(this, getIntent().getStringExtra("childId"), Toast.LENGTH_SHORT).show();
-        }
-
-        //change this to get from intent later
-        String id = "rR8IM0i012OxkTxPNOoT1KkUpsJ2";
+        final String ID = getIntent().getStringExtra("childUID");
 
         Button scheduleButton = findViewById(R.id.controllerUseScheduleButton);
         Button timeSelector = findViewById(R.id.timeButton);
@@ -82,7 +71,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
         //handles the pb, pef etc.
         PEFZones zone = new PEFZones();
-        helperPB(id, zone);
+        helperPB(ID, zone);
 
         String[] feeling_chosen = {""};
         String[] doseInput = {""};
@@ -93,7 +82,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
         scheduleButton.setOnClickListener(v ->{
             Intent intent = new Intent(ControllerLoggingScreen.this, ControllerScheduleScreen.class);
-            intent.putExtra("childId", id);
+            intent.putExtra("childUID", ID);
             startActivity(intent);
         });
 
@@ -113,6 +102,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
                     (view, selectedYear, selectedMonth, selectedDay) -> {
                         date[0] = DateValidator.makeDateString(selectedDay, selectedMonth + 1, selectedYear);
                         dateText.setText("Selected time: " + date[0]);
+                        dateText.setError(null);
                         inputs.setDate(date[0]);
                     },
                     year, month, day
@@ -132,7 +122,6 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 feeling_chosen[0] = feeling[position];
-                Toast.makeText(ControllerLoggingScreen.this, feeling_chosen[0], Toast.LENGTH_SHORT).show();
                 inputs.setFeeling(feeling_chosen[0]);
             }
 
@@ -153,7 +142,8 @@ public class ControllerLoggingScreen extends AppCompatActivity {
                     personalBest.setText("Current Personal Best: " + pbParsed);
                 }
                 zone.setPB(pbParsed);
-                PEFZonesDatabase.savePEFZones(id, zone);
+                PEFZonesDatabase.savePEFZones(ID, zone);
+                currentZone.setText("Today's Zone: " + zone.calculateZone());
             }
         });
 
@@ -161,8 +151,6 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             Intent intent = new Intent(ControllerLoggingScreen.this, VideoSBSInhallerUse.class);
             startActivity(intent);
         });
-
-        currentZone.setText("Today's Zone: " + zone.calculateZone());
 
         //if submit button is clicked validate amount input for dosage and if valid then log to database
         //also if the inputs for the optional fields are there, log that after validation
@@ -196,53 +184,28 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             }
 
             if (validSubmission(inputs)) {
-                ControllerDatabase.logControllerDatabase(id, inputs);
+                ControllerDatabase.logControllerDatabase(ID, inputs);
 
                 zone.setHighest_pef(postInputAmount);
-                PEFZonesDatabase.savePEFZones(id, zone);
+                PEFZonesDatabase.savePEFZones(ID, zone);
 
-                Toast.makeText(this, "" + inputs.getDoseInput(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(this, "done", Toast.LENGTH_SHORT).show();
+                currentZone.setText("Today's Zone: " + zone.calculateZone());
             }
         });
 
         //exit page if back button is clicked
         backButton.setOnClickListener(v->{finish();});
-
-        //when input the PEF calculate the currZone
-        postController.setOnFocusChangeListener((v, focus) -> {
-            if (!focus) {
-                String text = postController.getText().toString().trim();
-                int textNum = intParser(text);
-                Toast.makeText(this, "" + textNum, Toast.LENGTH_SHORT).show();
-
-                if (textNum != -69) {
-                    int highest_pef = zone.getHighest_pef();
-                    String highest_pef_date = zone.getDate();
-
-                    zone.setHighest_pef(textNum);
-                    currentZone.setText("Today's Zone: " + zone.calculateZone());
-
-                    zone.forceSetHighest_pef(highest_pef, highest_pef_date);
-                }
-                else {
-                    currentZone.setText("Today's Zone: N/A");
-                }
-            }
-        });
     }
 
     private int intParser(String input) {
         try {
             int ans = Integer.parseInt(input);
             if (ans < 0) {
-                //Toast.makeText(this, "negative input given", Toast.LENGTH_SHORT).show();
                 return -69;
             }
             return ans;
         }
         catch (NumberFormatException e) {
-            //Toast.makeText(this, "bad input given", Toast.LENGTH_SHORT).show();
             return -69;
         }
     }
@@ -266,39 +229,51 @@ public class ControllerLoggingScreen extends AppCompatActivity {
                         time[0] = selectedHour + ":" + selectedMinute;
                     }
                     timeChosen.setText("Selected Time: " + time[0]);
+                    timeChosen.setError(null);
                     input.setTime(time[0]);
-                    Toast.makeText(ControllerLoggingScreen.this, time[0], Toast.LENGTH_SHORT).show();
                 }, hour, minute, true
                 );
         dialog.show();
     }
 
     private boolean validSubmission(ControllerLog inputs) {
+        TextView dateText = findViewById(R.id.selectedDateText);
+        TextView timeChosen = findViewById(R.id.selectedTimeText);
+        TextView doseAmount = findViewById(R.id.amountInputText);
+        TextView breathShortnessText = findViewById(R.id.shortnessBreathInput);
+
+        boolean ans = true;
+
         if (inputs.getDate() == null) {
-            Toast.makeText(this, "invalid date", Toast.LENGTH_SHORT).show();
-            return false;
+            dateText.setError("This field is required");
+            dateText.requestFocus();
+            ans = false;
         }
 
         if (inputs.getTime() == null) {
-            Toast.makeText(this, "invalid time", Toast.LENGTH_SHORT).show();
-            return false;
+            timeChosen.setError("This field is required");
+            timeChosen.requestFocus();
+            ans = false;
         }
 
         if (inputs.getDoseInput() == -69) {
-            Toast.makeText(this, "invalid dosage", Toast.LENGTH_SHORT).show();
-            return false;
+            doseAmount.setError("This field is required");
+            doseAmount.requestFocus();
+            ans = false;
         }
 
         if (inputs.getBreathShortness() == -69) {
-            Toast.makeText(this, "invalid breath shortness", Toast.LENGTH_SHORT).show();
-            return false;
+            breathShortnessText.setError("This field is required");
+            breathShortnessText.requestFocus();
+            ans = false;
         }
 
-        return true;
+        return ans;
     }
 
     private void helperPB(String id, PEFZones pefZone) {
         TextView personalBest = findViewById(R.id.currentBest);
+        TextView currentZone = findViewById(R.id.currentZoneText);
 
         //loading in the pef zone object which contains the pb which is what we want
         PEFZonesDatabase.loadPEFZones(id, (pb, pef, date) -> {
@@ -310,6 +285,8 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             else {
                 personalBest.setText("Current Personal Best: N/A");
             }
+
+            currentZone.setText("Today's Zone: " + pefZone.calculateZone());
         });
     }
 }
