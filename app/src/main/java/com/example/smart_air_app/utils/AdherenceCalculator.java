@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -15,7 +14,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.function.Consumer;
 
-import controller_log.ControllerDatabase;
+import com.example.smart_air_app.controller_log.ControllerDatabase;
 
 public class AdherenceCalculator {
     /*

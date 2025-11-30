@@ -1,4 +1,4 @@
-package controller_log;
+package com.example.smart_air_app.controller_log;
 
 public class ControllerLog {
     private String feeling;

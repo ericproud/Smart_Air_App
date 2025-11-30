@@ -26,8 +26,8 @@ public class FirebaseDatabaseListeners {
             new TriageListeners(db.getReference("TriageEntries")),
             new InventoryListeners(db.getReference("Inventory")),
             new RescueListeners(db.getReference("RescueAttempts")),
-            new ControllerListeners(db.getReference("ControllerLogs"))
-
+            new ControllerListeners(db.getReference("ControllerLogs")),
+            new ZoneListeners(db.getReference("Users"))
     );
 
     private FirebaseDatabaseListeners() {}

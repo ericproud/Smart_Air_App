@@ -1,6 +1,4 @@
-package controller_log;
-
-import android.util.Log;
+package com.example.smart_air_app.controller_log;
 
 import androidx.annotation.NonNull;
 

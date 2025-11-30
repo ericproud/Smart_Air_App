@@ -52,8 +52,6 @@
         <activity
             android:name=".ParentChildHomeScreen"
             android:exported="false" />
-        <activity android:name=".ParentHomeScreen"
-            android:exported="false"/>
         <activity
             android:name=".ChildOnboardingScreen1"
             android:exported="false" />
@@ -82,7 +80,7 @@
             android:name=".StreaksAndBadges"
             android:exported="false" />
         <activity
-            android:name="controller_log.ControllerLoggingScreen"
+            android:name=".controller_log.ControllerLoggingScreen"
             android:exported="false" />
         <activity
             android:name="CheckinHistoryScreen"
