@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.triage.TriageEntry;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +41,10 @@ public class IncidentLog extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Back button
+        MaterialToolbar toolbar = findViewById(R.id.materialToolbar);
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         incidentLogField = findViewById(R.id.incidentLogField);
 
@@ -137,16 +142,16 @@ public class IncidentLog extends AppCompatActivity {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         triageInfo.setText(
-                "Date: " + dateFormat.format(date) + "\n\n" +
+                "\nDate: " + dateFormat.format(date) + "\n\n" +
                 "Red flags:\n" +
                         redFlagsText + "\n" +
                         recentRescueText + "\n" +
                         PEFText + "\n\n" +
-                        guidanceShown
+                        guidanceShown + "\n"
         );
 
         triageInfo.setPadding(20, 20, 20, 20);
-        triageInfo.setTextSize(16f);
+        triageInfo.setTextSize(17f);
         triageInfo.setBackgroundColor(Color.parseColor("#90D5FF"));
 
         // Add spacing between entries
@@ -154,7 +159,7 @@ public class IncidentLog extends AppCompatActivity {
                 new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 0, 0, 24);
+        params.setMargins(0, 0, 0, 80);
 
         triageInfo.setLayoutParams(params);
 
