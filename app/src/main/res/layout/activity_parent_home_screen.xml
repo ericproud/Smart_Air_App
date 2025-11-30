@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:background="#673AB7"
         android:paddingStart="5sp"
-        android:text="NAME OF USER /  SCREEN"
-        android:textAlignment="viewStart"
+        android:text="HOME "
+        android:textAlignment="center"
         android:textColor="#FFFDFD"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,12 +38,28 @@
         android:id="@+id/childButtonContainer"
         android:layout_width="409dp"
         android:layout_height="689dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addChildButton"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/parentLogoutButton">
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/parentLogoutButton"
+        android:layout_width="300dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#673AB7"
+        android:text="LOG OUT"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addChildButton" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

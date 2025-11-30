@@ -1,11 +1,14 @@
 package com.example.smart_air_app;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.widget.Button;
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.triage.TriageEntry;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
@@ -23,8 +27,11 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 
 public class TriageScreen extends AppCompatActivity {
+
+    public static Activity currentActivity;
 
     boolean yesornoChecked() {
         // Returns true when either yes or no is checked
@@ -54,6 +61,7 @@ public class TriageScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        currentActivity = this;
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_triage_screen);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -61,6 +69,10 @@ public class TriageScreen extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Back button
+        MaterialToolbar toolbar = findViewById(R.id.materialToolbar);
+        toolbar.setNavigationOnClickListener(view -> finish());
 
         ChipGroup redFlagsGroup = findViewById(R.id.redFlagsGroup);
         Button emergencyBtn = findViewById(R.id.btnFeelingBetter);
@@ -160,7 +172,8 @@ public class TriageScreen extends AppCompatActivity {
 
     }
 
-    // These buttons already redirect the user to their respective screens (emergency & homesteps)
+
+
 
     public void emergencyButtonPressed(View view) {
 
@@ -189,6 +202,13 @@ public class TriageScreen extends AppCompatActivity {
         String childUID = FirebaseAuth.getInstance().getUid();
 
         System.out.println(entry.getTriageID());
+
+        FirebaseDatabase.getInstance()
+                .getReference("TriageEntries")
+                .child(childUID)
+                .child("TriageID" + entry.getTriageID())
+                .child("dateTime")
+                .setValue(ServerValue.TIMESTAMP);
 
         FirebaseDatabase.getInstance()
                 .getReference("TriageEntries")

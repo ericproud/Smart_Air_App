@@ -44,6 +44,9 @@
             android:name=".DoctorHomeScreen"
             android:exported="false" />
         <activity
+            android:name=".ParentHomeScreen"
+            android:exported="false"/>
+        <activity
             android:name=".AddChildScreen"
             android:exported="false" />
         <activity
@@ -70,12 +73,6 @@
             android:name=".ParentOnboardingScreen3"
             android:exported="false" />
         <activity
-            android:name=".ParentHomeScreen"
-            android:exported="false" />
-        <activity
-            android:name=".ParentHomeScreen"
-            android:exported="false" />
-        <activity
             android:name=".ProviderOnboardingScreen1"
             android:exported="false" />
         <activity
@@ -85,10 +82,10 @@
             android:name=".StreaksAndBadges"
             android:exported="false" />
         <activity
-            android:name=".StreaksAndBadges"
+            android:name="controller_log.ControllerLoggingScreen"
             android:exported="false" />
         <activity
-            android:name=".CheckinHistoryScreen"
+            android:name="CheckinHistoryScreen"
             android:exported="false" />
         <activity
             android:name=".ViewHistoryScreen"
