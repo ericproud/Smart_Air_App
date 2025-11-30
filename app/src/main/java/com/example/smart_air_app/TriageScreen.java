@@ -22,10 +22,13 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class TriageScreen extends AppCompatActivity {
 
+    CountDownTimer emergencyTimer;
+    long timeLeftInMillis = 600000;  ///Hossein needs this 2 lines
     boolean yesornoChecked() {
         // Returns true when either yes or no is checked
         MaterialButton btnRescueYes = findViewById(R.id.btnRescueYes);
@@ -110,9 +113,11 @@ public class TriageScreen extends AppCompatActivity {
 
         CountDownTimer emergencyTimer;
         // 10 mins = 600000ms
-        emergencyTimer = new CountDownTimer(600000, 1000) {
+        emergencyTimer = new CountDownTimer(timeLeftInMillis, 1000) {  //Hossein
             @Override
             public void onTick(long msUntilFinished) {
+                timeLeftInMillis  = msUntilFinished;
+
                 long seconds = msUntilFinished / 1000;
                 long minutes = seconds / 60;
                 long remainingSeconds = seconds % 60;
@@ -168,6 +173,7 @@ public class TriageScreen extends AppCompatActivity {
             TriageEntry entry = createTriageEntry();
             saveTriageToDatabase(entry);
             startActivity(new Intent(TriageScreen.this, EmergencyScreen.class));
+
         }
 
     }
@@ -177,15 +183,19 @@ public class TriageScreen extends AppCompatActivity {
         if (validPEF()) {
             TriageEntry entry = createTriageEntry();
             saveTriageToDatabase(entry);
-            startActivity(new Intent(TriageScreen.this, VideoSBSInhallerUse.class));
+            Intent intent = new Intent(TriageScreen.this, VideoSBSInhallerUse.class);
+            ///startActivity(new Intent(TriageScreen.this, VideoSBSInhallerUse.class));
+            intent.putExtra("TIMER_REMAINING", timeLeftInMillis);
+            startActivity(intent);
         }
 
     }
 
     public void saveTriageToDatabase(TriageEntry entry) {
         // This method saves the TriageEntry into the database
-
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         // Get current child UID
+        if (user == null) {return;}
         String childUID = FirebaseAuth.getInstance().getUid();
 
         System.out.println(entry.getTriageID());

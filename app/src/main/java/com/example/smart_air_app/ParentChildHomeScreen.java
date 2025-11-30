@@ -2,6 +2,7 @@ package com.example.smart_air_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -57,6 +58,26 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         logRescueButton.setOnClickListener(view -> {
             startActivityWithChildInfo(LogRescueAttemptActivity.class);
         });
+
+        ///Hossein part
+        streaksAndBadgesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //the child
+
+                Intent intent = new Intent(ParentChildHomeScreen.this, StreaksAndBadges.class);
+
+                intent.putExtra("the kid", childUserId);
+                startActivity(intent);
+
+
+
+            }
+        });
+
+
+
+        /// Hossein done
 
         inventoryButton.setOnClickListener(view -> {
             startActivityWithChildInfo(InventoryActivity.class);
