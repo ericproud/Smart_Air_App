@@ -23,7 +23,7 @@ public class ControllerDatabase {
     public static void logControllerDatabase(String id, ControllerLog info) {
         //c_ref will update the controller logs
         DatabaseReference c_ref = fdb.getReference("ControllerLogs").child(id)
-                .child(info.getDate()).child(info.getTime());
+                .child(info.getDate() + " " + info.getTime());
 
         //if the controller log exists, this represents the difference between the 2 logs and updates the inventory accordingly
         int[] toDeduct = {info.getDoseInput()};
@@ -77,6 +77,7 @@ public class ControllerDatabase {
     private static void logControllerLog(DatabaseReference ref, ControllerLog info) {
         //saving the inputs as given
         ref.child("Date").setValue(info.getDate());
+        ref.child("Time").setValue(info.getTime());
         ref.child("amountUsed").setValue(info.getDoseInput());
         ref.child("breathRating").setValue(info.getFeeling());
         ref.child("shortnessBreathRating").setValue(info.getBreathShortness());
