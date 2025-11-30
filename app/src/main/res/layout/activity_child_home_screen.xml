@@ -136,13 +136,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parentStreaksAndBadgesButton" /><![CDATA[
-
-    />
-
-
-
-    ]]>
+        app:layout_constraintTop_toBottomOf="@+id/parentStreaksAndBadgesButton" />
 
     <Button
         android:id="@+id/childMedicineLogs"
