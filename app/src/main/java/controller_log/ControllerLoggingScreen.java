@@ -24,6 +24,8 @@ import com.example.smart_air_app.VideoSBSInhallerUse;
 import com.example.smart_air_app.utils.AdherenceCalculator;
 import com.example.smart_air_app.utils.AdherenceResult;
 import com.example.smart_air_app.utils.DateValidator;
+import com.example.smart_air_app.utils.PEFHistory;
+import com.example.smart_air_app.utils.PEFHistoryCalculator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,6 +44,11 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         });
 
         final String ID = getIntent().getStringExtra("childUID");
+
+        String datetemp = DateValidator.makeDateString(28, 11, 2024);
+        PEFHistoryCalculator.CalculateAdherence(ID, datetemp, val -> {
+            //hehehaha
+        });
 
         Button scheduleButton = findViewById(R.id.controllerUseScheduleButton);
         Button timeSelector = findViewById(R.id.timeButton);
@@ -180,7 +187,10 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
             if (postInputAmount != -69) {
                 inputs.setPostInput(postInputAmount);
-                zone.setHighest_pef(postInputAmount);
+
+                if (DateValidator.getTodaysDate().equals(inputs.getDate())) {
+                    zone.setHighest_pef(postInputAmount);
+                }
             }
 
             if (validSubmission(inputs)) {
