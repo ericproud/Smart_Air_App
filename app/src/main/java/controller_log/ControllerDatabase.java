@@ -25,8 +25,7 @@ public class ControllerDatabase {
         String year = "";
         String month = "";
         String day = "";
-        String time2 = String.format("%04d",
-                Integer.parseInt(time.replace(":", "")));
+        String time2 = String.format("%04d", Integer.parseInt(time.replace(":", "")));
 
         String[] temp = date.split(" ");
 
