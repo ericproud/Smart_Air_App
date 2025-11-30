@@ -20,7 +20,7 @@ public class ControllerDatabase {
         void onResult(List<String> steps);
     }
 
-    private static String keyHelper(String date, String time)
+    public static String keyHelper(String date, String time)
     {
         String year = "";
         String month = "";
