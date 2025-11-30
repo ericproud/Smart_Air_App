@@ -87,8 +87,8 @@ public class InventoryListeners extends EntryListeners<ValueEventListener> {
                             notifiedExpired.put(controllerKey, true);
                         }
 
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    } catch (ParseException ignored) {
+
                     }
                 });
 
