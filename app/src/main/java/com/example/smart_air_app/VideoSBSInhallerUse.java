@@ -18,7 +18,7 @@ public class VideoSBSInhallerUse extends AppCompatActivity {
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate(  savedInstanceState );
         setContentView( R.layout.activity_video_step_by_step_rescure_inhaller_use);
-
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());   ////////back
         VideoView vid =  findViewById(R.id.videoView);
         String path = "android.resource://" + getPackageName() + "/" + R.raw.controler_vid;
         Uri uri = Uri.parse(path);

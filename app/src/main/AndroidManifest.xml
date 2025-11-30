@@ -27,13 +27,8 @@
             android:exported="false" />
         <activity
             android:name=".TriageScreen"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".TemplateActivity"
             android:exported="false" />
@@ -86,7 +81,13 @@
             android:exported="false" />
         <activity
             android:name=".StreaksAndBadges"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="controller_log.ControllerLoggingScreen"
             android:exported="false" />
@@ -105,6 +106,7 @@
         <activity
             android:name=".VideoSBSInhallerUse"
             android:exported="false" />
+
         <activity
             android:name=".log_rescue_attempt.LogRescueAttemptActivity"
             android:exported="false" />
