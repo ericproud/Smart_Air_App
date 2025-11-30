@@ -25,8 +25,7 @@ public class ControllerDatabase {
         String year = "";
         String month = "";
         String day = "";
-        String time2 = String.format("%04d",
-                Integer.parseInt(time.replace(":", "")));
+        String time2 = String.format("%04d", Integer.parseInt(time.replace(":", "")));
 
         String[] temp = date.split(" ");
 
@@ -74,10 +73,11 @@ public class ControllerDatabase {
     }
 
     public static void logControllerDatabase(String id, ControllerLog info) {
+        //key is the converted time to number for easy sorting
         String key = keyHelper(info.getDate(), info.getTime());
-        //c_ref will update the controller logs
-        DatabaseReference c_ref = fdb.getReference("ControllerLogs").child(id)
-                .child(key);
+
+        //c_ref will points to the controller logs
+        DatabaseReference c_ref = fdb.getReference("ControllerLogs").child(id).child(key);
 
         //if the controller log exists, this represents the difference between the 2 logs and updates the inventory accordingly
         int[] toDeduct = {info.getDoseInput()};
