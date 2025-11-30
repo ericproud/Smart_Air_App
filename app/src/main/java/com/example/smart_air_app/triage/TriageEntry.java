@@ -1,5 +1,6 @@
 package com.example.smart_air_app.triage;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,6 +30,7 @@ public class TriageEntry {
         this.recentRescue = recentRescue;
         this.PEF = PEF;
         this.emergency = emergency;
+
     }
 
     public String getTriageID() {
@@ -66,5 +68,9 @@ public class TriageEntry {
     public boolean getEmergencyStatus() {
         return emergency;
     }
+
+
+
+
 
 }

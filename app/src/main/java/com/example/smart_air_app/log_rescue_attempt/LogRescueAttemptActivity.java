@@ -40,6 +40,9 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
     private MaterialButtonToggleGroup triageIncidentToggleButton;
     private MaterialToolbar toolbar;
 
+    private String childUID;
+    private String childName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,10 +73,23 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
         triageIncidentToggleButton.check(triageIncidentToggleButton.getChildAt(1).getId());
 
         if (getIntent().hasExtra("childUID")) { // child logged in through parent
-            String childUID = getIntent().getStringExtra("childUID");
+            childUID = getIntent().getStringExtra("childUID");
+            childName = getIntent().getStringExtra("childName");
             repo.setUid(childUID);
+
+            toolbar.setNavigationOnClickListener(view -> {
+                Intent intent = new Intent(LogRescueAttemptActivity.this, ParentChildHomeScreen.class);
+                intent.putExtra("childUID", childUID);
+                intent.putExtra("childName", childName);
+                startActivity(intent);
+            });
+
         } else {
             repo.setUid(FirebaseAuth.getInstance().getUid()); // child logged in normally
+            toolbar.setNavigationOnClickListener(view -> {
+                Intent intent = new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class);
+                startActivity(intent);
+            });
         }
 
         toolbar.setNavigationOnClickListener(v -> finish());
@@ -168,6 +184,13 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
 
     @Override
     public void navigateToSuccessScreen() {
-        finish();
+        if (childUID == null) {
+            startActivity(new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class));
+        } else {
+            Intent intent = new Intent(LogRescueAttemptActivity.this, ParentChildHomeScreen.class);
+            intent.putExtra("childUID", childUID);
+            intent.putExtra("childName", childName);
+            startActivity(intent);
+        }
     }
 }

@@ -12,10 +12,7 @@ import java.util.Locale;
 
 public class DateValidator {
     private static final DateTimeFormatter FORMATTER =
-            new DateTimeFormatterBuilder()
-                    .parseCaseInsensitive()
-                    .appendPattern("MMM dd yyyy")
-                    .toFormatter(Locale.ENGLISH);
+            new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern("MMM dd yyyy").toFormatter(Locale.ENGLISH);
 
     public static boolean isValidDate(String dateString) {
         try {
@@ -26,6 +23,33 @@ public class DateValidator {
         }
     }
 
+    // Check if a certain date is within todays date, and the desired number of months age
+    public static boolean withinDateRange(int months, String dateString) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("MMM dd yy", Locale.ENGLISH);
+            formatter.setLenient(false);
+
+            Date input = formatter.parse(dateString);
+
+            Calendar today = Calendar.getInstance();
+            today.set(Calendar.HOUR_OF_DAY, 0);
+            today.set(Calendar.MINUTE, 0);
+            today.set(Calendar.SECOND, 0);
+            today.set(Calendar.MILLISECOND, 0);
+
+            Calendar minDate = Calendar.getInstance();
+            minDate.setTime(today.getTime());
+            minDate.add(Calendar.MONTH, -months);
+
+            Calendar inputDate = Calendar.getInstance();
+            inputDate.setTime(input);
+
+            return !inputDate.before(minDate) && !inputDate.after(today);
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     public static String getTodaysDate() {
         Calendar cal = Calendar.getInstance();
