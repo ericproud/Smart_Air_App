@@ -130,7 +130,6 @@ public class ControllerDatabase {
     //handles logging controller usage
     private static void logControllerLog(DatabaseReference ref, ControllerLog info) {
         //saving the inputs as given
-        ref.child("Date").setValue(info.getDate());
         ref.child("amountUsed").setValue(info.getDoseInput());
         ref.child("breathRating").setValue(info.getFeeling());
         ref.child("shortnessBreathRating").setValue(info.getBreathShortness());
