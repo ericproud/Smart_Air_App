@@ -204,7 +204,6 @@ public class MedicineLogs extends AppCompatActivity {
         MedicineInfo.setTextSize(16f);
         MedicineInfo.setBackgroundColor(Color.parseColor("#90D5FF"));
 
-        // Add spacing between entries
         LinearLayout.LayoutParams params =
                 new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -213,7 +212,6 @@ public class MedicineLogs extends AppCompatActivity {
 
         MedicineInfo.setLayoutParams(params);
 
-        // Add the view to your layout
         MedicineLogField.addView(MedicineInfo);
     }
 
