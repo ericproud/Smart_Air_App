@@ -28,8 +28,6 @@ public class AdherenceCalculator {
     public static void CalculateAdherence(String id, String date, Consumer<Double> onResult) {
         AdherenceResult result = new AdherenceResult();
 
-        String currDate = DateValidator.getTodaysDate();
-
         //once completed return result.getResult() which happens to be what we calculate in the method below
         result.setCompletionListener(() -> {
             onResult.accept(result.getResult());
@@ -39,9 +37,9 @@ public class AdherenceCalculator {
         CalculateAdherence2(id, date, result);
     }
 
-    //this calculates the adherence the method above is to get around asynch issues
+    //this calculates the adherance the method above is to get around asynch issues
     private static void CalculateAdherence2(String id, String date, AdherenceResult result) {
-        //sum is what we want to take, amountTaken is how much we have taken
+        //sum is what we want to take, amountTaken is how much we have tkaen
         int[] sum = {0};
         int[] amountTaken = {0};
 
