@@ -20,10 +20,64 @@ public class ControllerDatabase {
         void onResult(List<String> steps);
     }
 
+    private static String keyHelper(String date, String time)
+    {
+        String year = "";
+        String month = "";
+        String day = "";
+        String time2 = String.format("%04d", Integer.parseInt(time.replace(":", "")));
+
+        String[] temp = date.split(" ");
+
+        year = temp[2];
+        day = temp[1];
+
+        if (temp[0].equals("JAN")) {
+            month = "01";
+        }
+        else if (temp[0].equals("FEB")) {
+            month = "02";
+        }
+        else if (temp[0].equals("MAR")) {
+            month = "03";
+        }
+        else if (temp[0].equals("APR")) {
+            month = "04";
+        }
+        else if (temp[0].equals("MAY")) {
+            month = "05";
+        }
+        else if (temp[0].equals("JUN")) {
+            month = "06";
+        }
+        else if (temp[0].equals("JUL")) {
+            month = "07";
+        }
+        else if (temp[0].equals("AUG")) {
+            month = "08";
+        }
+        else if (temp[0].equals("SEP")) {
+            month = "09";
+        }
+        else if (temp[0].equals("OCT")) {
+            month = "10";
+        }
+        else if (temp[0].equals("NOV")) {
+            month = "11";
+        }
+        else if (temp[0].equals("DEC")) {
+            month = "12";
+        }
+
+        return year + month + day + "_" + time2;
+    }
+
     public static void logControllerDatabase(String id, ControllerLog info) {
-        //c_ref will update the controller logs
-        DatabaseReference c_ref = fdb.getReference("ControllerLogs").child(id)
-                .child(info.getDate()).child(info.getTime());
+        //key is the converted time to number for easy sorting
+        String key = keyHelper(info.getDate(), info.getTime());
+
+        //c_ref will points to the controller logs
+        DatabaseReference c_ref = fdb.getReference("ControllerLogs").child(id).child(key);
 
         //if the controller log exists, this represents the difference between the 2 logs and updates the inventory accordingly
         int[] toDeduct = {info.getDoseInput()};
