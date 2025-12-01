@@ -1,6 +1,6 @@
 package com.example.smart_air_app;
 
-import static com.example.smart_air_app.utils.AlertSender.showAlert;
+////import static com.example.smart_air_app.utils.AlertSender.showAlert;
 
 import android.content.Context;
 import android.content.Intent;
@@ -55,7 +55,7 @@ public class ParentHomeScreen extends AppCompatActivity {
         parentUID = FirebaseAuth.getInstance().getUid();
         dbRef = FirebaseDatabase.getInstance().getReference().child("Users");
         childUIDs = new ArrayList<>();
-        showAlert(parentUID, this);
+        /////showAlert(parentUID, this);
         addChildButton.setOnClickListener(v -> {
             Intent intent = new Intent(ParentHomeScreen.this, AddChildScreen.class);
             startActivity(intent);
