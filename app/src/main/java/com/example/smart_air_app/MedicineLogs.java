@@ -19,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.triage.TriageEntry;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.google.android.material.chip.Chip;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,6 +61,37 @@ public class MedicineLogs extends AppCompatActivity {
                     MedicineLogField.removeAllViews();
                     loadMedicineEntries(childUID);
                 }
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String childUID = getIntent().getStringExtra("childUID");
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("Permissions")
+                .child(childUID)
+                .child("rescue logs");
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    boolean rescueLogsShared = snapshot.getValue(Boolean.class);
+                    Chip sharedTag = findViewById(R.id.sharedTag);
+                    if (rescueLogsShared) {
+                        sharedTag.setVisibility(View.VISIBLE);
+                    } else {
+                        sharedTag.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+
             }
         });
     }
