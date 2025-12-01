@@ -79,25 +79,26 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         rescueRepo.fetchRescueAttempt(new RescueAttemptRepository.FetchCallback() {
 
             private void setLastRescueTime(List<RescueAttempt> attempts) {
-                if (attempts.isEmpty()) lastRescueTime.setText("N/A");
-                else {
-                    long max = attempts.get(0).getTimestamp();
-                    for (RescueAttempt attempt : attempts) {
-                        max = Math.max(max, attempt.getTimestamp());
-                    }
-                    long now = System.currentTimeMillis();
-                    long diff = now - max;
+                if (attempts.isEmpty()) {
+                    lastRescueTime.setText("N/A");
+                    return;
+                }
 
-                    long days = diff / (1000 * 60 * 60 * 24);
-                    long hours = (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+                long max = attempts.getFirst().getTimestamp();
+                for (RescueAttempt attempt: attempts) {
+                    max = Math.max(max, attempt.getTimestamp());
+                }
+                long now = System.currentTimeMillis();
+                long diff = now - max;
 
-                    String ago;
-                    if (days == 0) {
-                        ago = String.format("%dh ago", hours);
-                    } else {
-                        ago = String.format("%dd %dh ago", days, hours);
-                    }
-                    lastRescueTime.setText(ago);
+                long days = diff / (1000 * 60 * 60 * 24);
+                long hours = (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+
+                String ago;
+                if (days == 0) {
+                    ago = String.format("%dh ago", hours);
+                } else {
+                    ago = String.format("%dd %dh ago", days, hours);
                 }
             }
 
