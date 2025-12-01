@@ -7,14 +7,17 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:id="@+id/textView"
+        android:layout_width="411dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Check In History Viewer"
+        android:background="#415F91"
+        android:paddingStart="5sp"
+        android:text="Checkin History"
+        android:textAlignment="center"
+        android:textColor="#FFFDFD"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/symptomLabel"
@@ -40,10 +43,9 @@
         android:id="@+id/symptomSpinner"
         android:layout_width="300dp"
         android:layout_height="48dp"
-        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        tools:layout_editor_absoluteY="70dp" />
 
     <Spinner
         android:id="@+id/triggerSpinner"

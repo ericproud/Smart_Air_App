@@ -290,7 +290,7 @@
             <!-- Emergency Triage -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEmergency"
-                style="@style/Widget.Material3.Button.IconButton.Filled.Tonal"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Having Trouble Breathing?"
@@ -299,7 +299,7 @@
             <!-- Set Personal Best -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/setPBButton"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Set Personal Best"
@@ -308,7 +308,7 @@
             <!-- Inventory -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnInventory"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Inventory"
@@ -317,7 +317,7 @@
             <!-- Streaks & Badges -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnStreaks"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Streaks &amp; Badges"
@@ -326,16 +326,25 @@
             <!-- Incident Log -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnIncidentLog"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Incident Log"
                 android:layout_marginTop="8dp" />
 
+            <!-- Medicine Logs -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMedicineLog"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Medicine Logs"
+                android:layout_marginTop="8dp" />
+
             <!-- Summary Charts -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSummaryCharts"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Summary Charts"
@@ -344,7 +353,7 @@
             <!-- Manage Account -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnManageAccount"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Manage Account"

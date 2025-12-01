@@ -1,159 +1,294 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChildHomeScreen">
+    android:background="?attr/colorSurface">
 
-
-    <TextView
-        android:id="@+id/childsName"
-        android:layout_width="411dp"
-        android:layout_height="wrap_content"
-        android:background="#673AB7"
-        android:paddingStart="5sp"
-        android:text="NAME OF USER /  SCREEN"
-        android:textAlignment="viewStart"
-        android:textColor="#FFFDFD"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/buttonContainer"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
         android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childsName"
-        app:layout_constraintVertical_bias="0.0"
-        tools:layout_editor_absoluteX="0dp" />
+        android:background="?attr/colorSurface">
 
-    <Button
-        android:id="@+id/parentLogControllerUsageButton"
-        android:layout_width="300dp"
-        android:layout_height="70sp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="56dp"
-        android:backgroundTint="#673AB7"
-        android:text="LOG CONTROLLER USAGE"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/parentLogRescueAttemptButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parentDailyCheckInButton" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:cardCornerRadius="28dp"
+            app:cardBackgroundColor="?attr/colorPrimaryContainer">
 
-    <Button
-        android:id="@+id/parentEmergencyTriageButton"
-        android:layout_width="300dp"
-        android:layout_height="70sp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="56dp"
-        android:backgroundTint="#673AB7"
-        android:text="HAVING TROUBLE BREATHING?"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parentLogRescueAttemptButton" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="16dp">
 
-    <Button
-        android:id="@+id/parentDailyCheckInButton"
-        android:layout_width="300dp"
-        android:layout_height="70sp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="56dp"
-        android:backgroundTint="#673AB7"
-        android:text="DAILY CHECK IN"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/parentLogControllerUsageButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childsName" />
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/childProfileImage"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/user"
+                    android:tint="@color/md_theme_onPrimaryContainer"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full" />
 
-    <Button
-        android:id="@+id/parentLogRescueAttemptButton"
-        android:layout_width="300dp"
-        android:layout_height="70sp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="56dp"
-        android:backgroundTint="#673AB7"
-        android:elegantTextHeight="true"
-        android:text="LOG RESCUE ATTEMPT"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/parentEmergencyTriageButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parentLogControllerUsageButton" />
+                <TextView
+                    android:id="@+id/childsName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:text="NAME OF USER / SCREEN"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnPrimaryContainer" />
 
-    <Button
-        android:id="@+id/parentStreaksAndBadgesButton"
-        android:layout_width="300dp"
-        android:layout_height="70sp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="56dp"
-        android:backgroundTint="#673AB7"
-        android:text="STREAKS AND BADGES"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parentEmergencyTriageButton" />
+            </LinearLayout>
 
-    <Button
-        android:id="@+id/setPEFButton"
-        android:layout_width="300dp"
-        android:layout_height="70sp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="56dp"
-        android:backgroundTint="#673AB7"
-        android:text="Set Today's PEF"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/parentStreaksAndBadgesButton" />
+        </com.google.android.material.card.MaterialCardView>
 
-    />
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <Button
-        android:id="@+id/childLogout"
-        android:layout_width="300dp"
-        android:layout_height="70sp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="56dp"
-        android:backgroundTint="#673AB7"
-        android:text="Log Out"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setPEFButton" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/todaysZoneTile"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/labelTodaysZone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Today's Zone"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="?attr/colorOnSurface" />
+
+                            <TextView
+                                android:id="@+id/textTodaysZone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Green"
+                                android:textSize="28sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="8dp"
+                                android:textColor="?attr/colorPrimary" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/lastRescueTile"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/labelLastRescue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Last Rescue Time"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="?attr/colorOnSurface" />
+
+                            <TextView
+                                android:id="@+id/textLastRescueTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="3h ago"
+                                android:textSize="26sp"
+                                android:layout_marginTop="8dp"
+                                android:textColor="?attr/colorSecondary" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/weeklyCountTile"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:id="@+id/labelWeeklyCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Weekly Rescue Count"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="?attr/colorOnSurface" />
+
+                            <TextView
+                                android:id="@+id/textWeeklyCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="4"
+                                android:textSize="32sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="8dp"
+                                android:textColor="?attr/colorTertiary" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/trendSnippetTile"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="12dp">
+
+                            <TextView
+                                android:id="@+id/labelTrendSnippet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Trend Snippet"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="?attr/colorOnSurface" />
+
+                            <FrameLayout
+                                android:id="@+id/chartContainer"
+                                android:layout_width="match_parent"
+                                android:layout_height="0dp"
+                                android:layout_weight="1"
+                                android:layout_marginTop="8dp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/parentDailyCheckInButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DAILY CHECK IN"
+                android:layout_marginTop="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/parentLogControllerUsageButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LOG CONTROLLER USAGE"
+                android:layout_marginTop="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/parentLogRescueAttemptButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LOG RESCUE ATTEMPT"
+                android:layout_marginTop="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/parentEmergencyTriageButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HAVING TROUBLE BREATHING?"
+                android:layout_marginTop="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/parentStreaksAndBadgesButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="STREAKS AND BADGES"
+                android:layout_marginTop="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/setPEFButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Set Today's PEF"
+                android:layout_marginTop="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/childMedicineLogs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Medicine Logs"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/childLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Log Out"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

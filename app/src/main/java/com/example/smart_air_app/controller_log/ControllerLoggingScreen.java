@@ -20,6 +20,8 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.smart_air_app.R;
 import com.example.smart_air_app.VideoSBSInhallerUse;
 import com.example.smart_air_app.utils.DateValidator;
+import com.example.smart_air_app.utils.PEFHistory;
+import com.example.smart_air_app.utils.PEFHistoryCalculator;
 
 import java.util.Calendar;
 
@@ -174,7 +176,10 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
             if (postInputAmount != -69) {
                 inputs.setPostInput(postInputAmount);
-                zone.setHighest_pef(postInputAmount);
+
+                if (DateValidator.getTodaysDate().equals(inputs.getDate())) {
+                    zone.setHighest_pef(postInputAmount);
+                }
             }
 
             if (validSubmission(inputs)) {
