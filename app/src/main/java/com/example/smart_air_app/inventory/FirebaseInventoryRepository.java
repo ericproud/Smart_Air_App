@@ -19,6 +19,7 @@ public class FirebaseInventoryRepository implements InventoryRepository {
 
     @Override
     public void saveInventory(List<Medicine> inventory, int index, SaveCallback callback) {
+        if (uid == null) return;
         DatabaseReference ref = db.getReference().child("Inventory").child(uid).child(String.valueOf(index));
 
         ref.setValue(inventory.get(index))
@@ -28,6 +29,7 @@ public class FirebaseInventoryRepository implements InventoryRepository {
 
     @Override
     public void fetchInventory(FetchCallback callback) {
+        if (uid == null) return;
         DatabaseReference ref = db.getReference("Inventory").child(uid);
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {

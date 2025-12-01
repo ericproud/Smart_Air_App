@@ -184,13 +184,6 @@ public class LogRescueAttemptActivity extends AppCompatActivity implements LogRe
 
     @Override
     public void navigateToSuccessScreen() {
-        if (childUID == null) {
-            startActivity(new Intent(LogRescueAttemptActivity.this, ChildHomeScreen.class));
-        } else {
-            Intent intent = new Intent(LogRescueAttemptActivity.this, ParentChildHomeScreen.class);
-            intent.putExtra("childUID", childUID);
-            intent.putExtra("childName", childName);
-            startActivity(intent);
-        }
+        finish();
     }
 }

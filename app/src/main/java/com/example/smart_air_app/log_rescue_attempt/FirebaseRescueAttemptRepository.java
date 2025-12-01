@@ -18,6 +18,7 @@ public class FirebaseRescueAttemptRepository implements RescueAttemptRepository 
     @Override
     public void saveRescueAttempt(RescueAttempt attempt, SaveCallback callback) {
         String userId = uid;
+        if (userId == null) return;
 
         DatabaseReference ref = db.getReference().child("RescueAttempts").child(userId).push();
 
@@ -33,6 +34,7 @@ public class FirebaseRescueAttemptRepository implements RescueAttemptRepository 
     @Override
     public void fetchRescueAttempt(FetchCallback callback) {
         String userId = uid;
+        if (userId == null) return;
 
         DatabaseReference ref = db.getReference().child("RescueAttempts").child(userId);
 
