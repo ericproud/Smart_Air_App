@@ -25,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -90,20 +91,17 @@ public class MedicineLogs extends AppCompatActivity {
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                for (DataSnapshot dateSnapshot : snapshot.getChildren()) {
-                    String date = dateSnapshot.getKey();
-                    for (DataSnapshot timeSnapshot : dateSnapshot.getChildren()) {
-                        String time = timeSnapshot.getKey();
-                        Long amountUsed = timeSnapshot.child("amountUsed").getValue(Long.class);
-                        String breathRating = timeSnapshot.child("breathRating").getValue(String.class);
-                        Long PEFbefore = timeSnapshot.child("Pre PEF").getValue(Long.class);
-                        Long PEFafter = timeSnapshot.child("postPEF").getValue(Long.class);
-                        Long shortnessRating = timeSnapshot.child("shortnessBreathRating").getValue(Long.class);
-                        writeControllerLog(date, time, amountUsed, breathRating, PEFbefore, PEFafter, shortnessRating);
-                    }
+                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                    String date = getDate(childSnapshot.getKey().toString());
+                    String time = getTime(childSnapshot.getKey().toString());
+                    Long amountUsed = childSnapshot.child("amountUsed").getValue(Long.class);
+                    String breathRating = childSnapshot.child("breathRating").getValue(String.class);
+                    Long PEFbefore = childSnapshot.child("Pre PEF").getValue(Long.class);
+                    Long PEFafter = childSnapshot.child("postPEF").getValue(Long.class);
+                    Long shortnessRating = childSnapshot.child("shortnessBreathRating").getValue(Long.class);
+                    writeControllerLog(date, time, amountUsed, breathRating, PEFbefore, PEFafter, shortnessRating);
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError error) {
             }
@@ -243,6 +241,28 @@ public class MedicineLogs extends AppCompatActivity {
         MedicineInfo.setLayoutParams(params);
 
         MedicineLogField.addView(MedicineInfo);
+    }
+
+    public static String getDate(String dateTime) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd_HHmm");
+            Date date = inputFormat.parse(dateTime);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("MMM dd yyyy");
+            return outputFormat.format(date).toUpperCase();
+        } catch (ParseException e) {
+            return "";
+        }
+    }
+
+    public static String getTime(String dateTime) {
+        try {
+            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMdd_HHmm");
+            Date date = inputFormat.parse(dateTime);
+            SimpleDateFormat outputFormat = new SimpleDateFormat("H:mm");
+            return outputFormat.format(date);
+        } catch (ParseException e) {
+            return "";
+        }
     }
 }
 
