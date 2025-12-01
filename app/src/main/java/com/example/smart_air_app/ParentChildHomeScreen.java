@@ -100,6 +100,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
                 } else {
                     ago = String.format("%dd %dh ago", days, hours);
                 }
+                lastRescueTime.setText(ago);
             }
 
             private void setWeeklyRescueCount(List<RescueAttempt> attempts) {
