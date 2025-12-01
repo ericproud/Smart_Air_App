@@ -2,8 +2,6 @@ package com.example.smart_air_app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -29,6 +27,7 @@ import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
 import com.example.smart_air_app.controller_log.PEFZones;
 import com.example.smart_air_app.controller_log.PEFZonesDatabase;
 import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -71,6 +70,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         MaterialButton medicineLogsButton = findViewById(R.id.btnMedicineLog);
         MaterialButton logoutButton = findViewById(R.id.btnLogout);
         MaterialButton setPBButton = findViewById(R.id.setPBButton);
+        MaterialButton onboardButton = findViewById(R.id.onboardingButton);
 
         TextView todaysZone = findViewById(R.id.textTodaysZone);
         TextView lastRescueTime = findViewById(R.id.textLastRescueTime);
@@ -138,6 +138,26 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         logRescueButton.setOnClickListener(view -> {
             startActivityWithChildInfo(LogRescueAttemptActivity.class);
         });
+
+        ///Hossein part
+        streaksAndBadgesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //the child
+
+                Intent intent = new Intent(ParentChildHomeScreen.this, StreaksAndBadges.class);
+
+                intent.putExtra("the kid", childUserId);
+                startActivity(intent);
+
+
+
+            }
+        });
+
+
+
+        /// Hossein done
 
         inventoryButton.setOnClickListener(view -> {
             startActivityWithChildInfo(InventoryActivity.class);
@@ -219,6 +239,10 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
         medicineLogsButton.setOnClickListener(view -> {
             startActivityWithChildInfo(MedicineLogs.class);
+        });
+
+        onboardButton.setOnClickListener(v-> {
+            startActivity(new Intent(ParentChildHomeScreen.this, ParentOnboardingScreen1.class));
         });
     }
 

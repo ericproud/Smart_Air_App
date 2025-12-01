@@ -117,7 +117,7 @@ public class AddChildScreen extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         String uID = childAuth.getCurrentUser().getUid();
-                        Child newChild = new Child(firstName, lastName, height, weight, DOB, uID);
+                        Child newChild = new Child(firstName, lastName, height, weight, DOB, uID, parentUID);
                         FirebaseDatabase.getInstance().getReference("Users").child(uID).setValue(newChild);
                         FirebaseDatabase.getInstance().getReference("Badges").child(uID).setValue(badges);
                         FirebaseDatabase.getInstance().getReference("Permissions").child(uID).setValue(permissions);

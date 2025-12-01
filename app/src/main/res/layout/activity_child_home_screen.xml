@@ -123,7 +123,7 @@
                             android:layout_height="match_parent"
                             android:orientation="vertical"
                             android:gravity="center"
-                            android:padding="16dp">
+                            android:padding="16dp" >
 
                             <TextView
                                 android:id="@+id/labelLastRescue"
@@ -151,7 +151,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal" >
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/weeklyCountTile"
@@ -166,7 +166,7 @@
                             android:layout_height="match_parent"
                             android:orientation="vertical"
                             android:gravity="center"
-                            android:padding="16dp">
+                            android:padding="16dp" >
 
                             <TextView
                                 android:id="@+id/labelWeeklyCount"
@@ -203,7 +203,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:padding="12dp">
+                            android:padding="12dp" >
 
                             <TextView
                                 android:id="@+id/labelTrendSnippet"
@@ -233,8 +233,10 @@
                 android:id="@+id/parentDailyCheckInButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="DAILY CHECK IN"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="16dp"
+                android:elevation="10dp"
+
+                android:text="DAILY CHECK IN" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/parentLogControllerUsageButton"
@@ -276,6 +278,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Medicine Logs"
+                android:layout_marginTop="8dp"  />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/onboardingButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="View Onboarding"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp" />
 
