@@ -56,6 +56,7 @@ public class PEFZonesDatabase {
         });
     }
 
+    //converts date of form MMM DD YYYY to yyyymmdd for query usage
     public static String keyHelper(String date) {
         String year = "";
         String month = "";
@@ -116,6 +117,8 @@ public class PEFZonesDatabase {
 
         String key = keyHelper(info.getDate());
 
+        //this PEFHistory is the history of what the child experienced, used in PEFHistory
+        //we can just save directly no logic because PEFZones handles the logic
         DatabaseReference pef_history_ref = fdb.getReference("PEFHistory").child(id).child(key);
 
         pef_history_ref.setValue(info.calculateZone());

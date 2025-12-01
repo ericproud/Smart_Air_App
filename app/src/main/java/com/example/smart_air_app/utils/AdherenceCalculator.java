@@ -1,7 +1,5 @@
 package com.example.smart_air_app.utils;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -51,12 +49,11 @@ public class AdherenceCalculator {
 
         long days = ChronoUnit.DAYS.between(start, end) + 1;
 
-        Log.d("Controller Adherence", "" + days + " measuring");
-
         //call the calculator
         CalculateAdherence2(id, startKey, endKey, days, result);
     }
 
+    //converts date from MMM DD YYYY to yyyymmdd for query usage
     public static LocalDate dateParseHelp(String date) {
         String[] temp = date.trim().split(" ");
 
@@ -124,8 +121,6 @@ public class AdherenceCalculator {
                 }
             }
 
-            Log.d("Controller Adherance", "sum = " + sum[0]);
-
             //handles amountTaken or goes through controller usage after the schedule is loaded to avoid potential asynch issues
             FirebaseDatabase fdb = FirebaseDatabase.getInstance();
 
@@ -140,12 +135,12 @@ public class AdherenceCalculator {
                     for (DataSnapshot toDo : snapshot.getChildren()) {
                         DataSnapshot amount_ref = toDo.child("amountUsed");
 
+                        //if the amount is logged and non null then add it to what we have taken
                         if (amount_ref.exists()) {
                             Integer dose = amount_ref.getValue(Integer.class);
                             if (dose != null && dose > 0) {
                                 amountTaken[0] += dose;
                             }
-                            Log.d("Controller Adherence", "dose = " + dose + "\namount taken = " + amountTaken[0]);
                         }
                     }
 
@@ -163,11 +158,6 @@ public class AdherenceCalculator {
                             result.setResult((1.0 * amountTaken[0]) / (sum[0] * days));
                         }
                     }
-
-                    Log.d("Controller Adherence", "amount taken = " + amountTaken[0]);
-                    Log.d("Controller Adherence", "supposed to take = " + sum[0]);
-                    Log.d("Controller Adherence", "days: " + days);
-                    Log.d("ControllerAdherence", "percent: " + result.getResult());
                 }
 
                 @Override

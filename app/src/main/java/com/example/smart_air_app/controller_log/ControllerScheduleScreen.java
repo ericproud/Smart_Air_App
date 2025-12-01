@@ -165,9 +165,9 @@ public class ControllerScheduleScreen extends AppCompatActivity {
         });
     }
 
-    //like the adapter design pattern. this allows use to use a String[] on the recycleview which lists what the user needs to take
     //prints exactly what's in the medicine_to_use
     private static class CustomStringAdapter extends RecyclerView.Adapter<CustomStringAdapter.ViewHolder> {
+        //to_print is what we want to print hence the name
         private List<String> to_print;
 
         public CustomStringAdapter(List<String> to_print) {
@@ -186,15 +186,22 @@ public class ControllerScheduleScreen extends AppCompatActivity {
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            TextView text = (TextView) LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
+            //create the textviews that will display whatever we want to display
+            TextView text = (TextView) LayoutInflater.from(parent.getContext()).inflate(
+                    android.R.layout.simple_list_item_1,
+                    parent,
+                    false);
+
             return new ViewHolder(text);
         }
 
+        //setting the text to the corresponding to_print item (position pos)
         @Override
         public void onBindViewHolder(ViewHolder obj, int pos) {
             obj.text.setText(to_print.get(pos));
         }
 
+        //how many items we want to print
         @Override
         public int getItemCount() {
             return to_print.size();
@@ -209,6 +216,8 @@ public class ControllerScheduleScreen extends AppCompatActivity {
                 schedule.add(toDo);
             }
 
+            //as the schedule is changed, update the array and string adapter to
+            //update the spinner and recyleview of a schedule
             stringAdapter.notifyDataSetChanged();;
             arrayAdapter.notifyDataSetChanged();
         });

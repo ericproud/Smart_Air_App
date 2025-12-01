@@ -100,8 +100,10 @@ public class ChildHomeScreen extends AppCompatActivity {
             Logout.logout(this);
         });
 
+        //the child wants to set a new PEF a dialog for an input field shows up
         Button setPEFButton = findViewById(R.id.setPEFButton);
         setPEFButton.setOnClickListener(v -> {
+            //setting info like title, hint, where to show (this)
             AlertDialog.Builder build = new AlertDialog.Builder(this);
             build.setTitle("Enter new PEF");
 
@@ -109,33 +111,49 @@ public class ChildHomeScreen extends AppCompatActivity {
             inputText.setHint("Enter Today's PEF (Eg 67)");
             build.setView(inputText);
 
+            //confirm button means check input for a number and save it if its valid
             build.setPositiveButton("Confirm", (d, w) -> {
+                //get input
                 String input = inputText.getText().toString().trim();
                 try {
+                    //try converting it
                     int int_input = Integer.parseInt(input);
 
                     //using a lambda expression to ensure asynch calls work
                     PEFZonesDatabase.loadPEFZones(childUID, (pb, highest_pef, date) ->{
                         PEFZones zone2 = new PEFZones();
 
+                        //creating zone object
                         zone2.setPB(pb);
                         zone2.setHighest_pef(highest_pef);
                         zone2.setDate(date);
 
+                        //zone object handles logic
                         zone2.setHighest_pef(int_input);
 
+                        //save to database
                         PEFZonesDatabase.savePEFZones(childUID, zone2);
                     });
                 }
                 catch (NumberFormatException e) {
+                    //nothing really happens here so leave it
                 }
             });
 
+            //leave button so obliterate the dialog
             build.setNegativeButton("Cancel", (d, w) -> {
                 d.cancel();
             });
 
+            //show the dialog
             build.show();
+        });
+
+        PEFZones zone = new PEFZones();
+        //loads in the zone info and updates the textview
+        PEFZonesDatabase.loadPEFZones(childUID, (pb, pef, date) -> {
+            zone.initializePEF(pb, pef, date);
+            todaysZone.setText(zone.calculateZone());
         });
     }
 }

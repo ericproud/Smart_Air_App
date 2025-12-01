@@ -150,6 +150,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             Logout.logout(this);
         });
 
+        //loads in teh zone from the database and updates the text view
         PEFZones zone = new PEFZones();
 
         PEFZonesDatabase.loadPEFZones(childUserId, (pb, pef, date) -> {
@@ -157,7 +158,9 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             todaysZone.setText(zone.calculateZone());
         });
 
+        //when you click the pb button a new dialog shows up asking for input
         setPBButton.setOnClickListener(v -> {
+            //putting in information like where it should pop up (here), hints, a title etc.
             AlertDialog.Builder build = new AlertDialog.Builder(this);
             build.setTitle("Enter new PB");
 
@@ -165,32 +168,41 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             inputText.setHint("Enter new PB (Eg 67)");
             build.setView(inputText);
 
+            //label the button confirm and handle the logic
             build.setPositiveButton("Confirm", (d, w) -> {
+                //get input
                 String input = inputText.getText().toString().trim();
                 try {
+                    //try parsing integer
                     int int_input = Integer.parseInt(input);
 
                     //using a lambda expression to ensure asynch calls work
                     PEFZonesDatabase.loadPEFZones(childUserId, (pb, highest_pef, date) ->{
                         PEFZones zone2 = new PEFZones();
 
+                        //load in info
                         zone2.setPB(pb);
                         zone2.setHighest_pef(highest_pef);
                         zone2.setDate(date);
 
+                        //set the pb (zone handles logic)
                         zone2.setPB(int_input);
 
+                        //updates the database
                         PEFZonesDatabase.savePEFZones(childUserId, zone2);
                     });
                 }
                 catch (NumberFormatException e) {
+                    //nothing really happens here
                 }
             });
 
+            //leave button is called so we destroy the dialog
             build.setNegativeButton("Cancel", (d, w) -> {
                 d.cancel();
             });
 
+            //show the build
             build.show();
         });
 
