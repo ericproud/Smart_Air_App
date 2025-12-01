@@ -2,10 +2,12 @@ package com.example.smart_air_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.utils.Logout;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -57,6 +60,9 @@ public class ChildHomeScreen extends AppCompatActivity {
                 String lastName = childSnapshot.child("lastName").getValue(String.class);
                 String childName = firstName + " " + lastName;
                 childNameText.setText(childName);
+
+
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
@@ -64,6 +70,20 @@ public class ChildHomeScreen extends AppCompatActivity {
 
         String childName = childNameText.getText().toString();
 
+
+        /// Hossein
+        MaterialButton dailyCheckIn = findViewById(R.id.parentDailyCheckInButton);
+        dailyCheckIn.setOnClickListener(view -> {
+            Log.d("DEBUG", "Button was definitely clicked!");
+            Toast.makeText(this, "CLICKED!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ChildHomeScreen.this, DailyCheckIn.class);
+            intent.putExtra("childUID", childUID);
+            intent.putExtra("childName", childName);
+
+            startActivity(intent);
+        });
+
+        ///Hossein out
         Button logRescueAttempt = findViewById(R.id.parentLogRescueAttemptButton);
         logRescueAttempt.setOnClickListener(view -> {
             Intent intent = new Intent(ChildHomeScreen.this, LogRescueAttemptActivity.class);

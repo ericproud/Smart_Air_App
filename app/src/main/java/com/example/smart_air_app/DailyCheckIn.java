@@ -3,6 +3,7 @@ package com.example.smart_air_app;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -12,10 +13,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Random;
 
 public class DailyCheckIn extends AppCompatActivity {
 
+    String childUID;
+    String childName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +35,30 @@ public class DailyCheckIn extends AppCompatActivity {
         startFloatingAnimation(findViewById(R.id.blob_1));
         startFloatingAnimation(findViewById(R.id.blob_2));
 
+
+
+        childUID = getIntent().getStringExtra("childUID");  //if it the parent this is not null
+        childName = getIntent().getStringExtra("childName");
+        if(childUID == null) childUID = FirebaseAuth.getInstance().getUid(); //if the child is on the app
+
+
+        View btmComplete = findViewById(R.id.BtmComplete); //this guy is for filling the check ins!
+        String findChildUID = childUID; ///it is not "stable"
+        String findChildName = childName; ///it is not "stable"
+        btmComplete.setOnClickListener(v -> {
+            Intent intent = new Intent(DailyCheckIn.this, DailyLogActivity.class);
+            intent.putExtra("childUID", findChildUID);
+            intent.putExtra("childName", findChildName);
+            startActivity(intent);
+        });
+
+        View btmHistory = findViewById(R.id.BtnHistory);
+        btmHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(DailyCheckIn.this, CheckinHistoryScreen.class);
+            intent.putExtra("childUID", findChildUID);
+            intent.putExtra("childName", findChildName);
+            startActivity(intent);
+        });
     }
 
     private void startFloatingAnimation(View blob) {

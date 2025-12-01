@@ -99,13 +99,8 @@
             android:exported="false" />
         <activity
             android:name=".StreaksAndBadges"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".controller_log.ControllerLoggingScreen"
             android:exported="false" />
@@ -134,10 +129,23 @@
         <activity
             android:name=".RegisterAsParent"
             android:exported="false" />
+
+        <activity
+            android:name=".DailyCheckIn"
+            android:exported="false" />
+        <activity
+            android:name=".DailyLogActivity"
+            android:exported="false" />
+
         <activity
             android:name=".StartScreen"
-            android:exported="false"/>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 

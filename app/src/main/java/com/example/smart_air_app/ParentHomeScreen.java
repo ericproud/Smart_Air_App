@@ -45,7 +45,9 @@ public class ParentHomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_home_screen);
+        ///
 
+        ///
         container = findViewById(R.id.childButtonContainer);
         addChildButton = findViewById(R.id.addChildButton);
         logoutButton = findViewById(R.id.parentLogoutButton);
