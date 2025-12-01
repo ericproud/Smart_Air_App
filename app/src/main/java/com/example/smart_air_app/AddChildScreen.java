@@ -16,14 +16,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.smart_air_app.alerts.FirebaseDatabaseListeners;
 import com.example.smart_air_app.inventory.FirebaseInventoryRepository;
 import com.example.smart_air_app.inventory.InventoryRepository;
 import com.example.smart_air_app.user_classes.Child;
 import com.example.smart_air_app.utils.DateValidator;
 import com.example.smart_air_app.utils.FormHelperFunctions;
+import com.google.firebase.Firebase;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
@@ -124,9 +127,29 @@ public class AddChildScreen extends AppCompatActivity {
                         inv.setUid(uID);
                         inv.initInventory();
 
-                        FirebaseDatabase.getInstance().getReference("Users").child(parentUID).child("children").child(uID).setValue(true);
+
+                        // needed for alerts
+                        DatabaseReference triageRef = FirebaseDatabase.getInstance().getReference("Triage").child(uID);
+                        DatabaseReference rescueRef = FirebaseDatabase.getInstance().getReference("RescueAttempts").child(uID);
+                        DatabaseReference controllerRef = FirebaseDatabase.getInstance().getReference("ControllerLogs").child(uID);
+                        DatabaseReference childRef = FirebaseDatabase.getInstance().getReference("Users")
+                                .child(parentUID)
+                                .child("children")
+                                .child(uID);
+                        DatabaseReference zoneRef = FirebaseDatabase.getInstance().getReference("Users").child("Zones");
+
+                        triageRef.setValue(null).addOnSuccessListener(aVoid1 -> {
+                            rescueRef.setValue(null).addOnSuccessListener(aVoid2 -> {
+                                controllerRef.setValue(null).addOnSuccessListener(aVoid3 -> {
+                                    childRef.setValue(true).addOnSuccessListener(aVoid4 -> {
+                                        zoneRef.setValue(null).addOnSuccessListener(aVoid5 -> {
+                                            FirebaseDatabaseListeners.getInstance().attachListeners(uID, firstName + " " + lastName);
+                                        }).addOnFailureListener(e -> {});
+                                    }).addOnFailureListener(e -> {});
+                                }).addOnFailureListener(e -> {});
+                            }).addOnFailureListener(e -> {});
+                        }).addOnFailureListener(e -> {});
                         childAuth.signOut();
-                        startActivity(new Intent(AddChildScreen.this, ParentHomeScreen.class));
                         finish();
                     } else {
                         Toast.makeText(AddChildScreen.this, "Authentication failed.",

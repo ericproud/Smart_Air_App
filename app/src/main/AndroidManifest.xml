@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,6 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Smart_Air_App">
+
+
         <activity
             android:name=".MedicineLogs"
             android:exported="false" />
@@ -92,7 +94,7 @@
             android:name=".StreaksAndBadges"
             android:exported="false" />
         <activity
-            android:name="controller_log.ControllerLoggingScreen"
+            android:name=".controller_log.ControllerLoggingScreen"
             android:exported="false" />
         <activity
             android:name=".CheckinHistoryScreen"

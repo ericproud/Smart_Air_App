@@ -293,7 +293,7 @@
                 style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Emergency Triage"
+                android:text="Having Trouble Breathing?"
                 android:layout_marginTop="8dp" />
 
             <!-- Set Personal Best -->
@@ -357,6 +357,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Manage Account"
+                android:layout_marginTop="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLogout"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Log Out"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="24dp" />
 

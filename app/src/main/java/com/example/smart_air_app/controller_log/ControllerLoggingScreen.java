@@ -1,4 +1,4 @@
-package controller_log;
+package com.example.smart_air_app.controller_log;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -34,7 +34,6 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
 
         final String ID = getIntent().getStringExtra("childUID");
 

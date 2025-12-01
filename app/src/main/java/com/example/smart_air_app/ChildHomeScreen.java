@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
+import com.example.smart_air_app.utils.Logout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,9 +24,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import controller_log.ControllerLoggingScreen;
-import controller_log.PEFZones;
-import controller_log.PEFZonesDatabase;
+import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
+import com.example.smart_air_app.controller_log.PEFZones;
+import com.example.smart_air_app.controller_log.PEFZonesDatabase;
 
 public class ChildHomeScreen extends AppCompatActivity {
 
@@ -92,6 +93,11 @@ public class ChildHomeScreen extends AppCompatActivity {
             Intent intent = new Intent(ChildHomeScreen.this, MedicineLogs.class);
             intent.putExtra("childUID", childUID);
             startActivity(intent);
+        });
+
+        Button logoutButton = findViewById(R.id.childLogout);
+        logoutButton.setOnClickListener(v -> {
+            Logout.logout(this);
         });
 
         Button setPEFButton = findViewById(R.id.setPEFButton);
