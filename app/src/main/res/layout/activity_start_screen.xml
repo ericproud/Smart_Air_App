@@ -9,27 +9,27 @@
 
     <Button
         android:id="@+id/button_login"
-        android:layout_width="213dp"
-        android:layout_height="86dp"
-        android:text="LOG IN"
+        android:layout_width="230dp"
+        android:layout_height="92dp"
+        android:text="Log In"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.522" />
+        app:layout_constraintVertical_bias="0.5" />
 
     <Button
         android:id="@+id/button_register"
-        android:layout_width="213dp"
-        android:layout_height="86dp"
-        android:text="REGISTER"
+        android:layout_width="230dp"
+        android:layout_height="92dp"
+        android:layout_marginTop="30dp"
+        android:text="Register"
         android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.705" />
+        app:layout_constraintTop_toBottomOf="@+id/button_login" />
 
     <TextView
         android:id="@+id/childsName"
