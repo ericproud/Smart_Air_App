@@ -359,6 +359,15 @@
                 android:text="Manage Account"
                 android:layout_marginTop="8dp" />
 
+            <!--- View Onboarding -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/onboardingButton"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="View Onboarding"
+                android:layout_marginTop="8dp" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogout"
                 style="@style/Widget.Material3.Button.OutlinedButton"

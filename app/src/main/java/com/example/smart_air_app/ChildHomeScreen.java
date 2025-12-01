@@ -51,6 +51,7 @@ public class ChildHomeScreen extends AppCompatActivity {
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
         String childUID = FirebaseAuth.getInstance().getUid();
 
+        helperOnboard(FirebaseDatabase.getInstance().getReference("Users"), childUID);
 
         TextView childNameText = findViewById(R.id.childsName);
         dbRef.child("Users").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -174,6 +175,39 @@ public class ChildHomeScreen extends AppCompatActivity {
         PEFZonesDatabase.loadPEFZones(childUID, (pb, pef, date) -> {
             zone.initializePEF(pb, pef, date);
             todaysZone.setText(zone.calculateZone());
+        });
+
+        Button goOnboard = findViewById(R.id.onboardingButton);
+        goOnboard.setOnClickListener(v->{
+            startActivity(new Intent(ChildHomeScreen.this, ChildOnboardingScreen1.class));
+        });
+    }
+
+    private void helperOnboard(DatabaseReference d_ref, String id) {
+        //reference to see if the user is onboarded
+        DatabaseReference o_ref = d_ref.child(id).child("isOnboarded");
+
+        o_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //the isOnboarded should exist this is just a safety net
+                if (snapshot.exists()) {
+                    Boolean val = snapshot.getValue(Boolean.class);
+
+                    //if false then send them to parent onboarding also check if null for safety
+                    if (val != null && !val) {
+                        Intent intent = new Intent(ChildHomeScreen.this, ChildOnboardingScreen1.class);
+                        startActivity(intent);
+
+                        //when they finish the onboarding set this to true
+                        o_ref.setValue(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 }

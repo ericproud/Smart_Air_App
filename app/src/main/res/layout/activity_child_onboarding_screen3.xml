@@ -6,16 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/onboardingText"
-        android:layout_width="347dp"
-        android:layout_height="583dp"
-        android:layout_marginTop="10dp"
-        android:text="if you are reading this then someone hasn't done the onboarding story points yet (page 3 child)"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
@@ -35,4 +25,43 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/backButton" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/child_page3" />
+
+    <TextView
+        android:id="@+id/textView27"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Daily Check in allows you to log if you experienced any symptoms or triggers and overall how you were that day. Log Controller Usage allows you to record whenever you use your controller. Log Rescue Attempt allows you to log whenever you had to use your rescue medicine."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+
+    <TextView
+        android:id="@+id/textView29"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Having Trouble Breathing allows you to log if you experience severe symptoms. Streaks and Badges allows you to view your achievements. Set Today's PEF allows you to set a PEF for the day."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Medicine Logs allows you to view your history of controller and rescue usages. View onboarding allows you to come back here for the tutorial. Log out logs you out of the app securely."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView29" />
 </androidx.constraintlayout.widget.ConstraintLayout>

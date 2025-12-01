@@ -86,6 +86,15 @@
             android:name=".ParentOnboardingScreen3"
             android:exported="false" />
         <activity
+            android:name=".ParentOnboardingScreen4"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen5"
+            android:exported="false" />
+        <activity
+            android:name=".ParentOnboardingScreen6"
+            android:exported="false" />
+        <activity
             android:name=".ProviderOnboardingScreen1"
             android:exported="false" />
         <activity
@@ -128,10 +137,6 @@
             android:exported="false" />
         <activity
             android:name=".RegisterAsParent"
-            android:exported="false" />
-
-        <activity
-            android:name=".DailyCheckIn"
             android:exported="false" />
         <activity
             android:name=".DailyLogActivity"
