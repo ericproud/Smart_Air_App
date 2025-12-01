@@ -50,5 +50,25 @@
         <item name="android:actionMenuTextColor">@color/md_theme_primary</item>
     </style>
 
+    <style name="SharedWithProviderChip" parent="Widget.Material3.Chip.Assist">
+        <item name="chipBackgroundColor">@color/md_theme_primaryContainer</item>
+        <item name="chipSurfaceColor">@color/md_theme_primaryContainer</item>
+
+        <item name="android:textColor">@color/md_theme_onPrimaryContainer</item>
+        <item name="chipIconTint">@color/md_theme_onPrimaryContainer</item>
+
+        <item name="chipIcon">@drawable/visibility_24px</item>
+        <item name="android:textSize">12sp</item>
+
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+
+        <!-- Disable interactions (this is a pure status tag) -->
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
+        <item name="android:checkable">false</item>
+    </style>
+
+
     <style name="Theme.Smart_Air_App" parent="Base.Theme.Smart_Air_App" />
 </resources>

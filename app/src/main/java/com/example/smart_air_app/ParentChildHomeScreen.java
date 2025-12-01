@@ -15,14 +15,22 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.inventory.InventoryActivity;
+import com.example.smart_air_app.log_rescue_attempt.FirebaseRescueAttemptRepository;
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
-import com.example.smart_air_app.utils.NotificationUtils;
+import com.example.smart_air_app.log_rescue_attempt.RescueAttempt;
+import com.example.smart_air_app.log_rescue_attempt.RescueAttemptRepository;
 import com.example.smart_air_app.utils.Logout;
 import com.google.android.material.button.MaterialButton;
 
-import controller_log.ControllerLoggingScreen;
-import controller_log.PEFZones;
-import controller_log.PEFZonesDatabase;
+import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
+import com.example.smart_air_app.controller_log.PEFZones;
+import com.example.smart_air_app.controller_log.PEFZonesDatabase;
+import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class ParentChildHomeScreen extends AppCompatActivity {
 
@@ -55,6 +63,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         MaterialButton summaryChartsButton = findViewById(R.id.btnSummaryCharts);
         MaterialButton manageAccountButton = findViewById(R.id.btnManageAccount);
         MaterialButton incidentLogButton = findViewById(R.id.btnIncidentLog);
+        MaterialButton medicineLogsButton = findViewById(R.id.btnMedicineLog);
         MaterialButton logoutButton = findViewById(R.id.btnLogout);
         MaterialButton setPBButton = findViewById(R.id.setPBButton);
 
@@ -65,10 +74,58 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
         childNameText.setText(childName);
 
+        var rescueRepo = new FirebaseRescueAttemptRepository();
+        rescueRepo.setUid(childUserId);
+        rescueRepo.fetchRescueAttempt(new RescueAttemptRepository.FetchCallback() {
+
+            private void setLastRescueTime(List<RescueAttempt> attempts) {
+                if (attempts.isEmpty()) lastRescueTime.setText("N/A");
+                else {
+                    long max = attempts.get(0).getTimestamp();
+                    for (RescueAttempt attempt : attempts) {
+                        max = Math.max(max, attempt.getTimestamp());
+                    }
+                    long now = System.currentTimeMillis();
+                    long diff = now - max;
+
+                    long days = diff / (1000 * 60 * 60 * 24);
+                    long hours = (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+
+                    String ago;
+                    if (days == 0) {
+                        ago = String.format("%dh ago", hours);
+                    } else {
+                        ago = String.format("%dd %dh ago", days, hours);
+                    }
+                    lastRescueTime.setText(ago);
+                }
+            }
+
+            private void setWeeklyRescueCount(List<RescueAttempt> attempts) {
+                if (attempts.isEmpty()) lastRescueTime.setText("0");
+
+                long now = System.currentTimeMillis();
+                List<RescueAttempt> filtered = attempts.stream()
+                        .filter(rescueAttempt -> now - rescueAttempt.getTimestamp() <= 1000L * 60 * 60 * 24 * 7)
+                        .collect(Collectors.toList());
+
+                weeklyRescueCount.setText(String.valueOf(filtered.size()));
+            }
+
+            @Override
+            public void onSuccess(List<RescueAttempt> attempts) {
+                setLastRescueTime(attempts);
+                setWeeklyRescueCount(attempts);
+            }
+
+            @Override
+            public void onError(String e) {}
+        });
+
         emergencyButton.setOnClickListener(view -> {
             startActivityWithChildInfo(TriageScreen.class);
         });
-        
+
         logControllerButton.setOnClickListener(v-> {
             startActivityWithChildInfo(ControllerLoggingScreen.class);
         });
@@ -135,6 +192,10 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             });
 
             build.show();
+        });
+
+        medicineLogsButton.setOnClickListener(view -> {
+            startActivityWithChildInfo(MedicineLogs.class);
         });
     }
 

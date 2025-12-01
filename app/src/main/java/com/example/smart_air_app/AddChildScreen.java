@@ -136,12 +136,15 @@ public class AddChildScreen extends AppCompatActivity {
                                 .child(parentUID)
                                 .child("children")
                                 .child(uID);
+                        DatabaseReference zoneRef = FirebaseDatabase.getInstance().getReference("Users").child("Zones");
 
                         triageRef.setValue(null).addOnSuccessListener(aVoid1 -> {
                             rescueRef.setValue(null).addOnSuccessListener(aVoid2 -> {
-                                controllerRef.setValue(null).addOnSuccessListener(aVoid4 -> {
-                                    childRef.setValue(true).addOnSuccessListener(aVoid3 -> {
-                                        FirebaseDatabaseListeners.getInstance().attachListeners(uID, firstName + " " + lastName);
+                                controllerRef.setValue(null).addOnSuccessListener(aVoid3 -> {
+                                    childRef.setValue(true).addOnSuccessListener(aVoid4 -> {
+                                        zoneRef.setValue(null).addOnSuccessListener(aVoid5 -> {
+                                            FirebaseDatabaseListeners.getInstance().attachListeners(uID, firstName + " " + lastName);
+                                        }).addOnFailureListener(e -> {});
                                     }).addOnFailureListener(e -> {});
                                 }).addOnFailureListener(e -> {});
                             }).addOnFailureListener(e -> {});

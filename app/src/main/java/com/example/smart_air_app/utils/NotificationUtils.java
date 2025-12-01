@@ -64,9 +64,6 @@ public class NotificationUtils {
         }
     }
 
-    /**
-     * Safely show a notification.
-     */
     public static void show(Context context, String title, String message) {
         ensurePermissionAndChannel(context);
 
@@ -81,9 +78,6 @@ public class NotificationUtils {
         manager.notify((int) System.currentTimeMillis(), builder.build());
     }
 
-    /**
-     * Optional: check if notifications are disabled on this device.
-     */
     public static boolean areNotificationsEnabled(Context context) {
         return NotificationManagerCompat.from(context).areNotificationsEnabled();
     }

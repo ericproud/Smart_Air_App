@@ -1,68 +1,29 @@
-package com.example.smart_air_app;
+package com.example.smart_air_app.utils;
 
+import static androidx.browser.customtabs.CustomTabsClient.getPackageName;
+
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
+
 import java.util.HashMap;
-import java.util.Map;
 
-public class ProviderReportScreen extends AppCompatActivity {
-    String childUID;
-    String childName;
-    TextView screenName;
-    HashMap<String, String> mapOfFields;
-    DatabaseReference dbRef;
-    int fieldsToLoad = 1;
-    int fieldsLoaded = 0;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_provider_report_screen);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        dbRef = FirebaseDatabase.getInstance().getReference();
-        childUID = getIntent().getStringExtra("patientUID");
-        childName = getIntent().getStringExtra("patientName");
-        screenName = findViewById(R.id.screenName);
-        screenName.setText(childName + "'s Report");
-        mapOfFields = new HashMap<>();
-
-        setFields();
-    }
-
-    void buildPDF() {
+public class BuildPDFs {
+    public static void buildProviderReport(Context context, DatabaseReference dbRef, String childUID, String childName, HashMap<String, String> mapOfFields) {
         dbRef.child("Permissions").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot permissionsSnapshot) {
@@ -79,16 +40,6 @@ public class ProviderReportScreen extends AppCompatActivity {
                 // Paint for regular text
                 Paint textPaint = new Paint();
                 textPaint.setTextSize(16);
-
-                mapOfFields.put("Shortness of breath", "8");
-                mapOfFields.put("Chest tightness", "5");
-                mapOfFields.put("Chest pain", "3");
-                mapOfFields.put("Wheezing", "1");
-                mapOfFields.put("Trouble sleeping", "0");
-                mapOfFields.put("Coughing", "3");
-                mapOfFields.put("Other", "22");
-                mapOfFields.put("Controller Adherence", "0%");
-                mapOfFields.put("Rescue Attempts Per Day", "0");
 
                 canvas.drawText("Summary Report: " + childName, 50, 50, titlePaint);
 
@@ -108,7 +59,7 @@ public class ProviderReportScreen extends AppCompatActivity {
 
                 if (permissionsSnapshot.child("symptoms").getValue(Boolean.class) || permissionsSnapshot.child("summary charts").getValue(Boolean.class)) {
                     canvas.drawText("Symptom Burdens (days): ", 50, 200, textPaint);
-                    drawSymptomHorizontalBarGraph(canvas, 50, 220, 500, 300);
+                    drawSymptomHorizontalBarGraph(mapOfFields, canvas, 50, 220, 500, 300);
                 }
                 else {
                     canvas.drawText("Symptom Burdens (days): NOT PROVIDED", 50, 200, textPaint);
@@ -206,7 +157,7 @@ public class ProviderReportScreen extends AppCompatActivity {
                 summaryPDF.finishPage(page2);
 
                 String timeStamp = String.valueOf(System.currentTimeMillis());
-                File file = new File(getExternalFilesDir(null), "MyGeneratedPDF" + timeStamp + ".pdf");
+                File file = new File(context.getExternalFilesDir(null), "MyGeneratedPDF" + timeStamp + ".pdf");
 
                 try {
                     summaryPDF.writeTo(new FileOutputStream(file));
@@ -215,15 +166,15 @@ public class ProviderReportScreen extends AppCompatActivity {
 
                 summaryPDF.close();
 
-                Uri uri = FileProvider.getUriForFile(ProviderReportScreen.this,
-                        getPackageName() + ".provider", file);
+                Uri uri = FileProvider.getUriForFile(context,
+                        context.getPackageName() + ".provider", file);
 
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setDataAndType(uri, "application/pdf");
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 try {
-                    startActivity(intent);
+                    context.startActivity(intent);
                 } catch (Exception e) {
                 }
             }
@@ -232,21 +183,8 @@ public class ProviderReportScreen extends AppCompatActivity {
             }
         });
     }
-    void setFields() {
-        fieldsToLoad = 1;
-        fieldsLoaded = 0;
-        //setControllerAdherence();
-        buildPDF();
-    }
 
-    void setFieldLoaded() {
-        fieldsLoaded++;
-        if (fieldsLoaded == fieldsToLoad) {
-            buildPDF();
-        }
-    }
-
-    void drawPEFDistribution(Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
+    static void drawPEFDistribution(Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
         // PLACEHOLDER DATA TO BE REPLACED
         float[][] zoneDistribution = {
                 {60, 30, 10},
@@ -315,7 +253,7 @@ public class ProviderReportScreen extends AppCompatActivity {
         }
     }
 
-    void drawSymptomHorizontalBarGraph(Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
+    static void drawSymptomHorizontalBarGraph(HashMap<String, String> mapOfFields, Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
         String[] symptoms = {
                 "Shortness of breath", "Chest tightness", "Chest pain",
                 "Wheezing", "Trouble sleeping", "Coughing", "Other"
@@ -384,7 +322,7 @@ public class ProviderReportScreen extends AppCompatActivity {
         drawSymptomLegend(canvas, startX, startY + (symptoms.length * (barHeight + barSpacing)) + 20, symptoms, symptomColors);
     }
 
-    void drawSymptomLegend(Canvas canvas, float startX, float startY, String[] symptoms, int[] colors) {
+    static void drawSymptomLegend(Canvas canvas, float startX, float startY, String[] symptoms, int[] colors) {
         Paint textPaint = new Paint();
         textPaint.setTextSize(14);
         textPaint.setColor(Color.BLACK);
