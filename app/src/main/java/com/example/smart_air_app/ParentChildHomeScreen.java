@@ -96,8 +96,6 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             }
 
             private void setWeeklyRescueCount(List<RescueAttempt> attempts) {
-                if (attempts.isEmpty()) lastRescueTime.setText("0");
-
                 long now = System.currentTimeMillis();
                 List<RescueAttempt> filtered = attempts.stream()
                         .filter(rescueAttempt -> now - rescueAttempt.getTimestamp() <= 1000L * 60 * 60 * 24 * 7)
