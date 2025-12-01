@@ -2,6 +2,8 @@ package com.example.smart_air_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -19,6 +21,7 @@ import com.example.smart_air_app.log_rescue_attempt.FirebaseRescueAttemptReposit
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.log_rescue_attempt.RescueAttempt;
 import com.example.smart_air_app.log_rescue_attempt.RescueAttemptRepository;
+import com.example.smart_air_app.utils.BuildPDFs;
 import com.example.smart_air_app.utils.Logout;
 import com.google.android.material.button.MaterialButton;
 
@@ -26,6 +29,8 @@ import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
 import com.example.smart_air_app.controller_log.PEFZones;
 import com.example.smart_air_app.controller_log.PEFZonesDatabase;
 import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Comparator;
 import java.util.List;
@@ -148,6 +153,12 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
         logoutButton.setOnClickListener(v -> {
             Logout.logout(this);
+        });
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        summaryChartsButton.setOnClickListener(v -> {
+            BuildPDFs.buildProviderReport(ParentChildHomeScreen.this, dbRef, childUserId, childName);
+            Log.d("ParentChildHomeScreen", ">>> buildProviderReport called for child: " + childName);
         });
 
         //loads in teh zone from the database and updates the text view

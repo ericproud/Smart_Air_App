@@ -9,9 +9,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import com.example.smart_air_app.log_rescue_attempt.FirebaseRescueAttemptRepository;
+import com.example.smart_air_app.log_rescue_attempt.RescueAttempt;
+import com.example.smart_air_app.log_rescue_attempt.RescueAttemptRepository;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,188 +25,258 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class BuildPDFs {
-    public static void buildProviderReport(Context context, DatabaseReference dbRef, String childUID, String childName, HashMap<String, String> mapOfFields) {
-        dbRef.child("Permissions").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot permissionsSnapshot) {
-                PdfDocument summaryPDF = new PdfDocument();
-                PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
-                PdfDocument.Page page = summaryPDF.startPage(pageInfo);
-                Canvas canvas = page.getCanvas();
+    private static final String TAG = "BuildPDFs";
 
-                // Paint for title
-                Paint titlePaint = new Paint();
-                titlePaint.setTextSize(24);
-                titlePaint.setFakeBoldText(true);
+    public static void buildProviderReport(Context context, DatabaseReference dbRef, String childUID, String childName) {
+        Log.d(TAG, "Starting PDF generation for: " + childName);
 
-                // Paint for regular text
-                Paint textPaint = new Paint();
-                textPaint.setTextSize(16);
+        // Step 1: get today's date minus sharing timeframe
+        dbRef.child("Permissions").child(childUID).get().addOnSuccessListener(permissionsSnapshot -> {
+            Integer timeframe = permissionsSnapshot.child("sharing timeframe").getValue(Integer.class);
+            if (timeframe == null) {
+                timeframe = 3; // Set default
+                Log.d(TAG, "Using default timeframe: 3 months");
+            }
+            String startDate = getDateMinusMonths(timeframe);
+            Log.d(TAG, "Start date: " + startDate);
 
-                canvas.drawText("Summary Report: " + childName, 50, 50, titlePaint);
+            // Alex's helper function for adherence
+            AdherenceCalculator.CalculateAdherence(childUID, startDate, adherencePercent -> {
+                Log.d(TAG, "Adherence: " + adherencePercent + "%");
 
-                if (permissionsSnapshot.child("controller adherence summary").getValue(Boolean.class)) {
-                    canvas.drawText("Controller Adherence: " + mapOfFields.get("Controller Adherence"), 50, 100, textPaint);
-                }
-                else {
-                    canvas.drawText("Controller Adherence: NOT PROVIDED", 50, 100, textPaint);
-                }
+                // Alex's helper function for getting pef
+                PEFHistoryCalculator.CalculateAdherence(childUID, startDate, PEFDistribution -> {
+                    Log.d(TAG, "Got PEF distribution, length: " + PEFDistribution.length);
 
-                if (permissionsSnapshot.child("rescue logs").getValue(Boolean.class)) {
-                    canvas.drawText("Rescue Attempts Per Day: " + mapOfFields.get("Controller Adherence"), 50, 150, textPaint);
-                }
-                else {
-                    canvas.drawText("Rescue Attempts Per Day: NOT PROVIDED", 50, 150, textPaint);
-                }
+                    // Store necessary fields from the triage branch as a snapshot
+                    dbRef.child("TriageEntries").child(childUID).get().addOnSuccessListener(triageSnapshot -> {
+                        Log.d(TAG, "Got triage snapshot");
 
-                if (permissionsSnapshot.child("symptoms").getValue(Boolean.class) || permissionsSnapshot.child("summary charts").getValue(Boolean.class)) {
-                    canvas.drawText("Symptom Burdens (days): ", 50, 200, textPaint);
-                    drawSymptomHorizontalBarGraph(mapOfFields, canvas, 50, 220, 500, 300);
-                }
-                else {
-                    canvas.drawText("Symptom Burdens (days): NOT PROVIDED", 50, 200, textPaint);
-                }
+                        HashMap<String, String> mapOfFields = new HashMap<>();
+                        mapOfFields.put("Shortness of breath", "8");
+                        mapOfFields.put("Chest tightness", "5");
+                        mapOfFields.put("Chest pain", "3");
+                        mapOfFields.put("Wheezing", "1");
+                        mapOfFields.put("Trouble sleeping", "0");
+                        mapOfFields.put("Coughing", "3");
+                        mapOfFields.put("Other", "22");
+                        mapOfFields.put("Rescue Attempts Per Day", "2"); // Fixed key
 
-                if (permissionsSnapshot.child("pef").getValue(Boolean.class) || permissionsSnapshot.child("summary charts").getValue(Boolean.class)) {
-                    canvas.drawText("Monthly PEF Zone Distribution: ", 50, 540, textPaint);
-                    drawPEFDistribution(canvas, 50, 550, 560, 200); // More space on second page
-                }
-                else {
-                    canvas.drawText("Monthly PEF Zone Distribution: NOT PROVIDED", 50, 540, textPaint);
-                }
+                        // Make pdf with all the needed info
+                        createPDF(context, childUID, childName, mapOfFields, startDate,
+                                permissionsSnapshot, adherencePercent, PEFDistribution, triageSnapshot);
 
-                summaryPDF.finishPage(page);
-
-                PdfDocument.PageInfo page2Info = new PdfDocument.PageInfo.Builder(595, 842, 2).create();
-                PdfDocument.Page page2 = summaryPDF.startPage(page2Info);
-                Canvas canvas2 = page2.getCanvas();
-
-                if (permissionsSnapshot.child("triage incidents").getValue(Boolean.class)) {
-                    canvas2.drawText("Notable Triage Incidents: ", 50, 50, textPaint);
-                    dbRef.child("TriageEntries").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot triageSnapshot) {
-                            float currentY = 100; // Start below the title
-
-                            Paint textPaint = new Paint();
-                            textPaint.setTextSize(12);
-                            textPaint.setColor(Color.BLACK);
-
-                            Paint labelPaint = new Paint();
-                            labelPaint.setTextSize(12);
-                            labelPaint.setColor(Color.BLACK);
-                            labelPaint.setFakeBoldText(true);
-
-                            int numTriages = 0;
-                            // Loop through each triage ID
-                            for (DataSnapshot triageEntry : triageSnapshot.getChildren()) {
-                                if (!triageSnapshot.exists() || triageSnapshot.getChildrenCount() == 0) {
-                                    canvas2.drawText("No triage incidents recorded", 70, currentY, textPaint);
-                                }
-                                if (numTriages > 3) {
-                                    return;
-                                }
-                                // Get triage data
-                                Boolean blueGrayLipsNails = triageEntry.child("BlueGrayLipsNails").getValue(Boolean.class);
-                                Boolean noFullSentences = triageEntry.child("NoFullSentences").getValue(Boolean.class);
-                                Long PEF = triageEntry.child("PEF").getValue(Long.class);
-                                Boolean recentRescueDone = triageEntry.child("RecentRescueDone").getValue(Boolean.class);
-                                Boolean retractions = triageEntry.child("Retractions").getValue(Boolean.class);
-                                Boolean emergencyStatus = triageEntry.child("emergencyStatus").getValue(Boolean.class);
-
-                                if (PEF == null) {
-                                    return;
-                                }
-                                if (!emergencyStatus) {
-                                    return;
-                                }
-
-                                // Draw triage details
-                                canvas2.drawText("PEF: " + PEF, 100, currentY, textPaint);
-                                currentY += 20;
-
-                                canvas2.drawText("Emergency: " + (emergencyStatus ? "YES" : "NO"), 100, currentY, textPaint);
-                                currentY += 20;
-
-                                canvas2.drawText("Blue/Gray Lips/Nails: " + (blueGrayLipsNails ? "YES" : "NO"), 100, currentY, textPaint);
-                                currentY += 20;
-
-                                canvas2.drawText("Cannot Speak Full Sentences" + (noFullSentences ? "YES" : "NO"), 90, currentY, textPaint);
-                                currentY += 20;
-
-                                canvas2.drawText("Chest Retractions" + (retractions ? "YES" : "NO"), 90, currentY, textPaint);
-                                currentY += 20;
-
-                                canvas2.drawText("Recent Rescue Controller Use: " + (recentRescueDone ? "YES" : "NO"), 90, currentY, textPaint);
-                                currentY += 20;
-
-                                currentY += 20; // Space between triage entries
-
-                                numTriages++;
-                            }
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError error) {
-                        }
+                    }).addOnFailureListener(e -> {
+                        Log.e(TAG, "Error fetching triage: " + e.getMessage(), e);
+                        Toast.makeText(context, "Error fetching data", Toast.LENGTH_SHORT).show();
                     });
-                }
-                else {
-                    canvas2.drawText("Notable Triage Incidents: NOT PROVIDED", 50, 200, textPaint);
-                }
 
+                });
+            });
 
-
-                summaryPDF.finishPage(page2);
-
-                String timeStamp = String.valueOf(System.currentTimeMillis());
-                File file = new File(context.getExternalFilesDir(null), "MyGeneratedPDF" + timeStamp + ".pdf");
-
-                try {
-                    summaryPDF.writeTo(new FileOutputStream(file));
-                } catch (Exception e) {
-                }
-
-                summaryPDF.close();
-
-                Uri uri = FileProvider.getUriForFile(context,
-                        context.getPackageName() + ".provider", file);
-
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setDataAndType(uri, "application/pdf");
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                try {
-                    context.startActivity(intent);
-                } catch (Exception e) {
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-            }
+        }).addOnFailureListener(e -> {
+            Log.e(TAG, "Error fetching permissions: " + e.getMessage(), e);
+            Toast.makeText(context, "Error loading permissions", Toast.LENGTH_SHORT).show();
         });
     }
 
-    static void drawPEFDistribution(Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
-        // PLACEHOLDER DATA TO BE REPLACED
-        float[][] zoneDistribution = {
-                {60, 30, 10},
-                {50, 40, 10},
-                {70, 20, 10},
-                {40, 40, 20},
-                {80, 15, 5},
-                {65, 25, 10}
-        };
+    private static void createPDF(Context context, String childUID, String childName,
+                                  HashMap<String, String> mapOfFields, String startDate,
+                                  DataSnapshot permissionsSnapshot, double adherencePercent,
+                                  int[][] PEFDistribution, DataSnapshot triageSnapshot) {
 
-        // PLACEHOLDER MONTHS TO BE REPLACED
-        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun"};
+        PdfDocument summaryPDF = new PdfDocument();
 
+        try {
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
+            PdfDocument.Page page = summaryPDF.startPage(pageInfo);
+            Canvas canvas = page.getCanvas();
+
+            // Paint for title
+            Paint titlePaint = new Paint();
+            titlePaint.setTextSize(24);
+            titlePaint.setFakeBoldText(true);
+            titlePaint.setColor(Color.BLACK);
+
+            // Paint for text
+            Paint textPaint = new Paint();
+            textPaint.setTextSize(16);
+            textPaint.setColor(Color.BLACK);
+
+            var rescueRepo = new FirebaseRescueAttemptRepository();
+            rescueRepo.setUid(childUID);
+
+            rescueRepo.fetchRescueAttempt(new RescueAttemptRepository.FetchCallback() {
+                private void setWeeklyRescueCount(List<RescueAttempt> attempts) {
+                    long now = System.currentTimeMillis();
+                    List<RescueAttempt> filtered = attempts.stream()
+                            .filter(rescueAttempt -> now - rescueAttempt.getTimestamp() <= 1000L * 60 * 60 * 24 * 7)
+                            .collect(Collectors.toList());
+
+                    mapOfFields.put("Rescue Attempts Per Day", String.valueOf(filtered.size()));
+                }
+
+                @Override
+                public void onSuccess(List<RescueAttempt> attempts) {
+                    setWeeklyRescueCount(attempts);
+                }
+
+                @Override
+                public void onError(String e) {}
+            });
+
+            canvas.drawText("Summary Report: " + childName, 50, 50, titlePaint);
+
+            if (permissionsSnapshot.child("controller adherence summary").getValue(Boolean.class)) {
+                canvas.drawText("Controller Adherence: " + adherencePercent * 100 + "%", 50, 100, textPaint);
+            } else {
+                canvas.drawText("Controller Adherence: NOT PROVIDED", 50, 100, textPaint);
+            }
+
+            if (permissionsSnapshot.child("rescue logs").getValue(Boolean.class)) {
+                // FIXED: Using correct key
+                String rescueAttempts = mapOfFields.get("Rescue Attempts Per Day");
+                canvas.drawText("Rescue Attempts Per Week: " + mapOfFields.get("Rescue Attempts Per Day"), 50, 150, textPaint);
+            } else {
+                canvas.drawText("Rescue Attempts Per Day: NOT PROVIDED", 50, 150, textPaint);
+            }
+
+            if (permissionsSnapshot.child("symptoms").getValue(Boolean.class)) {
+                canvas.drawText("Symptom Burdens (days): ", 50, 200, textPaint);
+                drawSymptomHorizontalBarGraph(mapOfFields, canvas, 50, 220, 500, 300);
+            } else {
+                canvas.drawText("Symptom Burdens (days): NOT PROVIDED", 50, 200, textPaint);
+            }
+
+            if (permissionsSnapshot.child("pef").getValue(Boolean.class)) {
+                canvas.drawText("Monthly PEF Zone Distribution: ", 50, 540, textPaint);
+                // Conversion for drawing
+                float[][] distribution = new float[PEFDistribution.length][3];
+                for (int i = 0; i < PEFDistribution.length; i++) {
+                    for (int j = 0; j < 3; j++) {
+                        distribution[i][j] = PEFDistribution[i][j];
+                    }
+                }
+                drawPEFDistribution(distribution, startDate, canvas, 50, 550, 560, 200);
+            } else {
+                canvas.drawText("Monthly PEF Zone Distribution: NOT PROVIDED", 50, 540, textPaint);
+            }
+
+            summaryPDF.finishPage(page);
+
+            PdfDocument.PageInfo page2Info = new PdfDocument.PageInfo.Builder(595, 842, 2).create();
+            PdfDocument.Page page2 = summaryPDF.startPage(page2Info);
+            Canvas canvas2 = page2.getCanvas();
+
+            canvas2.drawText("Notable Triage Incidents", 50, 50, titlePaint);
+
+            if (permissionsSnapshot.child("triage incidents").getValue(Boolean.class)) {
+                float currentY = 100;
+
+                Paint triageTextPaint = new Paint();
+                triageTextPaint.setTextSize(12);
+                triageTextPaint.setColor(Color.BLACK);
+
+                if (!triageSnapshot.exists() || triageSnapshot.getChildrenCount() == 0) {
+                    canvas2.drawText("No triage incidents recorded", 70, currentY, triageTextPaint);
+                } else {
+                    int numTriages = 0;
+
+                    for (DataSnapshot triageEntry : triageSnapshot.getChildren()) {
+                        if (numTriages >= 3) {
+                            break;
+                        }
+
+                        Boolean blueGrayLipsNails = triageEntry.child("BlueGrayLipsNails").getValue(Boolean.class);
+                        Boolean noFullSentences = triageEntry.child("NoFullSentences").getValue(Boolean.class);
+                        Long PEF = triageEntry.child("PEF").getValue(Long.class);
+                        Boolean recentRescueDone = triageEntry.child("RecentRescueDone").getValue(Boolean.class);
+                        Boolean retractions = triageEntry.child("Retractions").getValue(Boolean.class);
+                        Boolean emergencyStatus = triageEntry.child("emergencyStatus").getValue(Boolean.class);
+
+                        if (PEF == null) {
+                            continue;
+                        }
+                        if (emergencyStatus == null || !emergencyStatus) {
+                            continue;
+                        }
+
+                        canvas2.drawText("PEF: " + PEF, 100, currentY, textPaint);
+                        currentY += 20;
+
+                        canvas2.drawText("Emergency: " + (emergencyStatus ? "YES" : "NO"), 100, currentY, textPaint);
+                        currentY += 20;
+
+                        canvas2.drawText("Blue/Gray Lips/Nails: " + (blueGrayLipsNails ? "YES" : "NO"), 100, currentY, textPaint);
+                        currentY += 20;
+
+                        canvas2.drawText("Cannot Speak Full Sentences" + (noFullSentences ? "YES" : "NO"), 90, currentY, textPaint);
+                        currentY += 20;
+
+                        canvas2.drawText("Chest Retractions" + (retractions ? "YES" : "NO"), 90, currentY, textPaint);
+                        currentY += 20;
+
+                        canvas2.drawText("Recent Rescue Controller Use: " + (recentRescueDone ? "YES" : "NO"), 90, currentY, textPaint);
+                        currentY += 20;
+
+                        currentY += 20;
+
+                        numTriages++;
+                    }
+                    if (numTriages == 0) {
+                        canvas2.drawText("No emergency triage incidents found", 70, currentY, triageTextPaint);
+                    }
+                }
+            } else {
+                canvas2.drawText("Notable Triage Incidents: NOT PROVIDED", 50, 200, textPaint);
+            }
+
+            summaryPDF.finishPage(page2);
+            String timeStamp = String.valueOf(System.currentTimeMillis());
+            File file = new File(context.getExternalFilesDir(null), "MyGeneratedPDF" + timeStamp + ".pdf");
+
+            try {
+                summaryPDF.writeTo(new FileOutputStream(file));
+            } catch (Exception e) {
+            }
+
+            summaryPDF.close();
+
+            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            try {
+                context.startActivity(intent);
+            } catch (Exception e) {
+            }
+        }
+        catch (Exception e) {
+        }
+    }
+
+    static void populateMapOfFields() {
+
+    }
+
+    static void drawPEFDistribution(float[][] zoneDistribution, String startDate, Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
         int[] zoneColors = {Color.GREEN, Color.YELLOW, Color.RED};
 
-        int monthCount = months.length;
+        int monthCount = zoneDistribution.length;
         int zonesPerMonth = 3;
+
+        String[] monthLabels = getMonthLabels(startDate, monthCount);
 
         // Calculate dimensions
         float groupWidth = chartWidth / monthCount;
@@ -229,7 +304,7 @@ public class BuildPDFs {
             monthPaint.setTextSize(14);
             monthPaint.setColor(Color.BLACK);
             monthPaint.setTextAlign(Paint.Align.CENTER);
-            canvas.drawText(months[month], groupStartX + (groupWidth / 2), startY + chartHeight + 20, monthPaint);
+            canvas.drawText(monthLabels[month], groupStartX + (groupWidth / 2), startY + chartHeight + 20, monthPaint);
         }
 
         // Y axis
@@ -273,9 +348,15 @@ public class BuildPDFs {
         int[] symptomCounts = new int[symptoms.length];
         for (int i = 0; i < symptoms.length; i++) {
             try {
-                symptomCounts[i] = Integer.parseInt(mapOfFields.get(symptoms[i]));
+                String countStr = mapOfFields.get(symptoms[i]);
+                if (countStr != null) {
+                    symptomCounts[i] = Integer.parseInt(countStr);
+                } else {
+                    symptomCounts[i] = 0;
+                }
             } catch (NumberFormatException e) {
                 symptomCounts[i] = 0;
+                Log.w(TAG, "Could not parse symptom count for: " + symptoms[i]);
             }
         }
 
@@ -341,5 +422,41 @@ public class BuildPDFs {
             canvas.drawRect(xPos, yPos, xPos + 12, yPos + 12, colorPaint);
             canvas.drawText(symptoms[i], xPos + 18, yPos + 10, textPaint);
         }
+    }
+
+    static String getDateMinusMonths(int monthsBack) {
+        Calendar cal = Calendar.getInstance();
+
+        // subtract months safely
+        cal.add(Calendar.MONTH, -monthsBack);
+
+        // formatter
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd yy", Locale.getDefault());
+
+        return format.format(cal.getTime());
+    }
+
+    // Make array of months for labels based off of start date
+    static String[] getMonthLabels(String startDate, int timeframe) {
+        String[] months = new String[timeframe];
+
+        // Parse start date
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd yy", Locale.ENGLISH);
+        Calendar cal = Calendar.getInstance();
+        try {
+            if (startDate != null) {
+                cal.setTime(format.parse(startDate));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error parsing start date: " + startDate, e);
+        }
+
+        SimpleDateFormat monthFormat = new SimpleDateFormat("MMM", Locale.ENGLISH);
+        for (int i = 0; i < timeframe; i++) {
+            months[i] = monthFormat.format(cal.getTime());
+            cal.add(Calendar.MONTH, 1);
+        }
+
+        return months;
     }
 }

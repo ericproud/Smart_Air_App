@@ -39,44 +39,49 @@ public class PEFHistoryCalculator {
     public static LocalDate dateParseHelp(String date) {
         String[] temp = date.trim().split(" ");
 
-        int month = 0;
+        String monthStr = temp[0].toUpperCase();
+        int month = 1;
         int day = Integer.parseInt(temp[1]);
         int year = Integer.parseInt(temp[2]);
 
-        if (temp[0].equals("JAN")) {
+        if (year < 100) {
+            year += 2000;
+        }
+
+        if (monthStr.equals("JAN")) {
             month = 1;
         }
-        else if (temp[0].equals("FEB")) {
+        else if (monthStr.equals("FEB")) {
             month = 2;
         }
-        else if (temp[0].equals("MAR")) {
+        else if (monthStr.equals("MAR")) {
             month = 3;
         }
-        else if (temp[0].equals("APR")) {
+        else if (monthStr.equals("APR")) {
             month = 4;
         }
-        else if (temp[0].equals("MAY")) {
+        else if (monthStr.equals("MAY")) {
             month = 5;
         }
-        else if (temp[0].equals("JUN")) {
+        else if (monthStr.equals("JUN")) {
             month = 6;
         }
-        else if (temp[0].equals("JUL")) {
+        else if (monthStr.equals("JUL")) {
             month = 7;
         }
-        else if (temp[0].equals("AUG")) {
+        else if (monthStr.equals("AUG")) {
             month = 8;
         }
-        else if (temp[0].equals("SEP")) {
+        else if (monthStr.equals("SEP")) {
             month = 9;
         }
-        else if (temp[0].equals("OCT")) {
+        else if (monthStr.equals("OCT")) {
             month = 10;
         }
-        else if (temp[0].equals("NOV")) {
+        else if (monthStr.equals("NOV")) {
             month = 11;
         }
-        else if (temp[0].equals("DEC")) {
+        else if (monthStr.equals("DEC")) {
             month = 12;
         }
 
@@ -98,10 +103,29 @@ public class PEFHistoryCalculator {
         String today = DateValidator.getTodaysDate();
 
         //keys for the database query
-        String startKey = PEFZonesDatabase.keyHelper(date);
-        String endKey = PEFZonesDatabase.keyHelper(today);
+        String startKey = "";
+        String endKey = "";
 
-        //Local date versions of the times
+        try {
+            // Convert start date (MMM dd yy -> yyyymmdd)
+            LocalDate startDate = dateParseHelp(date);
+            startKey = String.format("%04d%02d%02d",
+                    startDate.getYear(),
+                    startDate.getMonthValue(),
+                    startDate.getDayOfMonth());
+
+            // Convert today date (MMM dd yy -> yyyymmdd)
+            LocalDate endDate = dateParseHelp(today);
+            endKey = String.format("%04d%02d%02d",
+                    endDate.getYear(),
+                    endDate.getMonthValue(),
+                    endDate.getDayOfMonth());
+        } catch (Exception e) {
+            android.util.Log.e("PEFHistoryCalculator", "Error converting dates", e);
+            result.setResult(new int[0][3]);
+            return;
+        }
+
         LocalDate startTime = dateParseHelp(date);
         LocalDate endTime = dateParseHelp(today);
 
