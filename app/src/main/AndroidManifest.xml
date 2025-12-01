@@ -88,6 +88,12 @@
             android:name=".ProviderOnboardingScreen1"
             android:exported="false" />
         <activity
+            android:name=".ProviderOnboardingScreen2"
+            android:exported="false" />
+        <activity
+            android:name=".ProviderOnboardingScreen3"
+            android:exported="false" />
+        <activity
             android:name=".ChildHomeScreen"
             android:exported="false" />
         <activity
@@ -113,6 +119,12 @@
             android:exported="false" />
         <activity
             android:name=".log_rescue_attempt.LogRescueAttemptActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterAsDoctor"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterAsParent"
             android:exported="false" />
         <activity
             android:name=".StartScreen"

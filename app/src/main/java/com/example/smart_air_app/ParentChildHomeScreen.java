@@ -2,10 +2,13 @@ package com.example.smart_air_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,6 +22,9 @@ import com.example.smart_air_app.log_rescue_attempt.RescueAttemptRepository;
 import com.example.smart_air_app.utils.Logout;
 import com.google.android.material.button.MaterialButton;
 
+import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
+import com.example.smart_air_app.controller_log.PEFZones;
+import com.example.smart_air_app.controller_log.PEFZonesDatabase;
 import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
 
 import java.util.Comparator;
@@ -59,6 +65,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         MaterialButton incidentLogButton = findViewById(R.id.btnIncidentLog);
         MaterialButton medicineLogsButton = findViewById(R.id.btnMedicineLog);
         MaterialButton logoutButton = findViewById(R.id.btnLogout);
+        MaterialButton setPBButton = findViewById(R.id.setPBButton);
 
         TextView todaysZone = findViewById(R.id.textTodaysZone);
         TextView lastRescueTime = findViewById(R.id.textLastRescueTime);
@@ -73,24 +80,25 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
             private void setLastRescueTime(List<RescueAttempt> attempts) {
                 if (attempts.isEmpty()) lastRescueTime.setText("N/A");
+                else {
+                    long max = attempts.get(0).getTimestamp();
+                    for (RescueAttempt attempt : attempts) {
+                        max = Math.max(max, attempt.getTimestamp());
+                    }
+                    long now = System.currentTimeMillis();
+                    long diff = now - max;
 
-                long max = attempts.getFirst().getTimestamp();
-                for (RescueAttempt attempt: attempts) {
-                    max = Math.max(max, attempt.getTimestamp());
+                    long days = diff / (1000 * 60 * 60 * 24);
+                    long hours = (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+
+                    String ago;
+                    if (days == 0) {
+                        ago = String.format("%dh ago", hours);
+                    } else {
+                        ago = String.format("%dd %dh ago", days, hours);
+                    }
+                    lastRescueTime.setText(ago);
                 }
-                long now = System.currentTimeMillis();
-                long diff = now - max;
-
-                long days = diff / (1000 * 60 * 60 * 24);
-                long hours = (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
-
-                String ago;
-                if (days == 0) {
-                    ago = String.format("%dh ago", hours);
-                } else {
-                    ago = String.format("%dd %dh ago", days, hours);
-                }
-                lastRescueTime.setText(ago);
             }
 
             private void setWeeklyRescueCount(List<RescueAttempt> attempts) {
@@ -140,6 +148,50 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
         logoutButton.setOnClickListener(v -> {
             Logout.logout(this);
+        });
+
+        PEFZones zone = new PEFZones();
+
+        PEFZonesDatabase.loadPEFZones(childUserId, (pb, pef, date) -> {
+            zone.initializePEF(pb, pef, date);
+            todaysZone.setText(zone.calculateZone());
+        });
+
+        setPBButton.setOnClickListener(v -> {
+            AlertDialog.Builder build = new AlertDialog.Builder(this);
+            build.setTitle("Enter new PB");
+
+            final EditText inputText = new EditText(this);
+            inputText.setHint("Enter new PB (Eg 67)");
+            build.setView(inputText);
+
+            build.setPositiveButton("Confirm", (d, w) -> {
+                String input = inputText.getText().toString().trim();
+                try {
+                    int int_input = Integer.parseInt(input);
+
+                    //using a lambda expression to ensure asynch calls work
+                    PEFZonesDatabase.loadPEFZones(childUserId, (pb, highest_pef, date) ->{
+                        PEFZones zone2 = new PEFZones();
+
+                        zone2.setPB(pb);
+                        zone2.setHighest_pef(highest_pef);
+                        zone2.setDate(date);
+
+                        zone2.setPB(int_input);
+
+                        PEFZonesDatabase.savePEFZones(childUserId, zone2);
+                    });
+                }
+                catch (NumberFormatException e) {
+                }
+            });
+
+            build.setNegativeButton("Cancel", (d, w) -> {
+                d.cancel();
+            });
+
+            build.show();
         });
 
         medicineLogsButton.setOnClickListener(view -> {
