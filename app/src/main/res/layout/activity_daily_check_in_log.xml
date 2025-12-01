@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="411dp"
+        android:layout_height="wrap_content"
+        android:background="#415f91"
+        android:paddingStart="5sp"
+        android:text="How are you feeling?"
+        android:textAlignment="center"
+        android:textColor="#FFFDFD"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:layout_width="230dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginBottom="44dp"
+        android:text="Symptoms (Check all that apply)"
+        app:layout_constraintBottom_toTopOf="@+id/chkNight"
+        app:layout_constraintStart_toStartOf="@+id/chkActivity" />
+
+    <CheckBox
+        android:id="@+id/chkNight"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="Night Waking"
+        app:layout_constraintStart_toStartOf="@+id/chkActivity"
+        tools:layout_editor_absoluteY="123dp" />
+
+    <CheckBox
+        android:id="@+id/chkActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginBottom="50dp"
+        android:text="Activity Limitations"
+        app:layout_constraintBottom_toTopOf="@+id/triggerChipGroup"
+        app:layout_constraintStart_toStartOf="@+id/textView8"
+        app:layout_constraintTop_toBottomOf="@+id/chkCough" />
+
+    <CheckBox
+        android:id="@+id/chkCough"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="Cough / Wheeze"
+        app:layout_constraintBottom_toTopOf="@+id/chkActivity"
+        app:layout_constraintStart_toStartOf="@+id/chkActivity"
+        app:layout_constraintTop_toBottomOf="@+id/chkNight" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="Triggers Today"
+        app:layout_constraintBottom_toTopOf="@+id/triggerChipGroup"
+        app:layout_constraintStart_toStartOf="@+id/triggerChipGroup" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/triggerChipGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="180dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnSubmitLog"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.chip.Chip
+
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dust" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pollen" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Exercise" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cold Air" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Smoke" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <Button
+        android:id="@+id/btnSubmitLog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:text="Save Log"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="32dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

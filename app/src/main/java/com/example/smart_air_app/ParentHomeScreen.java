@@ -1,5 +1,8 @@
 package com.example.smart_air_app;
 
+import static com.example.smart_air_app.utils.AlertSender.showAlert;
+
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -42,7 +45,9 @@ public class ParentHomeScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_home_screen);
+        ///
 
+        ///
         container = findViewById(R.id.childButtonContainer);
         addChildButton = findViewById(R.id.addChildButton);
         logoutButton = findViewById(R.id.parentLogoutButton);
@@ -50,7 +55,7 @@ public class ParentHomeScreen extends AppCompatActivity {
         parentUID = FirebaseAuth.getInstance().getUid();
         dbRef = FirebaseDatabase.getInstance().getReference().child("Users");
         childUIDs = new ArrayList<>();
-
+        showAlert(parentUID, this);
         addChildButton.setOnClickListener(v -> {
             Intent intent = new Intent(ParentHomeScreen.this, AddChildScreen.class);
             startActivity(intent);

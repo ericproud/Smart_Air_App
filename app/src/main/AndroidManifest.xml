@@ -42,6 +42,7 @@
         <activity
             android:name=".TriageScreen"
             android:exported="false" />
+
         <activity
             android:name=".TemplateActivity"
             android:exported="false" />
@@ -99,6 +100,7 @@
         <activity
             android:name=".StreaksAndBadges"
             android:exported="false" />
+
         <activity
             android:name=".controller_log.ControllerLoggingScreen"
             android:exported="false" />
@@ -117,6 +119,7 @@
         <activity
             android:name=".VideoSBSInhallerUse"
             android:exported="false" />
+
         <activity
             android:name=".log_rescue_attempt.LogRescueAttemptActivity"
             android:exported="false" />
@@ -126,6 +129,14 @@
         <activity
             android:name=".RegisterAsParent"
             android:exported="false" />
+
+        <activity
+            android:name=".DailyCheckIn"
+            android:exported="false" />
+        <activity
+            android:name=".DailyLogActivity"
+            android:exported="false" />
+
         <activity
             android:name=".StartScreen"
             android:exported="true">
@@ -135,6 +146,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

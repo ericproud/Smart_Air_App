@@ -11,7 +11,10 @@ public class Child extends User{
     private String DOB;
     private boolean isOnboarded;
 
-    public Child(String firstName, String lastName, String height, String weight, String DOB, String userID) {
+    private String ParentUID;
+
+
+    public Child(String firstName, String lastName, String height, String weight, String DOB, String userID, String ParentUID) {
         super("child", firstName, lastName, userID);
 
         if(!DateValidator.isValidDate(DOB)) {
@@ -28,6 +31,7 @@ public class Child extends User{
         this.weight = weight;
         this.DOB = DOB;
         this.isOnboarded = false;
+        this.ParentUID = ParentUID;
     }
     public String getWeight() {
         return weight;
@@ -43,5 +47,9 @@ public class Child extends User{
 
     public String getHeight() {
         return height;
+    }
+
+    public String getParentUID() {
+        return ParentUID;
     }
 }
