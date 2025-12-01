@@ -2,7 +2,6 @@ package com.example.smart_air_app;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -14,11 +13,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.inventory.InventoryActivity;
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
-import com.example.smart_air_app.utils.NotificationUtils;
 import com.example.smart_air_app.utils.Logout;
 import com.google.android.material.button.MaterialButton;
 
-import controller_log.ControllerLoggingScreen;
+import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
 
 public class ParentChildHomeScreen extends AppCompatActivity {
 

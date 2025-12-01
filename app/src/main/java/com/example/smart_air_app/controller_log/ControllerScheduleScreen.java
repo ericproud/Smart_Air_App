@@ -1,4 +1,4 @@
-package controller_log;
+package com.example.smart_air_app.controller_log;
 
 import android.app.TimePickerDialog;
 import android.os.Bundle;

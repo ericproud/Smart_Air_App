@@ -16,9 +16,9 @@ import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.utils.Logout;
 import com.google.firebase.auth.FirebaseAuth;
 
-import controller_log.ControllerLoggingScreen;
-import controller_log.PEFZones;
-import controller_log.PEFZonesDatabase;
+import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
+import com.example.smart_air_app.controller_log.PEFZones;
+import com.example.smart_air_app.controller_log.PEFZonesDatabase;
 
 public class ChildHomeScreen extends AppCompatActivity {
 
