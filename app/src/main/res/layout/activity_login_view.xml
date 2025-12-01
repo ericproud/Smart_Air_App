@@ -11,7 +11,35 @@
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".LoginScreen">
+        tools:context=".LoginScreen"
+        tools:layout_editor_absoluteX="47dp"
+        tools:layout_editor_absoluteY="124dp">
+
+        <Button
+            android:id="@+id/buttonLoginBack"
+            android:layout_width="96dp"
+            android:layout_height="53dp"
+            android:text="Back"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.126"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.927" />
+
+        <Button
+            android:id="@+id/buttonRecoverAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="53dp"
+            android:text="Recover Account"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.809" />
 
         <EditText
             android:id="@+id/inputLoginUsernameOrEmail"
@@ -22,7 +50,7 @@
             android:inputType="text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.387" />
@@ -35,6 +63,7 @@
             android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.231" />
@@ -43,13 +72,14 @@
             android:id="@+id/AuthFailedText"
             android:layout_width="wrap_content"
             android:layout_height="29dp"
+            android:layout_marginBottom="4dp"
             android:text="Login failed, please try again"
             android:textAlignment="center"
             android:textColor="#F44336"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/inputLoginUsernameOrEmail"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
@@ -61,45 +91,23 @@
             android:inputType="text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.499" />
 
         <Button
             android:id="@+id/LoginButton"
-            android:layout_width="129dp"
-            android:layout_height="68dp"
+            android:layout_width="230dp"
+            android:layout_height="92dp"
             android:text="Log in"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.671" />
 
-        <Button
-            android:id="@+id/buttonRecoverAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recover Account"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.901"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.931" />
-
-        <Button
-            android:id="@+id/buttonLoginBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.102"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.931" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

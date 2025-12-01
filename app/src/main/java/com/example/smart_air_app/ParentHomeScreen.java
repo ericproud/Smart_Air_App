@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.smart_air_app.alerts.FirebaseDatabaseListeners;
 import com.example.smart_air_app.utils.NotificationUtils;
 import com.example.smart_air_app.utils.Logout;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -79,6 +81,20 @@ public class ParentHomeScreen extends AppCompatActivity {
         fdl.setContext(getApplicationContext());
         fdl.setParentId(FirebaseAuth.getInstance().getUid());
         fdl.attachListeners();
+
+        String parentUID = FirebaseAuth.getInstance().getUid();
+        TextView parentNameText = findViewById(R.id.parentNameText);
+        dbRef.child(parentUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot childSnapshot) {
+                String firstName = childSnapshot.child("firstName").getValue(String.class);
+                String lastName = childSnapshot.child("lastName").getValue(String.class);
+                String childName = firstName + " " + lastName;
+                parentNameText.setText(childName);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) { }
+        });
     }
 
     @Override
@@ -87,6 +103,7 @@ public class ParentHomeScreen extends AppCompatActivity {
         fdl.removeListeners();
 
     }
+
 
     void createChildButtons(List<String> childUIDs) {
         for (String childUID : childUIDs) {
@@ -106,20 +123,17 @@ public class ParentHomeScreen extends AppCompatActivity {
     }
 
     void createChildButton(String childUID, String childName) {
-        Button button = new Button(this);
-        button.setText(childName);
-        button.setTextColor(Color.WHITE);
+        MaterialButton button = new MaterialButton(this);
 
-        GradientDrawable drawable = new GradientDrawable();
-        drawable.setShape(GradientDrawable.RECTANGLE);
-        drawable.setColor(Color.parseColor("#673AB7"));
-        drawable.setCornerRadius(dpToPx(35));
-        button.setBackground(drawable);
+        button.setText(childName);
+        button.setTextColor(getResources().getColor(android.R.color.white));
         button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         button.setPadding(0, 0, 0, 0);
 
+        button.setBackgroundColor(Color.parseColor("#415f91"));
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                dpToPx(297), dpToPx(67)
+                dpToPx(300), dpToPx(70)
         );
         params.setMargins(dpToPx(55), dpToPx(20), dpToPx(56), 0);
         button.setLayoutParams(params);

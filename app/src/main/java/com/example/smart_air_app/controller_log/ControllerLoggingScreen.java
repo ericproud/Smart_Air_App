@@ -1,17 +1,15 @@
-package controller_log;
+package com.example.smart_air_app.controller_log;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,13 +19,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.R;
 import com.example.smart_air_app.VideoSBSInhallerUse;
-import com.example.smart_air_app.utils.AdherenceCalculator;
-import com.example.smart_air_app.utils.AdherenceResult;
 import com.example.smart_air_app.utils.DateValidator;
+import com.example.smart_air_app.utils.PEFHistory;
+import com.example.smart_air_app.utils.PEFHistoryCalculator;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class ControllerLoggingScreen extends AppCompatActivity {
     @Override
@@ -180,7 +176,10 @@ public class ControllerLoggingScreen extends AppCompatActivity {
 
             if (postInputAmount != -69) {
                 inputs.setPostInput(postInputAmount);
-                zone.setHighest_pef(postInputAmount);
+
+                if (DateValidator.getTodaysDate().equals(inputs.getDate())) {
+                    zone.setHighest_pef(postInputAmount);
+                }
             }
 
             if (validSubmission(inputs)) {
