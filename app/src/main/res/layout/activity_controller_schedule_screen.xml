@@ -7,23 +7,26 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/scheduleLabel"
-        android:layout_width="wrap_content"
+        android:id="@+id/textView5"
+        android:layout_width="411dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Schedule"
+        android:background="#415F91"
+        android:paddingStart="5sp"
+        android:text="Controller Use Schedule"
+        android:textAlignment="center"
+        android:textColor="#FFFDFD"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/controller_schedule"
         android:layout_width="389dp"
         android:layout_height="315dp"
-        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.727"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scheduleLabel" />
+        tools:layout_editor_absoluteY="49dp" />
 
     <Button
         android:id="@+id/back_button"

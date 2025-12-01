@@ -29,7 +29,7 @@
         android:id="@+id/textView6"
         android:layout_width="411dp"
         android:layout_height="wrap_content"
-        android:background="#673AB7"
+        android:background="#415f91"
         android:paddingStart="5sp"
         android:text="Technique Helper"
         android:textAlignment="center"
