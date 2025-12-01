@@ -67,6 +67,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         MaterialButton medicineLogsButton = findViewById(R.id.btnMedicineLog);
         MaterialButton logoutButton = findViewById(R.id.btnLogout);
         MaterialButton setPBButton = findViewById(R.id.setPBButton);
+        MaterialButton onboardButton = findViewById(R.id.onboardingButton);
 
         TextView todaysZone = findViewById(R.id.textTodaysZone);
         TextView lastRescueTime = findViewById(R.id.textLastRescueTime);
@@ -229,6 +230,10 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
         medicineLogsButton.setOnClickListener(view -> {
             startActivityWithChildInfo(MedicineLogs.class);
+        });
+
+        onboardButton.setOnClickListener(v-> {
+            startActivity(new Intent(ParentChildHomeScreen.this, ParentOnboardingScreen1.class));
         });
     }
 
