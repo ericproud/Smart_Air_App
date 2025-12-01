@@ -71,7 +71,10 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         rescueRepo.fetchRescueAttempt(new RescueAttemptRepository.FetchCallback() {
 
             private void setLastRescueTime(List<RescueAttempt> attempts) {
-                if (attempts.isEmpty()) lastRescueTime.setText("N/A");
+                if (attempts.isEmpty()) {
+                    lastRescueTime.setText("N/A");
+                    return;
+                }
 
                 long max = attempts.getFirst().getTimestamp();
                 for (RescueAttempt attempt: attempts) {
