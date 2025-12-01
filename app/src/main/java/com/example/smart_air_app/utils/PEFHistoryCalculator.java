@@ -161,7 +161,7 @@ public class PEFHistoryCalculator {
                     if (temp_year[0] > curr_year[0] && curr_month[0] <= temp_month[0]) {
                         //if the year we read is > then the last year we read and the month we read > last month read then
                         //we do 12 * difference of years and add to counter to skip over the months that aren't logged
-                        counter[0] += 12 * temp_year[0] - curr_year[0];
+                        counter[0] += 12 * (temp_year[0] - curr_year[0]);
                         curr_year[0] = temp_year[0];
                     }
                     else if (temp_year[0] > curr_year[0] && curr_month[0] > temp_month[0]) {
@@ -192,15 +192,15 @@ public class PEFHistoryCalculator {
                     String temp = data_to_process.getValue(String.class);
 
                     //here we log if it's a green yellow or red zone day, anything else we ignore
-                    if (temp != null) {
-                        if (temp.equals("Green")) {
-                            ans[counter[0]][0]++;
-                        }
-                        else if (temp.equals("Yellow")) {
-                            ans[counter[0]][1]++;
-                        }
-                        else if (temp.equals("Red")) {
-                            ans[counter[0]][2]++;
+                    if (counter[0] >= 0 && counter[0] < ans.length) {
+                        if (temp != null) {
+                            if (temp.equals("Green")) {
+                                ans[counter[0]][0]++;
+                            } else if (temp.equals("Yellow")) {
+                                ans[counter[0]][1]++;
+                            } else if (temp.equals("Red")) {
+                                ans[counter[0]][2]++;
+                            }
                         }
                     }
                 }

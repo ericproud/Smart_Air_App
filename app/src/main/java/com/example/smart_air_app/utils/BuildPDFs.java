@@ -36,55 +36,54 @@ public class BuildPDFs {
     private static final String TAG = "BuildPDFs";
 
     public static void buildProviderReport(Context context, DatabaseReference dbRef, String childUID, String childName) {
-        Log.d(TAG, "Starting PDF generation for: " + childName);
-
-        // Step 1: get today's date minus sharing timeframe
         dbRef.child("Permissions").child(childUID).get().addOnSuccessListener(permissionsSnapshot -> {
             Integer timeframe = permissionsSnapshot.child("sharing timeframe").getValue(Integer.class);
             if (timeframe == null) {
-                timeframe = 3; // Set default
-                Log.d(TAG, "Using default timeframe: 3 months");
+                timeframe = 3;
             }
             String startDate = getDateMinusMonths(timeframe);
-            Log.d(TAG, "Start date: " + startDate);
 
             // Alex's helper function for adherence
             AdherenceCalculator.CalculateAdherence(childUID, startDate, adherencePercent -> {
-                Log.d(TAG, "Adherence: " + adherencePercent + "%");
 
                 // Alex's helper function for getting pef
                 PEFHistoryCalculator.CalculateAdherence(childUID, startDate, PEFDistribution -> {
-                    Log.d(TAG, "Got PEF distribution, length: " + PEFDistribution.length);
 
                     // Store necessary fields from the triage branch as a snapshot
                     dbRef.child("TriageEntries").child(childUID).get().addOnSuccessListener(triageSnapshot -> {
-                        Log.d(TAG, "Got triage snapshot");
 
-                        HashMap<String, String> mapOfFields = new HashMap<>();
-                        mapOfFields.put("Shortness of breath", "8");
-                        mapOfFields.put("Chest tightness", "5");
-                        mapOfFields.put("Chest pain", "3");
-                        mapOfFields.put("Wheezing", "1");
-                        mapOfFields.put("Trouble sleeping", "0");
-                        mapOfFields.put("Coughing", "3");
-                        mapOfFields.put("Other", "22");
-                        mapOfFields.put("Rescue Attempts Per Day", "2"); // Fixed key
+                        dbRef.child("rescueAttempts").child(childUID).get().addOnSuccessListener(rescueIdSnapshot -> {
 
-                        // Make pdf with all the needed info
-                        createPDF(context, childUID, childName, mapOfFields, startDate,
-                                permissionsSnapshot, adherencePercent, PEFDistribution, triageSnapshot);
+                            HashMap<String, String> mapOfFields = new HashMap<>();
+                            mapOfFields.put("Shortness of breath", "0");
+                            mapOfFields.put("Chest tightness", "0");
+                            mapOfFields.put("Chest pain", "0");
+                            mapOfFields.put("Wheezing", "0");
+                            mapOfFields.put("Trouble sleeping", "0");
+                            mapOfFields.put("Coughing", "0");
+                            mapOfFields.put("Other", "0");
+                            mapOfFields.put("Rescue Attempts Per Day", "0");
 
+                            for (DataSnapshot rescueAttemptSnapshot : rescueIdSnapshot.getChildren()) {
+                                DataSnapshot symptomSnapshot = rescueAttemptSnapshot.child("symptoms");
+                                for (DataSnapshot symptom : symptomSnapshot.getChildren()) {
+                                    String symptomName = symptom.getValue(String.class);
+                                    mapOfFields.put(symptomName, String.valueOf(Integer.parseInt(mapOfFields.get(symptomName)) + 1));
+                                }
+                            }
+
+                            // Make pdf with all the needed info
+                            createPDF(context, childUID, childName, mapOfFields, startDate,
+                                    permissionsSnapshot, adherencePercent, PEFDistribution, triageSnapshot);
+                        }).addOnFailureListener(e -> {
+                        });
                     }).addOnFailureListener(e -> {
-                        Log.e(TAG, "Error fetching triage: " + e.getMessage(), e);
-                        Toast.makeText(context, "Error fetching data", Toast.LENGTH_SHORT).show();
                     });
 
                 });
             });
 
         }).addOnFailureListener(e -> {
-            Log.e(TAG, "Error fetching permissions: " + e.getMessage(), e);
-            Toast.makeText(context, "Error loading permissions", Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -142,7 +141,6 @@ public class BuildPDFs {
             }
 
             if (permissionsSnapshot.child("rescue logs").getValue(Boolean.class)) {
-                // FIXED: Using correct key
                 String rescueAttempts = mapOfFields.get("Rescue Attempts Per Day");
                 canvas.drawText("Rescue Attempts Per Week: " + mapOfFields.get("Rescue Attempts Per Day"), 50, 150, textPaint);
             } else {
@@ -176,7 +174,6 @@ public class BuildPDFs {
             PdfDocument.Page page2 = summaryPDF.startPage(page2Info);
             Canvas canvas2 = page2.getCanvas();
 
-            canvas2.drawText("Notable Triage Incidents", 50, 50, titlePaint);
 
             if (permissionsSnapshot.child("triage incidents").getValue(Boolean.class)) {
                 float currentY = 100;
@@ -188,8 +185,8 @@ public class BuildPDFs {
                 if (!triageSnapshot.exists() || triageSnapshot.getChildrenCount() == 0) {
                     canvas2.drawText("No triage incidents recorded", 70, currentY, triageTextPaint);
                 } else {
+                    canvas2.drawText("Notable Triage Incidents: ", 50, 200, textPaint);
                     int numTriages = 0;
-
                     for (DataSnapshot triageEntry : triageSnapshot.getChildren()) {
                         if (numTriages >= 3) {
                             break;
@@ -287,11 +284,12 @@ public class BuildPDFs {
         for (int month = 0; month < monthCount; month++) {
             float groupStartX = startX + (month * groupWidth);
 
+            float totalDays = zoneDistribution[month][0] + zoneDistribution[month][1] + zoneDistribution[month][2];
             // Loop through zone (R, Y, G)
             for (int zone = 0; zone < zonesPerMonth; zone++) {
                 // Make bar for zone
                 float barLeft = groupStartX + barSpacing + (zone * (barWidth + barSpacing));
-                float barHeight = (zoneDistribution[month][zone] / 100f) * chartHeight;
+                float barHeight = (zoneDistribution[month][zone] / totalDays) * chartHeight;
                 float barTop = startY + chartHeight - barHeight;
 
                 Paint barPaint = new Paint();
