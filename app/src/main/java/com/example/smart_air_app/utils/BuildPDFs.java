@@ -32,12 +32,10 @@ public class BuildPDFs {
                 PdfDocument.Page page = summaryPDF.startPage(pageInfo);
                 Canvas canvas = page.getCanvas();
 
-                // Paint for title
                 Paint titlePaint = new Paint();
                 titlePaint.setTextSize(24);
                 titlePaint.setFakeBoldText(true);
 
-                // Paint for regular text
                 Paint textPaint = new Paint();
                 textPaint.setTextSize(16);
 
@@ -203,7 +201,6 @@ public class BuildPDFs {
         int monthCount = months.length;
         int zonesPerMonth = 3;
 
-        // Calculate dimensions
         float groupWidth = chartWidth / monthCount;
         float barWidth = groupWidth * 0.7f / zonesPerMonth;
         float barSpacing = groupWidth * 0.3f / (zonesPerMonth + 1);
