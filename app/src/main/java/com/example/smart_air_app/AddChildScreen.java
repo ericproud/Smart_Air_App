@@ -66,7 +66,12 @@ public class AddChildScreen extends AppCompatActivity {
         inputDOBButton = findViewById(R.id.inputChildDOB);
         inputDOBButton.setText(getTodaysDate());
 
-        createAccountButton.setOnClickListener(v -> createAccount());
+        createAccountButton.setOnClickListener(v -> {
+            createAccount();
+            Intent intent = new Intent(AddChildScreen.this, ParentHomeScreen.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void createAccount() {
