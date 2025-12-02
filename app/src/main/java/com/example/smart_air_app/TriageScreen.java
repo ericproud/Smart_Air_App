@@ -198,7 +198,7 @@ public class TriageScreen extends AppCompatActivity {
         // This method saves the TriageEntry into the database
 
         // Get current child UID
-        String childUID = FirebaseAuth.getInstance().getUid();
+        String childUID = getIntent().getStringExtra("childUID");
 
         System.out.println(entry.getTriageID());
 

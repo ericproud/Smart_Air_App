@@ -133,7 +133,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
                     return;
                 }
 
-                long max = attempts.getFirst().getTimestamp();
+                long max = attempts.get(0).getTimestamp();
                 for (RescueAttempt attempt: attempts) {
                     max = Math.max(max, attempt.getTimestamp());
                 }
