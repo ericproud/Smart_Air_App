@@ -60,7 +60,17 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
     private String childUserId;
     private String childName;
+    private TextView todaysZone;
+    private TextView lastRescueTime;
+    private TextView weeklyRescueCount;
+    private FrameLayout chartContainer;
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateDashboardData();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +103,12 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         MaterialButton setPBButton = findViewById(R.id.setPBButton);
         MaterialButton onboardButton = findViewById(R.id.onboardingButton);
 
-        TextView todaysZone = findViewById(R.id.textTodaysZone);
-        TextView lastRescueTime = findViewById(R.id.textLastRescueTime);
-        TextView weeklyRescueCount = findViewById(R.id.textWeeklyCount);
-        FrameLayout chartContainer = findViewById(R.id.chartContainer);
+        todaysZone = findViewById(R.id.textTodaysZone);
+        lastRescueTime = findViewById(R.id.textLastRescueTime);
+        weeklyRescueCount = findViewById(R.id.textWeeklyCount);
+        chartContainer = findViewById(R.id.chartContainer);
+
+        populateDashboardData();
 
         trendSnippetLabel.setText("Rescues/Day:7 Day");
         final boolean[] showing7Days = { true };
@@ -119,62 +131,11 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             showing7Days[0] = !showing7Days[0];
         });
 
-        buildTrendSnippet(7);
-
         childNameText.setText(childName);
-
-        var rescueRepo = new FirebaseRescueAttemptRepository();
-        rescueRepo.setUid(childUserId);
-        rescueRepo.fetchRescueAttempt(new RescueAttemptRepository.FetchCallback() {
-
-            private void setLastRescueTime(List<RescueAttempt> attempts) {
-                if (attempts.isEmpty()) {
-                    lastRescueTime.setText("N/A");
-                    return;
-                }
-
-                long max = attempts.get(0).getTimestamp();
-                for (RescueAttempt attempt: attempts) {
-                    max = Math.max(max, attempt.getTimestamp());
-                }
-                long now = System.currentTimeMillis();
-                long diff = now - max;
-
-                long days = diff / (1000 * 60 * 60 * 24);
-                long hours = (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
-
-                String ago;
-                if (days == 0) {
-                    ago = String.format("%dh ago", hours);
-                } else {
-                    ago = String.format("%dd %dh ago", days, hours);
-                }
-                lastRescueTime.setText(ago);
-            }
-
-            private void setWeeklyRescueCount(List<RescueAttempt> attempts) {
-                long now = System.currentTimeMillis();
-                List<RescueAttempt> filtered = attempts.stream()
-                        .filter(rescueAttempt -> now - rescueAttempt.getTimestamp() <= 1000L * 60 * 60 * 24 * 7)
-                        .collect(Collectors.toList());
-
-                weeklyRescueCount.setText(String.valueOf(filtered.size()));
-            }
-
-            @Override
-            public void onSuccess(List<RescueAttempt> attempts) {
-                setLastRescueTime(attempts);
-                setWeeklyRescueCount(attempts);
-            }
-
-            @Override
-            public void onError(String e) {}
-        });
 
         dailyCheckInButton.setOnClickListener(view -> {
             startActivityWithChildInfo(DailyCheckIn.class);
         });
-
 
         emergencyButton.setOnClickListener(view -> {
             startActivityWithChildInfo(TriageScreen.class);
@@ -228,14 +189,6 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         summaryChartsButton.setOnClickListener(v -> {
             BuildPDFs.buildProviderReport(ParentChildHomeScreen.this, dbRef, childUserId, childName);
             Log.d("ParentChildHomeScreen", ">>> buildProviderReport called for child: " + childName);
-        });
-
-        //loads in teh zone from the database and updates the text view
-        PEFZones zone = new PEFZones();
-
-        PEFZonesDatabase.loadPEFZones(childUserId, (pb, pef, date) -> {
-            zone.initializePEF(pb, pef, date);
-            todaysZone.setText(zone.calculateZone());
         });
 
         //when you click the pb button a new dialog shows up asking for input
@@ -364,6 +317,68 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             }
         });
     }
+
+    private void populateDashboardData() {
+        //loads in teh zone from the database and updates the text view
+        PEFZones zone = new PEFZones();
+
+        PEFZonesDatabase.loadPEFZones(childUserId, (pb, pef, date) -> {
+            zone.initializePEF(pb, pef, date);
+            todaysZone.setText(zone.calculateZone());
+        });
+
+        var rescueRepo = new FirebaseRescueAttemptRepository();
+        rescueRepo.setUid(childUserId);
+        rescueRepo.fetchRescueAttempt(new RescueAttemptRepository.FetchCallback() {
+
+            private void setLastRescueTime(List<RescueAttempt> attempts) {
+                if (attempts.isEmpty()) {
+                    lastRescueTime.setText("N/A");
+                    return;
+                }
+
+                long max = attempts.get(0).getTimestamp();
+                for (RescueAttempt attempt: attempts) {
+                    max = Math.max(max, attempt.getTimestamp());
+                }
+                long now = System.currentTimeMillis();
+                long diff = now - max;
+
+                long days = diff / (1000 * 60 * 60 * 24);
+                long hours = (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+
+                String ago;
+                if (days == 0) {
+                    ago = String.format("%dh ago", hours);
+                } else {
+                    ago = String.format("%dd %dh ago", days, hours);
+                }
+                lastRescueTime.setText(ago);
+            }
+
+            private void setWeeklyRescueCount(List<RescueAttempt> attempts) {
+                long now = System.currentTimeMillis();
+                List<RescueAttempt> filtered = attempts.stream()
+                        .filter(rescueAttempt -> now - rescueAttempt.getTimestamp() <= 1000L * 60 * 60 * 24 * 7)
+                        .collect(Collectors.toList());
+
+                weeklyRescueCount.setText(String.valueOf(filtered.size()));
+            }
+
+            @Override
+            public void onSuccess(List<RescueAttempt> attempts) {
+                setLastRescueTime(attempts);
+                setWeeklyRescueCount(attempts);
+            }
+
+            @Override
+            public void onError(String e) {}
+        });
+
+        buildTrendSnippet(7);
+
+    }
+
 
     private void startActivityWithChildInfo(Class<?> cls) {
         Intent intent = new Intent(ParentChildHomeScreen.this, cls);
