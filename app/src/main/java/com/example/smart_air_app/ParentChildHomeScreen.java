@@ -171,6 +171,11 @@ public class ParentChildHomeScreen extends AppCompatActivity {
             public void onError(String e) {}
         });
 
+        dailyCheckInButton.setOnClickListener(view -> {
+            startActivityWithChildInfo(DailyCheckIn.class);
+        });
+
+
         emergencyButton.setOnClickListener(view -> {
             startActivityWithChildInfo(TriageScreen.class);
         });
