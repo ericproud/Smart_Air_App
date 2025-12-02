@@ -81,6 +81,14 @@
                 android:layout_height="wrap_content"
                 android:text="Rescue Medicine"/>
         </com.google.android.material.button.MaterialButtonToggleGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/pdf"
+            style="@style/Widget.Material3.Button.IconButton.Filled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Export Logs As A PDF"
+            android:layout_marginTop="8dp" />
     </LinearLayout>
 
     <ScrollView

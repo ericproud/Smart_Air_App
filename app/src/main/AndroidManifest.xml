@@ -39,9 +39,6 @@
             android:name=".TriageScreen"
             android:exported="false" />
         <activity
-            android:name=".TemplateActivity"
-            android:exported="false" />
-        <activity
             android:name=".login_module.LoginView"
             android:exported="false" />
         <activity
