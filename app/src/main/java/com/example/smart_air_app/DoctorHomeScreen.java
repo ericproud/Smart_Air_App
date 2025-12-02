@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.utils.BuildPDFs;
+import com.example.smart_air_app.utils.Logout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,18 +66,35 @@ public class DoctorHomeScreen extends AppCompatActivity {
         String doctorID = FirebaseAuth.getInstance().getUid();
         DatabaseReference d_ref = FirebaseDatabase.getInstance().getReference("Users");
         helperOnboard(d_ref, doctorID);
+
+        Button logoutButton = findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(v -> {
+            Logout.logout(this);
+        });
+
+        TextView doctorNameText = findViewById(R.id.doctorNameText);
+        dbRef.child("Users").child(doctorID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange (@NonNull DataSnapshot childSnapshot){
+                String firstName = childSnapshot.child("firstName").getValue(String.class);
+                String lastName = childSnapshot.child("lastName").getValue(String.class);
+                String childName = firstName + " " + lastName;
+                doctorNameText.setText(childName);
+            }
+            @Override
+            public void onCancelled (@NonNull DatabaseError error){
+            }
+        });
     }
 
     Spinner patientSpinner;
     TextView patientName;
     EditText enterOTC;
     Button submitOTCButton;
-
     String UID = FirebaseAuth.getInstance().getUid();
     ArrayList<String> patientUIDs = new ArrayList<>();
     ArrayList<String> patientNames = new ArrayList<>();
     HashMap<String, String> patientNameToUID = new HashMap<>();
-
 
     void getPatientUIDs() {
         // Get patient UIDs from children linked to doctor from db
