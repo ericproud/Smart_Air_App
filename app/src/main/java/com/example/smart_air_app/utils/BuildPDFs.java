@@ -10,7 +10,6 @@ import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
@@ -18,14 +17,14 @@ import com.example.smart_air_app.log_rescue_attempt.FirebaseRescueAttemptReposit
 import com.example.smart_air_app.log_rescue_attempt.RescueAttempt;
 import com.example.smart_air_app.log_rescue_attempt.RescueAttemptRepository;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +43,7 @@ public class BuildPDFs {
             String startDate = getDateMinusMonths(timeframe);
 
             // Alex's helper function for adherence
+            Integer finalTimeframe = timeframe;
             AdherenceCalculator.CalculateAdherence(childUID, startDate, adherencePercent -> {
 
                 // Alex's helper function for getting pef
@@ -52,29 +52,15 @@ public class BuildPDFs {
                     // Store necessary fields from the triage branch as a snapshot
                     dbRef.child("TriageEntries").child(childUID).get().addOnSuccessListener(triageSnapshot -> {
 
-                        dbRef.child("rescueAttempts").child(childUID).get().addOnSuccessListener(rescueIdSnapshot -> {
+                        dbRef.child("RescueAttempts").child(childUID).get().addOnSuccessListener(rescueIdSnapshot -> {
 
-                            HashMap<String, String> mapOfFields = new HashMap<>();
-                            mapOfFields.put("Shortness of breath", "0");
-                            mapOfFields.put("Chest tightness", "0");
-                            mapOfFields.put("Chest pain", "0");
-                            mapOfFields.put("Wheezing", "0");
-                            mapOfFields.put("Trouble sleeping", "0");
-                            mapOfFields.put("Coughing", "0");
-                            mapOfFields.put("Other", "0");
-                            mapOfFields.put("Rescue Attempts Per Day", "0");
-
-                            for (DataSnapshot rescueAttemptSnapshot : rescueIdSnapshot.getChildren()) {
-                                DataSnapshot symptomSnapshot = rescueAttemptSnapshot.child("symptoms");
-                                for (DataSnapshot symptom : symptomSnapshot.getChildren()) {
-                                    String symptomName = symptom.getValue(String.class);
-                                    mapOfFields.put(symptomName, String.valueOf(Integer.parseInt(mapOfFields.get(symptomName)) + 1));
-                                }
-                            }
+                            // Getting the symptom counts for the display
+                            HashMap<String, Integer> mapOfFields;
+                            mapOfFields = populateMapOfFields(rescueIdSnapshot, finalTimeframe);
 
                             // Make pdf with all the needed info
                             createPDF(context, childUID, childName, mapOfFields, startDate,
-                                    permissionsSnapshot, adherencePercent, PEFDistribution, triageSnapshot);
+                                    permissionsSnapshot, adherencePercent, PEFDistribution, triageSnapshot, startDate);
                         }).addOnFailureListener(e -> {
                         });
                     }).addOnFailureListener(e -> {
@@ -88,9 +74,9 @@ public class BuildPDFs {
     }
 
     private static void createPDF(Context context, String childUID, String childName,
-                                  HashMap<String, String> mapOfFields, String startDate,
+                                  HashMap<String, Integer> mapOfFields, String startDate,
                                   DataSnapshot permissionsSnapshot, double adherencePercent,
-                                  int[][] PEFDistribution, DataSnapshot triageSnapshot) {
+                                  int[][] PEFDistribution, DataSnapshot triageSnapshot, String date) {
 
         PdfDocument summaryPDF = new PdfDocument();
 
@@ -120,7 +106,7 @@ public class BuildPDFs {
                             .filter(rescueAttempt -> now - rescueAttempt.getTimestamp() <= 1000L * 60 * 60 * 24 * 7)
                             .collect(Collectors.toList());
 
-                    mapOfFields.put("Rescue Attempts Per Day", String.valueOf(filtered.size()));
+                    mapOfFields.put("Rescue Attempts Per Day", Integer.valueOf(filtered.size()));
                 }
 
                 @Override
@@ -141,7 +127,6 @@ public class BuildPDFs {
             }
 
             if (permissionsSnapshot.child("rescue logs").getValue(Boolean.class)) {
-                String rescueAttempts = mapOfFields.get("Rescue Attempts Per Day");
                 canvas.drawText("Rescue Attempts Per Week: " + mapOfFields.get("Rescue Attempts Per Day"), 50, 150, textPaint);
             } else {
                 canvas.drawText("Rescue Attempts Per Day: NOT PROVIDED", 50, 150, textPaint);
@@ -263,10 +248,6 @@ public class BuildPDFs {
         }
     }
 
-    static void populateMapOfFields() {
-
-    }
-
     static void drawPEFDistribution(float[][] zoneDistribution, String startDate, Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
         int[] zoneColors = {Color.GREEN, Color.YELLOW, Color.RED};
 
@@ -326,7 +307,7 @@ public class BuildPDFs {
         }
     }
 
-    static void drawSymptomHorizontalBarGraph(HashMap<String, String> mapOfFields, Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
+    static void drawSymptomHorizontalBarGraph(HashMap<String, Integer> mapOfFields, Canvas canvas, float startX, float startY, float chartWidth, float chartHeight) {
         String[] symptoms = {
                 "Shortness of breath", "Chest tightness", "Chest pain",
                 "Wheezing", "Trouble sleeping", "Coughing", "Other"
@@ -346,15 +327,14 @@ public class BuildPDFs {
         int[] symptomCounts = new int[symptoms.length];
         for (int i = 0; i < symptoms.length; i++) {
             try {
-                String countStr = mapOfFields.get(symptoms[i]);
-                if (countStr != null) {
-                    symptomCounts[i] = Integer.parseInt(countStr);
+                Integer count = mapOfFields.get(symptoms[i]);
+                if (count != null) {
+                    symptomCounts[i] = count;
                 } else {
                     symptomCounts[i] = 0;
                 }
             } catch (NumberFormatException e) {
                 symptomCounts[i] = 0;
-                Log.w(TAG, "Could not parse symptom count for: " + symptoms[i]);
             }
         }
 
@@ -420,6 +400,44 @@ public class BuildPDFs {
             canvas.drawRect(xPos, yPos, xPos + 12, yPos + 12, colorPaint);
             canvas.drawText(symptoms[i], xPos + 18, yPos + 10, textPaint);
         }
+    }
+
+    private static HashMap<String, Integer> populateMapOfFields(DataSnapshot rescueIdSnapshot, int timeframe) {
+        // The symptoms
+        HashMap<String, Integer> mapOfFields = new HashMap<>();
+        String[] symptoms = {
+                "Shortness of breath", "Chest tightness", "Chest pain",
+                "Wheezing", "Trouble sleeping", "Coughing", "Other"
+        };
+
+        for (String s : symptoms) {
+            mapOfFields.put(s, 0);
+        }
+
+        // Get counts from rescues
+        for (DataSnapshot rescueAttemptSnapshot : rescueIdSnapshot.getChildren()) {
+            DataSnapshot symptomSnapshot = rescueAttemptSnapshot.child("symptoms");
+
+            // Checking if the rescue comes from before the allowed timeframe from the parents
+            Calendar cal = Calendar.getInstance(); // now
+            cal.add(Calendar.MONTH, -timeframe); // subtract 5 months
+            long minTime = cal.getTimeInMillis();
+            long timestamp = rescueAttemptSnapshot.child("timestamp").getValue(Long.class); // timestamp in millis
+            if (minTime > timestamp) {
+                continue;
+            }
+
+            // Counting up symptoms
+            for (DataSnapshot symptom : symptomSnapshot.getChildren()) {
+                String symptomName = symptom.getValue(String.class);
+                if (mapOfFields.containsKey(symptomName)) {
+                    mapOfFields.put(symptomName, mapOfFields.get(symptomName) + 1);
+                } else {
+                    mapOfFields.put(symptomName, 1);
+                }
+            }
+        }
+        return mapOfFields;
     }
 
     static String getDateMinusMonths(int monthsBack) {
