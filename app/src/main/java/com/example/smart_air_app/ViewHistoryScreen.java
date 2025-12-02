@@ -158,7 +158,7 @@ public class ViewHistoryScreen extends AppCompatActivity {
                 int count = 0;
 
                 for (DataSnapshot data : snapshot.getChildren()) {  /// reads everylog has been saved for the kid one by one
-                    CheckInFields item = data.getValue(CheckInFields.class); ///I made it a filed
+                    CheckInFields item = data.getValue(CheckInFields.class); ///I made it a fieled
                     if (item == null || item.date == null) continue; /// just in case
 
 

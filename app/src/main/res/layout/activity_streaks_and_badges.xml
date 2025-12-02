@@ -1,44 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!-- the Imageview Warning are OKAY leave them be! its for a description
-     P.S. got it done!-->
+    <!-- the Imageview Warning are OKAY leave them be! its for a description -->
+    P.S. got it done!
+
     <ImageView
         android:id="@+id/left"
-        android:layout_width="190dp"
-        android:layout_height="190dp"
-        android:layout_marginStart="20dp"
-
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="190dp"
         android:contentDescription="@string/start_header_text"
-        app:layout_constraintEnd_toStartOf="@+id/right"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/middle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/middle"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="190dp"
+        android:contentDescription="@string/start_header_text"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499"
         tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/right"
-        android:layout_width="190dp"
-        android:layout_height="190dp"
-        android:layout_marginEnd="20dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="190dp"
         android:contentDescription="@string/start_header_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/middle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/streakNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="152dp"
         android:text="@string/string_you_are_not_here"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/settingsContainer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/middle" />
 
     <TextView
         android:id="@+id/textView6"
@@ -52,4 +70,44 @@
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/settingsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/btnBack">
+
+        <Button
+            android:id="@+id/btnSetController"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Set Controller Goal (Default: 7)" />
+
+        <Button
+            android:id="@+id/btnSetTechnique"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Set Technique Goal (Default: 10)" />
+
+        <Button
+            android:id="@+id/btnSetRescue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Set Rescue Limit (Default: 4)" />
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
