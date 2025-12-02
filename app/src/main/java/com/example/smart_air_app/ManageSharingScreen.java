@@ -103,5 +103,8 @@ public class ManageSharingScreen extends AppCompatActivity {
         dbRef.child("Permissions").child(id).child("triggers").setValue(triggers);
         dbRef.child("Permissions").child(id).child("summaries").setValue(summaries);
         dbRef.child("Permissions").child(id).child("sharing timeframe").setValue(timeframe);
+        dbRef.child("Permissions").child(id).child("controller adherence summary").setValue(controllerMedicine);
+        dbRef.child("Permissions").child(id).child("rescue logs").setValue(rescueMedicine);
+        dbRef.child("Permissions").child(id).child("triage incidents").setValue(triage);
     }
 }

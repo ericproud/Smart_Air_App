@@ -168,9 +168,11 @@ public class BuildPDFs {
                 triageTextPaint.setColor(Color.BLACK);
 
                 if (!triageSnapshot.exists() || triageSnapshot.getChildrenCount() == 0) {
-                    canvas2.drawText("No triage incidents recorded", 70, currentY, triageTextPaint);
+
                 } else {
-                    canvas2.drawText("Notable Triage Incidents: ", 50, 200, textPaint);
+                    canvas2.drawText("Notable Triage Incidents: ", 50, currentY, textPaint);
+                    currentY += 20;
+
                     int numTriages = 0;
                     for (DataSnapshot triageEntry : triageSnapshot.getChildren()) {
                         if (numTriages >= 3) {
@@ -191,7 +193,7 @@ public class BuildPDFs {
                             continue;
                         }
 
-                        canvas2.drawText("PEF: " + PEF, 100, currentY, textPaint);
+                        canvas2.drawText("PEF: " + PEF, 70, currentY, textPaint);
                         currentY += 20;
 
                         canvas2.drawText("Emergency: " + (emergencyStatus ? "YES" : "NO"), 100, currentY, textPaint);
@@ -200,10 +202,10 @@ public class BuildPDFs {
                         canvas2.drawText("Blue/Gray Lips/Nails: " + (blueGrayLipsNails ? "YES" : "NO"), 100, currentY, textPaint);
                         currentY += 20;
 
-                        canvas2.drawText("Cannot Speak Full Sentences" + (noFullSentences ? "YES" : "NO"), 90, currentY, textPaint);
+                        canvas2.drawText("Cannot Speak Full Sentences: " + (noFullSentences ? "YES" : "NO"), 90, currentY, textPaint);
                         currentY += 20;
 
-                        canvas2.drawText("Chest Retractions" + (retractions ? "YES" : "NO"), 90, currentY, textPaint);
+                        canvas2.drawText("Chest Retractions: " + (retractions ? "YES" : "NO"), 90, currentY, textPaint);
                         currentY += 20;
 
                         canvas2.drawText("Recent Rescue Controller Use: " + (recentRescueDone ? "YES" : "NO"), 90, currentY, textPaint);
@@ -214,7 +216,7 @@ public class BuildPDFs {
                         numTriages++;
                     }
                     if (numTriages == 0) {
-                        canvas2.drawText("No emergency triage incidents found", 70, currentY, triageTextPaint);
+                        canvas2.drawText("No emergency triage incidents found", 70, currentY, textPaint);
                     }
                 }
             } else {
