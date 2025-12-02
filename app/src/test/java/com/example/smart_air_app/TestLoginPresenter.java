@@ -1,27 +1,25 @@
 package com.example.smart_air_app;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-
-import com.example.smart_air_app.login_module.LoginModel;
-import com.example.smart_air_app.login_module.LoginPresenter;
-import com.example.smart_air_app.login_module.LoginView;
-import com.example.smart_air_app.session.SessionManager;
-import com.example.smart_air_app.user_classes.User;
-
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+
+import com.example.smart_air_app.login_module.LoginModel;
+import com.example.smart_air_app.login_module.LoginPresenter;
+import com.example.smart_air_app.login_module.LoginView;
+import com.example.smart_air_app.user_classes.User;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestLoginPresenter {
@@ -72,7 +70,7 @@ public class TestLoginPresenter {
         LoginPresenter presenter = new LoginPresenter(model, view);
         String email = "email@gmail.com";
 
-        assertEquals(email, presenter.handleUsername(email));
+        assertEquals(email, presenter.convertUsername(email));
     }
 
     @Test
@@ -80,7 +78,7 @@ public class TestLoginPresenter {
         LoginPresenter presenter = new LoginPresenter(model, view);
         String username = "user";
 
-        assertEquals("user@xyz.com", presenter.handleUsername(username));
+        assertEquals("user@xyz.com", presenter.convertUsername(username));
     }
 
     @Test
@@ -124,9 +122,9 @@ public class TestLoginPresenter {
         LoginPresenter presenter = new LoginPresenter(model, view);
         String usernameOrEmail = "";
         String password = "";
-        presenter.Login(usernameOrEmail, password);
+        presenter.login(usernameOrEmail, password);
 
-        verify(model, never()).signIn(anyString(), anyString(), any());
+        verify(model, never()).login(anyString(), anyString(), any());
     }
 
     @Test
@@ -134,9 +132,9 @@ public class TestLoginPresenter {
         LoginPresenter presenter = new LoginPresenter(model, view);
         String usernameOrPassword = "username";
         String password = "";
-        presenter.Login(usernameOrPassword, password);
+        presenter.login(usernameOrPassword, password);
 
-        verify(model, never()).signIn(anyString(), anyString(), any());
+        verify(model, never()).login(anyString(), anyString(), any());
     }
 
     @Test
@@ -144,9 +142,9 @@ public class TestLoginPresenter {
         LoginPresenter presenter = new LoginPresenter(model, view);
         String usernameOrPassword = "";
         String password = "password";
-        presenter.Login(usernameOrPassword, password);
+        presenter.login(usernameOrPassword, password);
 
-        verify(model, never()).signIn(anyString(), anyString(), any());
+        verify(model, never()).login(anyString(), anyString(), any());
     }
 
 
@@ -155,9 +153,9 @@ public class TestLoginPresenter {
         LoginPresenter presenter = new LoginPresenter(model, view);
         String username = "username";
         String password = "password";
-        presenter.Login(username, password);
+        presenter.login(username, password);
 
-        verify(model).signIn(eq(presenter.handleUsername(username)), eq(password), any());
+        verify(model).login(eq(presenter.convertUsername(username)), eq(password), any());
     }
 
     @Test
@@ -165,9 +163,9 @@ public class TestLoginPresenter {
         LoginPresenter presenter = new LoginPresenter(model, view);
         String email = "email@gmail.com";
         String password = "password";
-        presenter.Login(email, password);
+        presenter.login(email, password);
 
-        verify(model).signIn(eq(presenter.handleUsername(email)), eq(password), any());
+        verify(model).login(eq(presenter.convertUsername(email)), eq(password), any());
     }
 
     @Test
@@ -175,16 +173,14 @@ public class TestLoginPresenter {
         LoginPresenter presenter = new LoginPresenter(model, view);
         String email = "email@gmail.com";
         String password = "password";
-        presenter.Login(email, password);
+        presenter.login(email, password);
 
         ArgumentCaptor<LoginModel.AuthCallback> callbackCaptor = ArgumentCaptor.forClass(LoginModel.AuthCallback.class);
-        verify(model).signIn(anyString(), anyString(), callbackCaptor.capture());
+        verify(model).login(anyString(), anyString(), callbackCaptor.capture());
 
         User user = mock(User.class);
         user.type = "doctor";
-        callbackCaptor.getValue().onAuthSuccess(user);
-
-        assertEquals(user, SessionManager.getInstance().getCurrentUser());
+        callbackCaptor.getValue().onAuthSuccess(user.type);
         verify(view).redirectToHome("doctor");
     }
 
@@ -193,10 +189,10 @@ public class TestLoginPresenter {
         LoginPresenter presenter = new LoginPresenter(model, view);
         String email = "username";
         String password = "password";
-        presenter.Login(email, password);
+        presenter.login(email, password);
 
         ArgumentCaptor<LoginModel.AuthCallback> callbackCaptor = ArgumentCaptor.forClass(LoginModel.AuthCallback.class);
-        verify(model).signIn(anyString(), anyString(), callbackCaptor.capture());
+        verify(model).login(anyString(), anyString(), callbackCaptor.capture());
 
         String errorMessage = "error";
         callbackCaptor.getValue().onAuthFailure(errorMessage);
