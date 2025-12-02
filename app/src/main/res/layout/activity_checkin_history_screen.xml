@@ -43,9 +43,11 @@
         android:id="@+id/symptomSpinner"
         android:layout_width="300dp"
         android:layout_height="48dp"
+        android:layout_marginTop="36dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="70dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Spinner
         android:id="@+id/triggerSpinner"
@@ -100,7 +102,7 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="40dp"
         android:text="Back"
         app:layout_constraintEnd_toStartOf="@+id/viewHistoryButton"
         app:layout_constraintStart_toStartOf="parent"

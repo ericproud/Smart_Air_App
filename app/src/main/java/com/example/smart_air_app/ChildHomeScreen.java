@@ -112,8 +112,8 @@ public class ChildHomeScreen extends AppCompatActivity {
         /// Hossein
         MaterialButton dailyCheckIn = findViewById(R.id.parentDailyCheckInButton);
         dailyCheckIn.setOnClickListener(view -> {
-            Log.d("DEBUG", "Button was definitely clicked!");
-            Toast.makeText(this, "CLICKED!", Toast.LENGTH_SHORT).show();
+            ////Log.d("DEBUG", "Button was definitely clicked!");
+            ///Toast.makeText(this, "CLICKED!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(ChildHomeScreen.this, DailyCheckIn.class);
             intent.putExtra("childUID", childUID);
             intent.putExtra("childName", childName);
