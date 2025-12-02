@@ -53,16 +53,6 @@ public class DoctorHomeScreen extends AppCompatActivity {
         dbRef = FirebaseDatabase.getInstance().getReference();
         childUID = getIntent().getStringExtra("patientUID");
         childName = getIntent().getStringExtra("patientName");
-        mapOfFields = new HashMap<>();
-        mapOfFields.put("Shortness of breath", "8");
-        mapOfFields.put("Chest tightness", "5");
-        mapOfFields.put("Chest pain", "3");
-        mapOfFields.put("Wheezing", "1");
-        mapOfFields.put("Trouble sleeping", "0");
-        mapOfFields.put("Coughing", "3");
-        mapOfFields.put("Other", "22");
-        mapOfFields.put("Controller Adherence", "0%");
-        mapOfFields.put("Rescue Attempts Per Day", "0");
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -176,7 +166,7 @@ public class DoctorHomeScreen extends AppCompatActivity {
         summaryChartsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BuildPDFs.buildProviderReport(DoctorHomeScreen.this, dbRef, patientUID, patientName, mapOfFields);
+                BuildPDFs.buildProviderReport(DoctorHomeScreen.this, dbRef, patientUID, patientName);
             }
         });
     }

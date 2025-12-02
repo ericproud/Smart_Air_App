@@ -37,6 +37,9 @@ public class ManageChildAccount extends AppCompatActivity {
             Button managePermissionsButton = findViewById(R.id.manageChildPermissions);
             TextView OTCText = findViewById(R.id.OTCText);
 
+            String childUID = getIntent().getStringExtra("childUID");
+            String childName = getIntent().getStringExtra("childName");
+
             sendOTCButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -51,7 +54,8 @@ public class ManageChildAccount extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ManageChildAccount.this, ManageSharingScreen.class);
-                    intent.putExtra("childUID", id);
+                    intent.putExtra("childUID", childUID);
+                    intent.putExtra("childName", childName);
                     startActivity(intent);
                 }
             });
