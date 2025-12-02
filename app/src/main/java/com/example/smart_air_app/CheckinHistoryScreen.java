@@ -9,12 +9,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 
@@ -26,6 +29,8 @@ public class CheckinHistoryScreen extends AppCompatActivity {
     private Calendar startDate = null;
     private Calendar endDate = null;
 
+    String childUID;
+    String childName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +56,19 @@ public class CheckinHistoryScreen extends AppCompatActivity {
         Button viewHistoryButton = findViewById(R.id.viewHistoryButton);
 
         //options for the symptoms spinner
-        String[] symptoms = {"if", "you", "are", "seeing", "this", "the", "page", "isn't", "done"};
+        String[] symptoms = {"None","Night Walking", "Cough / Wheeze", "Activity Limitation(s)", "All"};
         //options for the trigger spinner
-        String[] triggers = {"if", "you", "are", "seeing", "this", "the", "page", "isn't", "done"};
+        String[] triggers = {"None","Dust", "Pollen", "Exercise", "Cold Air", "Smoke", "All"};
+        /// the info from the Intent
+
+         childUID = getIntent().getStringExtra("childUserId");  //if it the parent this is not null
+         childName = getIntent().getStringExtra("childName");
+        if(childUID == null) {
+            childUID = FirebaseAuth.getInstance().getUid(); //if the child is on the app
+        }
+        ///
+
+
 
         //setting symptom spinner's options to symptoms array
         ArrayAdapter<String> symptomAdapter = new ArrayAdapter<>(
@@ -119,7 +134,7 @@ public class CheckinHistoryScreen extends AppCompatActivity {
             DatePickerDialog dateSelection = new DatePickerDialog(
                     this,
                     (view, selectedYear, selectedMonth, selectedDay) -> {
-                        startSelected = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
+                        startSelected = String.format("%d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);  ///sorrty alex this works better for my use case
                         startDateLabel.setText("Start Date Selected: " + startSelected);
                         startDate = Calendar.getInstance();
                         startDate.set(selectedYear, selectedMonth, selectedDay);
@@ -151,7 +166,7 @@ public class CheckinHistoryScreen extends AppCompatActivity {
             DatePickerDialog dateSelection = new DatePickerDialog(
                     this,
                     (view, selectedYear, selectedMonth, selectedDay) -> {
-                        endSelected = selectedYear + "-" + (selectedMonth + 1) + "-" + selectedDay;
+                        endSelected = String.format("%d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay);
                         endDateLabel.setText("Start Date Selected: " + endSelected);
                         endDate = Calendar.getInstance();
                         endDate.set(selectedYear, selectedMonth, selectedDay);
@@ -180,8 +195,12 @@ public class CheckinHistoryScreen extends AppCompatActivity {
 
         viewHistoryButton.setOnClickListener(v->{
             //as symptoms and triggers are option, all we care about are 2 valid dates selected.
+            ////Toast.makeText(this, "CLICKED!", Toast.LENGTH_SHORT).show();
             if (!startSelected.equals("None") && !endSelected.equals("None")) {
+
                 Intent intent = new Intent(CheckinHistoryScreen.this, ViewHistoryScreen.class);
+                intent.putExtra("childUID", childUID);
+                intent.putExtra("childName", childName);
                 intent.putExtra("Symptom", symptomSelected);
                 intent.putExtra("Trigger", triggerSelected);
                 intent.putExtra("Start", startSelected);
