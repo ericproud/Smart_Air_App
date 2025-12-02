@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="ENTER ONE TIME CODE TO ADD A PATIENT"
+                android:text="Enter One-Time Code To Add A Patient"
                 android:textColor="?attr/colorOnPrimaryContainer"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -72,17 +72,16 @@
                 android:id="@+id/enterOTC"
                 android:layout_width="300dp"
                 android:layout_height="60dp"
-                android:hint="Enter one time code"
+                android:layout_marginTop="8dp"
                 android:inputType="text"
-                android:padding="12dp"
-                android:layout_marginTop="8dp" />
+                android:padding="12dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/submitOTCButton"
                 style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="300dp"
                 android:layout_height="70dp"
-                android:text="SUBMIT OTC"
+                android:text="Submit OTC"
                 android:textSize="20sp"
                 android:layout_marginTop="16dp" />
 
@@ -98,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="CHOOSE A PATIENT"
+                android:text="Choose A Patient"
                 android:textColor="?attr/colorOnPrimaryContainer"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -108,9 +107,20 @@
                 style="@style/Widget.Material3.Button.IconButton.Filled"
                 android:layout_width="300dp"
                 android:layout_height="70dp"
-                android:text="SUMMARY CHARTS"
+                android:text="Summary Charts"
                 android:textSize="20sp"
                 android:layout_marginTop="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/logoutButton"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
+                android:layout_width="220dp"
+                android:layout_height="53dp"
+                android:layout_marginTop="200dp"
+                android:text="Log Out"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

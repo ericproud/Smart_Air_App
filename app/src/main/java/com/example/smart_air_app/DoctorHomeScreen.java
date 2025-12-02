@@ -19,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.utils.BuildPDFs;
+import com.example.smart_air_app.utils.Logout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -75,17 +76,23 @@ public class DoctorHomeScreen extends AppCompatActivity {
         String doctorID = FirebaseAuth.getInstance().getUid();
         DatabaseReference d_ref = FirebaseDatabase.getInstance().getReference("Users");
         helperOnboard(d_ref, doctorID);
+
+        Button logoutButton = findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(v -> {
+            Logout.logout(this);
+        });
+
     }
 
     Spinner patientSpinner;
     TextView patientName;
     EditText enterOTC;
     Button submitOTCButton;
-
     String UID = FirebaseAuth.getInstance().getUid();
     ArrayList<String> patientUIDs = new ArrayList<>();
     ArrayList<String> patientNames = new ArrayList<>();
     HashMap<String, String> patientNameToUID = new HashMap<>();
+
 
 
     void getPatientUIDs() {
