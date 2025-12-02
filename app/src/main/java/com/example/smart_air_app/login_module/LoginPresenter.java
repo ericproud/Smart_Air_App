@@ -36,71 +36,70 @@ public class LoginPresenter {
             view.resetInputs();                     // Reset input fields
             view.showError(error);                  // Show specific error message
         }
+    }
+    // login method takes username and password and will pass it to the model
+    public void login(String usernameOrEmail, String password) {
+        String handledUsernameOrEmail;
+        LoginCallback callback;
 
-        // login method takes username and password and will pass it to the model
-        public void Login(String usernameOrEmail, String password) {
-            String handledUsernameOrEmail;
-            LoginCallback callback;
-
-            if (!validateInputs(usernameOrEmail, password)) {   // If inputs are invalid
-                return;                                         // Do not continue (call to validateTnputs handles errors)
-            }
-            callback = new LoginCallback();     // Initialize the callback
-            handledUsernameOrEmail = convertUsername(usernameOrEmail);  // Convert username to email if needed
-            model.login(handledUsernameOrEmail, password, callback);    // Call the model's login method
+        if (!validateInputs(usernameOrEmail, password)) {   // If inputs are invalid
+            return;                                         // Do not continue (call to validateTnputs handles errors)
         }
+        callback = new LoginCallback();     // Initialize the callback
+        handledUsernameOrEmail = convertUsername(usernameOrEmail);  // Convert username to email if needed
+        model.login(handledUsernameOrEmail, password, callback);    // Call the model's login method
+    }
 
-        // Ensures neither the email nor the password are vailid
-        public boolean validateInputs(String usernameOrEmail, String password) {
-            boolean validUsernameOrEmail;
-            boolean validPassword;
+    // Ensures neither the email nor the password are vailid
+    public boolean validateInputs(String usernameOrEmail, String password) {
+        boolean validUsernameOrEmail;
+        boolean validPassword;
 
-            validUsernameOrEmail = validateUsernameOrEmail(usernameOrEmail);    // Check if username / email is valid
-            validPassword = validatePassword(password);                         // Check if password is valid
+        validUsernameOrEmail = validateUsernameOrEmail(usernameOrEmail);    // Check if username / email is valid
+        validPassword = validatePassword(password);                         // Check if password is valid
 
-            if (!validUsernameOrEmail) {        // If username / email is invalid
-                handleEmptyUsernameOrEmail();   // Call the callback to handle the error
-            }
-            if (!validPassword) {               // If password is invalid
-                handleEmptyPassword();          // Call the callback to handle the error
-            }
-            return validUsernameOrEmail && validPassword;  // Return true iff ( username / email ) and password are valid
+        if (!validUsernameOrEmail) {        // If username / email is invalid
+            handleEmptyUsernameOrEmail();   // Call the callback to handle the error
         }
-
-        // Checks if username / email is valid
-        public boolean validateUsernameOrEmail(String usernameOrEmail) {
-            if (usernameOrEmail.isEmpty()) {    // If username / email is empty
-                return false;                   // Return false
-            }
-            return true;    // Otherwise return true
+        if (!validPassword) {               // If password is invalid
+            handleEmptyPassword();          // Call the callback to handle the error
         }
+        return validUsernameOrEmail && validPassword;  // Return true iff ( username / email ) and password are valid
+    }
 
-        // Checks if password is valid
-        public boolean validatePassword(String password) {
-            if (password.isEmpty()) {   // If password is empty
-                return false;           // Return false
-            }
-            return true;    // Otherwise return true
+    // Checks if username / email is valid
+    public boolean validateUsernameOrEmail(String usernameOrEmail) {
+        if (usernameOrEmail.isEmpty()) {    // If username / email is empty
+            return false;                   // Return false
         }
+        return true;    // Otherwise return true
+    }
 
-        // Handles the empty username / email error with a callback to the view
-        public void handleEmptyUsernameOrEmail() {
-            view.onEmptyUsernameOrEmail();  // Call the callback to handle the error
+    // Checks if password is valid
+    public boolean validatePassword(String password) {
+        if (password.isEmpty()) {   // If password is empty
+            return false;           // Return false
         }
+        return true;    // Otherwise return true
+    }
 
-        // Handles the empty password error with a callback to the view
-        public void handleEmptyPassword() {
-            view.onEmptyPassword();         // Call the callback to handle the error
-        }
+    // Handles the empty username / email error with a callback to the view
+    public void handleEmptyUsernameOrEmail() {
+        view.onEmptyUsernameOrEmail();  // Call the callback to handle the error
+    }
+
+    // Handles the empty password error with a callback to the view
+    public void handleEmptyPassword() {
+        view.onEmptyPassword();         // Call the callback to handle the error
+    }
 
 
-        // Convert childs username to an email for the purposes of the app as allowed on Piazza
-        // Lets us register an account for a child as though they had an email
-        public String convertUsername(String usernameOrEmail) {
-            if (usernameOrEmail.contains("@")) {    // If username / email is already an email
-                return usernameOrEmail;             // Return as is
-            } else
-                return usernameOrEmail + "@xyz.com";   // Otherwise, add fake email extension to end of username
-        }
+    // Convert childs username to an email for the purposes of the app as allowed on Piazza
+    // Lets us register an account for a child as though they had an email
+    public String convertUsername(String usernameOrEmail) {
+        if (usernameOrEmail.contains("@")) {    // If username / email is already an email
+            return usernameOrEmail;             // Return as is
+        } else
+            return usernameOrEmail + "@xyz.com";   // Otherwise, add fake email extension to end of username
     }
 }

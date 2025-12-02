@@ -85,12 +85,6 @@
                 android:textSize="20sp"
                 android:layout_marginTop="16dp" />
 
-            <Spinner
-                android:id="@+id/patientSpinner"
-                android:layout_width="300dp"
-                android:layout_height="50sp"
-                android:layout_marginTop="16dp" />
-
             <TextView
                 android:id="@+id/patientName"
                 android:layout_width="300dp"
@@ -101,6 +95,12 @@
                 android:textColor="?attr/colorOnPrimaryContainer"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/patientSpinner"
+                android:layout_width="300dp"
+                android:layout_height="50sp"
+                android:layout_marginTop="16dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/summaryChartsButton"

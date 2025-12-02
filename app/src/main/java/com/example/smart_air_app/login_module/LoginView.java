@@ -64,7 +64,7 @@ public class LoginView extends AppCompatActivity implements LoginPresenter.AuthV
             public void onClick(View view) {
                 String email = inputUsernameOrEmail.getText().toString();   // Get inputted username / email
                 String password = inputPassword.getText().toString();       // Get inputted password
-                presenter.Login(email, password);   // Call the presenter's login method with the username / email and password
+                presenter.login(email, password);   // Call the presenter's login method with the username / email and password
             }
         });
 

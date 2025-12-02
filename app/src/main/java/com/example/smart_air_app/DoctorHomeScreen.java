@@ -2,6 +2,7 @@ package com.example.smart_air_app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -71,7 +72,8 @@ public class DoctorHomeScreen extends AppCompatActivity {
         Button logoutButton = findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(v -> {
             Logout.logout(this);
-        });
+        });enterOTC.setHint("Enter One-Time Code");
+
 
         TextView doctorNameText = findViewById(R.id.doctorNameText);
         dbRef.child("Users").child(doctorID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -148,9 +150,6 @@ public class DoctorHomeScreen extends AppCompatActivity {
                 String currentPatientName = patientSpinner.getSelectedItem().toString();
                 String currentPatientUID = patientNameToUID.get(currentPatientName);
 
-                // Setting patient name text
-                patientName.setText(currentPatientName);
-
                 // Setting Button functionality
                 setButtons(currentPatientName, currentPatientUID);
             }
@@ -181,14 +180,21 @@ public class DoctorHomeScreen extends AppCompatActivity {
                 dbRef.child("OTC's").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
+                        boolean foundChild = false;
                         for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                             if (childSnapshot.getValue() == null) {
                                 continue;
                             }
                             else if (childSnapshot.getValue().equals(OTC)) {
+                                foundChild = true;
                                 String patientUID = childSnapshot.getKey();
                                 dbRef.child("Users").child(UID).child("Patients").child(patientUID).setValue(true);
                             }
+                        }
+                        if (!foundChild) {
+                            enterOTC.setHint("Invalid One Time Code, try again");
+                            enterOTC.setText("");
+                            enterOTC.setHintTextColor(Color.parseColor("#FF0000"));
                         }
                     }
                     @Override

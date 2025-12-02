@@ -59,26 +59,13 @@ public class ParentHomeScreen extends AppCompatActivity {
         addChildButton.setOnClickListener(v -> {
             Intent intent = new Intent(ParentHomeScreen.this, AddChildScreen.class);
             startActivity(intent);
+            finish();
         });
 
         helperOnboard(dbRef, parentUID);
 
         logoutButton.setOnClickListener(v -> {
             Logout.logout(this);
-        });
-
-        dbRef.child(parentUID).child("children").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
-                    childUIDs.add(childSnapshot.getKey());
-                }
-                createChildButtons(childUIDs);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
         });
 
         NotificationUtils.ensurePermissionAndChannel(this);
@@ -99,13 +86,42 @@ public class ParentHomeScreen extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
         });
+
+        // If a new child is added to the parent we refresh the buttons and add the kid
+        dbRef.child(parentUID).child("children").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                loadChildren();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    public void loadChildren() {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        container.removeAllViews();
+        childUIDs = new ArrayList<>();
+        dbRef.child(parentUID).child("children").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                    childUIDs.add(childSnapshot.getKey());
+                }
+                createChildButtons(childUIDs);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         fdl.removeListeners();
-
     }
 
 
@@ -147,6 +163,7 @@ public class ParentHomeScreen extends AppCompatActivity {
             intent.putExtra("childUID", childUID);
             intent.putExtra("childName", childName);
             startActivity(intent);
+            finish();
         });
 
         container.addView(button);
@@ -174,6 +191,7 @@ public class ParentHomeScreen extends AppCompatActivity {
                     if (val != null && !val) {
                         Intent intent = new Intent(ParentHomeScreen.this, ParentOnboardingScreen1.class);
                         startActivity(intent);
+                        finish();
 
                         //when they finish the onboarding set this to true
                         o_ref.setValue(true);
