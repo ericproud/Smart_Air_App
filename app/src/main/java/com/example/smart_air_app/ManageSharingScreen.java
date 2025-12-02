@@ -2,6 +2,7 @@ package com.example.smart_air_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -56,14 +57,12 @@ public class ManageSharingScreen extends AppCompatActivity {
         toggleTimeframe = findViewById(R.id.toggleTimeframe);
 
         submitButton.setOnClickListener(v -> {
-            setPermissions();
-            Intent intent = new Intent(ManageSharingScreen.this, ManageChildAccount.class);
-            startActivity(intent);
+            setPermissions(getIntent().getStringExtra("childUID"));
+            finish();
         });
     }
 
-    public void setPermissions() {
-        String childUID = getIntent().getStringExtra("childUID");
+    public void setPermissions(String id) {
         boolean controllerMedicine = toggleControllerMedicine.isChecked();
         boolean rescueMedicine = toggleRescueMedicine.isChecked();
         boolean triage = toggleTriage.isChecked();
@@ -81,16 +80,13 @@ public class ManageSharingScreen extends AppCompatActivity {
         else {
             timeframe = 3;
         }
-        dbRef.child("Permissions").child(childUID).child("controller adherence summary").setValue(controllerMedicine);
-        dbRef.child("Permissions").child(childUID).child("rescue logs").setValue(rescueMedicine);
-        dbRef.child("Permissions").child(childUID).child("triage").setValue(triage);
-        dbRef.child("Permissions").child(childUID).child("pef").setValue(pef);
-        dbRef.child("Permissions").child(childUID).child("symptoms").setValue(symptoms);
-        dbRef.child("Permissions").child(childUID).child("triggers").setValue(triggers);
-        dbRef.child("Permissions").child(childUID).child("summary charts").setValue(summaries);
-        dbRef.child("Permissions").child(childUID).child("sharing timeframe").setValue(timeframe);
-
-        // Accounting for previous error
-        dbRef.child("Permissions").child(childUID).child("triage incidents").setValue(triage);
+        dbRef.child("Permissions").child(id).child("controllerMedicineUse").setValue(controllerMedicine);
+        dbRef.child("Permissions").child(id).child("rescueMedicineUse").setValue(rescueMedicine);
+        dbRef.child("Permissions").child(id).child("triage").setValue(triage);
+        dbRef.child("Permissions").child(id).child("pef").setValue(pef);
+        dbRef.child("Permissions").child(id).child("symptoms").setValue(symptoms);
+        dbRef.child("Permissions").child(id).child("triggers").setValue(triggers);
+        dbRef.child("Permissions").child(id).child("summaries").setValue(summaries);
+        dbRef.child("Permissions").child(id).child("sharing timeframe").setValue(timeframe);
     }
 }

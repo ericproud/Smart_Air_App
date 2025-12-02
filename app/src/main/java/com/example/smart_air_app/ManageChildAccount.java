@@ -2,6 +2,7 @@ package com.example.smart_air_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,9 +18,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ManageChildAccount extends AppCompatActivity {
 
+    private String id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        id = getIntent().getStringExtra("childUID");
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_manage_child_account);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -40,7 +46,7 @@ public class ManageChildAccount extends AppCompatActivity {
                     String OTC = Integer.toString((int) (Math.random() * (999999999 - 100000000 + 1) + 100000000));
                     String text = "Your code is: " + OTC + " please give this to your provider.";
                     OTCText.setText(text);
-                    FirebaseDatabase.getInstance().getReference("OTC's").child(childUID).setValue(OTC);
+                    FirebaseDatabase.getInstance().getReference("OTC's").child(id).setValue(OTC);
                 }
             });
 
