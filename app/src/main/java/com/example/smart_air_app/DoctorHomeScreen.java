@@ -75,6 +75,20 @@ public class DoctorHomeScreen extends AppCompatActivity {
         String doctorID = FirebaseAuth.getInstance().getUid();
         DatabaseReference d_ref = FirebaseDatabase.getInstance().getReference("Users");
         helperOnboard(d_ref, doctorID);
+
+        TextView doctorNameText = findViewById(R.id.doctorNameText);
+        dbRef.child("Users").child(doctorID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange (@NonNull DataSnapshot childSnapshot){
+                String firstName = childSnapshot.child("firstName").getValue(String.class);
+                String lastName = childSnapshot.child("lastName").getValue(String.class);
+                String childName = firstName + " " + lastName;
+                doctorNameText.setText(childName);
+            }
+            @Override
+            public void onCancelled (@NonNull DatabaseError error){
+            }
+        });
     }
 
     Spinner patientSpinner;
@@ -86,7 +100,6 @@ public class DoctorHomeScreen extends AppCompatActivity {
     ArrayList<String> patientUIDs = new ArrayList<>();
     ArrayList<String> patientNames = new ArrayList<>();
     HashMap<String, String> patientNameToUID = new HashMap<>();
-
 
     void getPatientUIDs() {
         // Get patient UIDs from children linked to doctor from db
