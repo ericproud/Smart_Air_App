@@ -28,15 +28,15 @@ Team members (Alphabetically by last name):
 - Gradle
 
 ## Some accounts to use
-Parent:
-- Email: janedoe@pinmx.net
-- Password: password
-Child:
-- Username Jack
-- Password: password
-Doctor:
-- Email: drj@gmail.com
-- Password: password
+- Parent:
+  - Email: janedoe@pinmx.net
+  - Password: password
+- Child:
+  - Username Jack
+  - Password: password
+- Doctor:
+  - Email: drj@gmail.com
+  - Password: password
   
 ## Installation And Running
 
