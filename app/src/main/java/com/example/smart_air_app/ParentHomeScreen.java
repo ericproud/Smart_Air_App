@@ -93,8 +93,8 @@ public class ParentHomeScreen extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot childSnapshot) {
                 String firstName = childSnapshot.child("firstName").getValue(String.class);
                 String lastName = childSnapshot.child("lastName").getValue(String.class);
-                String childName = firstName + " " + lastName;
-                parentNameText.setText(childName);
+                String parentName = firstName + " " + lastName;
+                parentNameText.setText(parentName);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }

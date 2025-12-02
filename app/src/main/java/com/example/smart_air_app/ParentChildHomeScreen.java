@@ -1,6 +1,7 @@
 package com.example.smart_air_app;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -21,14 +23,30 @@ import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.log_rescue_attempt.RescueAttempt;
 import com.example.smart_air_app.log_rescue_attempt.RescueAttemptRepository;
 import com.example.smart_air_app.utils.Logout;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.EntryXComparator;
 import com.google.android.material.button.MaterialButton;
 
 import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
 import com.example.smart_air_app.controller_log.PEFZones;
 import com.example.smart_air_app.controller_log.PEFZonesDatabase;
 import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -54,6 +72,7 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         childUserId = childData.getStringExtra("childUID");
         childName = getIntent().getStringExtra("childName");
 
+        TextView trendSnippetLabel = findViewById(R.id.labelTrendSnippet);
         TextView childNameText = findViewById(R.id.childName);
         MaterialButton dailyCheckInButton = findViewById(R.id.btnDailyCheckIn);
         MaterialButton logControllerButton = findViewById(R.id.btnLogController);
@@ -73,6 +92,29 @@ public class ParentChildHomeScreen extends AppCompatActivity {
         TextView lastRescueTime = findViewById(R.id.textLastRescueTime);
         TextView weeklyRescueCount = findViewById(R.id.textWeeklyCount);
         FrameLayout chartContainer = findViewById(R.id.chartContainer);
+
+        trendSnippetLabel.setText("Rescues/Day:7 Day");
+        final boolean[] showing7Days = { true };
+        Button chartToggleButton = findViewById(R.id.chartToggleButton);
+
+        chartToggleButton.setOnClickListener(v -> {
+            if (showing7Days[0]) {
+                buildTrendSnippet(7);
+            }
+            else {
+                buildTrendSnippet(30);
+            }
+            if (showing7Days[0]) {
+                trendSnippetLabel.setText("Rescues/Day:7 Day");
+            }
+            else {
+                trendSnippetLabel.setText("Rescues/Day:30 Day");
+            }
+
+            showing7Days[0] = !showing7Days[0];
+        });
+
+        buildTrendSnippet(7);
 
         childNameText.setText(childName);
 
@@ -234,6 +276,76 @@ public class ParentChildHomeScreen extends AppCompatActivity {
 
         onboardButton.setOnClickListener(v-> {
             startActivity(new Intent(ParentChildHomeScreen.this, ParentOnboardingScreen1.class));
+        });
+    }
+
+    public void buildTrendSnippet(int numDays) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        int[] rescueAttempts = new int[numDays];
+        for (int i = 0; i < numDays; i++) {
+            rescueAttempts[i] = 0;
+        }
+        dbRef.child("RescueAttempts").child(childUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot rescueAttemptSnapshot : dataSnapshot.getChildren()) {
+                    long timestamp = rescueAttemptSnapshot.child("timestamp").getValue(Long.class);
+                    Date rescueDate = new Date(timestamp);
+                    Date today = new Date();
+                    int numDaysAgo = (int) ((today.getTime() - rescueDate.getTime()) / (1000 * 60 * 60 * 24));
+
+                    for (int day = 0; day< numDays ; day++) {
+                        if (numDaysAgo == day) {
+                            rescueAttempts[day] ++;
+                        }
+                    }
+                }
+                ArrayList<Entry> entries = new ArrayList<>();
+                for (int i = 0; i < numDays ; i++) {
+                    entries.add(new Entry(i, rescueAttempts[numDays - i - 1]));
+                }
+                LineDataSet dataSet = new LineDataSet(entries, "Rescue Attempts");
+
+                dataSet.setColor(Color.parseColor("#415f91"));
+                dataSet.setDrawCircles(false);
+                dataSet.setDrawValues(false);
+
+                LineChart chart = findViewById(R.id.lineChart);
+                chart.setData(new LineData(dataSet));
+                chart.invalidate();
+
+                chart.getDescription().setEnabled(false);
+                chart.setNoDataText("No data available");
+
+                Legend legend = chart.getLegend();
+                chart.getLegend().setEnabled(false);
+                legend.setEnabled(false);
+
+                XAxis xAxis = chart.getXAxis();
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setDrawGridLines(true);
+                xAxis.setGridColor(Color.parseColor("#DDDDDD"));
+                xAxis.setTextColor(Color.BLACK);
+                xAxis.setTextSize(11f);
+                xAxis.setGranularity(1f);
+                xAxis.setAvoidFirstLastClipping(true);
+                xAxis.setDrawLabels(false);
+
+                YAxis leftAxis = chart.getAxisLeft();
+                leftAxis.setDrawGridLines(true);
+                leftAxis.setGridColor(Color.parseColor("#DDDDDD"));
+                leftAxis.setTextColor(Color.BLACK);
+                leftAxis.setTextSize(11f);
+                leftAxis.setAxisMinimum(0f);
+
+                leftAxis.setGranularity(1f);
+                leftAxis.setGranularityEnabled(true);
+
+                chart.getAxisRight().setEnabled(false);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
         });
     }
 

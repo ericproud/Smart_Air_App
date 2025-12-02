@@ -1,6 +1,7 @@
 package com.example.smart_air_app;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -19,6 +20,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.log_rescue_attempt.LogRescueAttemptActivity;
 import com.example.smart_air_app.utils.Logout;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +38,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.example.smart_air_app.controller_log.ControllerLoggingScreen;
 import com.example.smart_air_app.controller_log.PEFZones;
 import com.example.smart_air_app.controller_log.PEFZonesDatabase;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public class ChildHomeScreen extends AppCompatActivity {
 
@@ -44,6 +55,7 @@ public class ChildHomeScreen extends AppCompatActivity {
             return insets;
         });
 
+        TextView trendSnippetLabel = findViewById(R.id.labelTrendSnippet);
         TextView todaysZone = findViewById(R.id.textTodaysZone);
         TextView lastRescueTime = findViewById(R.id.textLastRescueTime);
         TextView weeklyRescueCount = findViewById(R.id.textWeeklyCount);
@@ -52,6 +64,8 @@ public class ChildHomeScreen extends AppCompatActivity {
         String childUID = FirebaseAuth.getInstance().getUid();
 
         helperOnboard(FirebaseDatabase.getInstance().getReference("Users"), childUID);
+        trendSnippetLabel.setText("Rescues/Day:7 Day");
+
 
         TextView childNameText = findViewById(R.id.childsName);
         dbRef.child("Users").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -71,6 +85,29 @@ public class ChildHomeScreen extends AppCompatActivity {
 
         String childName = childNameText.getText().toString();
 
+
+        final boolean[] showing7Days = { true };
+        Button chartToggleButton = findViewById(R.id.chartToggleButton);
+
+        chartToggleButton.setOnClickListener(v -> {
+            if (showing7Days[0]) {
+                buildTrendSnippet(7);
+            }
+            else {
+                buildTrendSnippet(30);
+            }
+
+            showing7Days[0] = !showing7Days[0];
+
+            if (showing7Days[0]) {
+                trendSnippetLabel.setText("Rescues/Day:7 Day");
+            }
+            else {
+                trendSnippetLabel.setText("Rescues/Day:30 Day");
+            }
+        });
+
+        buildTrendSnippet(7);
 
         /// Hossein
         MaterialButton dailyCheckIn = findViewById(R.id.parentDailyCheckInButton);
@@ -205,6 +242,77 @@ public class ChildHomeScreen extends AppCompatActivity {
                 }
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    public void buildTrendSnippet(int numDays) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        String childUID = FirebaseAuth.getInstance().getUid();
+        int[] rescueAttempts = new int[numDays];
+        for (int i = 0; i < numDays; i++) {
+            rescueAttempts[i] = 0;
+        }
+        dbRef.child("RescueAttempts").child(childUID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot rescueAttemptSnapshot : dataSnapshot.getChildren()) {
+                    long timestamp = rescueAttemptSnapshot.child("timestamp").getValue(Long.class);
+                    Date rescueDate = new Date(timestamp);
+                    Date today = new Date();
+                    int numDaysAgo = (int) ((today.getTime() - rescueDate.getTime()) / (1000 * 60 * 60 * 24));
+
+                    for (int day = 0; day< numDays ; day++) {
+                        if (numDaysAgo == day) {
+                            rescueAttempts[day] ++;
+                        }
+                    }
+                }
+                ArrayList<Entry> entries = new ArrayList<>();
+                for (int i = 0; i < numDays ; i++) {
+                    entries.add(new Entry(i, rescueAttempts[numDays - i - 1]));
+                }
+                LineDataSet dataSet = new LineDataSet(entries, "Rescue Attempts");
+
+                dataSet.setColor(Color.parseColor("#415f91"));
+                dataSet.setDrawCircles(false);
+                dataSet.setDrawValues(false);
+
+                LineChart chart = findViewById(R.id.lineChart);
+                chart.setData(new LineData(dataSet));
+                chart.invalidate();
+
+                chart.getDescription().setEnabled(false);
+                chart.setNoDataText("No data available");
+
+                Legend legend = chart.getLegend();
+                chart.getLegend().setEnabled(false);
+                legend.setEnabled(false);
+
+                XAxis xAxis = chart.getXAxis();
+                xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                xAxis.setDrawGridLines(true);
+                xAxis.setGridColor(Color.parseColor("#DDDDDD"));
+                xAxis.setTextColor(Color.BLACK);
+                xAxis.setTextSize(11f);
+                xAxis.setGranularity(1f);
+                xAxis.setAvoidFirstLastClipping(true);
+                xAxis.setDrawLabels(false);
+
+                YAxis leftAxis = chart.getAxisLeft();
+                leftAxis.setDrawGridLines(true);
+                leftAxis.setGridColor(Color.parseColor("#DDDDDD"));
+                leftAxis.setTextColor(Color.BLACK);
+                leftAxis.setTextSize(11f);
+                leftAxis.setAxisMinimum(0f);
+
+                leftAxis.setGranularity(1f);
+                leftAxis.setGranularityEnabled(true);
+
+                chart.getAxisRight().setEnabled(false);
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
