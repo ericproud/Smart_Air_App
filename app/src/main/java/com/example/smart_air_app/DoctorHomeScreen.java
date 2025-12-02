@@ -3,6 +3,7 @@ package com.example.smart_air_app;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.utils.BuildPDFs;
+import com.example.smart_air_app.utils.Logout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,16 +53,6 @@ public class DoctorHomeScreen extends AppCompatActivity {
         dbRef = FirebaseDatabase.getInstance().getReference();
         childUID = getIntent().getStringExtra("patientUID");
         childName = getIntent().getStringExtra("patientName");
-        mapOfFields = new HashMap<>();
-        mapOfFields.put("Shortness of breath", "8");
-        mapOfFields.put("Chest tightness", "5");
-        mapOfFields.put("Chest pain", "3");
-        mapOfFields.put("Wheezing", "1");
-        mapOfFields.put("Trouble sleeping", "0");
-        mapOfFields.put("Coughing", "3");
-        mapOfFields.put("Other", "22");
-        mapOfFields.put("Controller Adherence", "0%");
-        mapOfFields.put("Rescue Attempts Per Day", "0");
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -71,18 +63,39 @@ public class DoctorHomeScreen extends AppCompatActivity {
 
             return insets;
         });
+
+        String doctorID = FirebaseAuth.getInstance().getUid();
+        DatabaseReference d_ref = FirebaseDatabase.getInstance().getReference("Users");
+        helperOnboard(d_ref, doctorID);
+
+        Button logoutButton = findViewById(R.id.logoutButton);
+        logoutButton.setOnClickListener(v -> {
+            Logout.logout(this);
+        });
+
+        TextView doctorNameText = findViewById(R.id.doctorNameText);
+        dbRef.child("Users").child(doctorID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange (@NonNull DataSnapshot childSnapshot){
+                String firstName = childSnapshot.child("firstName").getValue(String.class);
+                String lastName = childSnapshot.child("lastName").getValue(String.class);
+                String childName = firstName + " " + lastName;
+                doctorNameText.setText(childName);
+            }
+            @Override
+            public void onCancelled (@NonNull DatabaseError error){
+            }
+        });
     }
 
     Spinner patientSpinner;
     TextView patientName;
     EditText enterOTC;
     Button submitOTCButton;
-
     String UID = FirebaseAuth.getInstance().getUid();
     ArrayList<String> patientUIDs = new ArrayList<>();
     ArrayList<String> patientNames = new ArrayList<>();
     HashMap<String, String> patientNameToUID = new HashMap<>();
-
 
     void getPatientUIDs() {
         // Get patient UIDs from children linked to doctor from db
@@ -153,7 +166,7 @@ public class DoctorHomeScreen extends AppCompatActivity {
         summaryChartsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BuildPDFs.buildProviderReport(DoctorHomeScreen.this, dbRef, patientUID, patientName, mapOfFields);
+                BuildPDFs.buildProviderReport(DoctorHomeScreen.this, dbRef, patientUID, patientName);
             }
         });
     }
@@ -172,7 +185,7 @@ public class DoctorHomeScreen extends AppCompatActivity {
                             if (childSnapshot.getValue() == null) {
                                 continue;
                             }
-                            else if (childSnapshot.getValue().equals(Long.parseLong(OTC))) {
+                            else if (childSnapshot.getValue().equals(OTC)) {
                                 String patientUID = childSnapshot.getKey();
                                 dbRef.child("Users").child(UID).child("Patients").child(patientUID).setValue(true);
                             }
@@ -182,6 +195,34 @@ public class DoctorHomeScreen extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError error) {
                     }
                 });
+            }
+        });
+    }
+
+    private void helperOnboard(DatabaseReference d_ref, String id) {
+        //reference to see if the user is onboarded
+        DatabaseReference o_ref = d_ref.child(id).child("isOnboarded");
+
+        o_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //the isOnboarded should exist this is just a safety net
+                if (snapshot.exists()) {
+                    Boolean val = snapshot.getValue(Boolean.class);
+
+                    //if false then send them to parent onboarding also check if null for safety
+                    if (val != null && !val) {
+                        Intent intent = new Intent(DoctorHomeScreen.this, ProviderOnboardingScreen1.class);
+                        startActivity(intent);
+
+                        //when they finish the onboarding set this to true
+                        o_ref.setValue(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }

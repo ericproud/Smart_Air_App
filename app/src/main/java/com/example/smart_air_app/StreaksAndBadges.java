@@ -1,6 +1,7 @@
 package com.example.smart_air_app;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;

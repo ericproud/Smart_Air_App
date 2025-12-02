@@ -220,21 +220,34 @@
                         android:orientation="vertical"
                         android:padding="12dp">
 
-                        <TextView
-                            android:id="@+id/labelTrendSnippet"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Trend Snippet"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:textColor="?attr/colorOnSurface" />
-
                         <FrameLayout
                             android:id="@+id/chartContainer"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:layout_marginTop="8dp" />
+                            android:layout_marginTop="8dp" >
+
+                        <TextView
+                            android:id="@+id/labelTrendSnippet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Rescue attempts per day"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnSurface" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/lineChart"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                            <Button
+                                android:id="@+id/chartToggleButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/transparent" />
+                        </FrameLayout>
+
 
                     </LinearLayout>
 
@@ -357,6 +370,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Manage Account"
+                android:layout_marginTop="8dp" />
+
+            <!--- View Onboarding -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/onboardingButton"
+                style="@style/Widget.Material3.Button.IconButton.Filled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="View Onboarding"
                 android:layout_marginTop="8dp" />
 
             <com.google.android.material.button.MaterialButton

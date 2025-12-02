@@ -20,8 +20,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.smart_air_app.R;
 import com.example.smart_air_app.VideoSBSInhallerUse;
 import com.example.smart_air_app.utils.DateValidator;
-import com.example.smart_air_app.utils.PEFHistory;
-import com.example.smart_air_app.utils.PEFHistoryCalculator;
 
 import java.util.Calendar;
 
@@ -76,35 +74,43 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         String[] date = {""};
         String[] breathShortness = {""};
 
+        //leaves to the controller schedule screen
         scheduleButton.setOnClickListener(v ->{
             Intent intent = new Intent(ControllerLoggingScreen.this, ControllerScheduleScreen.class);
             intent.putExtra("childUID", ID);
             startActivity(intent);
         });
 
+        //choose the time of controller use
         timeSelector.setOnClickListener(v->{
             showTimePopup(inputs);
         });
 
+        //choose the date of controller use
         dateSelector.setOnClickListener(v->{
             Calendar today = Calendar.getInstance();
 
+            //this is today's date and is the default date
             int day = today.get(today.DAY_OF_MONTH);
             int month = today.get(today.MONTH);
             int year = today.get(today.YEAR);
 
             DatePickerDialog dateSelection = new DatePickerDialog(
-              this,
-                    (view, selectedYear, selectedMonth, selectedDay) -> {
+              this, (view, selectedYear, selectedMonth, selectedDay) -> {
+                        //save the date chosen in inputs and in the dateText textview
                         date[0] = DateValidator.makeDateString(selectedDay, selectedMonth + 1, selectedYear);
                         dateText.setText("Selected time: " + date[0]);
+                        //if there is an error remove it
                         dateText.setError(null);
                         inputs.setDate(date[0]);
                     },
                     year, month, day
             );
 
+            //you can't really take medicine in the future and log it now so set max
             dateSelection.getDatePicker().setMaxDate(today.getTimeInMillis());
+
+            //show the calender
             dateSelection.show();
         });
 
@@ -114,35 +120,45 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         feelingSpinner.setAdapter(adapter);
 
+        //handles chosen feelings
         feelingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //handles and saves chosen feeling
                 feeling_chosen[0] = feeling[position];
                 inputs.setFeeling(feeling_chosen[0]);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                //if they manage to not choose anything there is no feeling
                 feeling_chosen[0] = "";
                 inputs.setFeeling(null);
             }
         });
 
+        //this sets the pb
         pbButton.setOnClickListener(v->{
+            //get pb text
             String pbText = pbInput.getText().toString().trim();
 
+            //try and parse it
             int pbParsed = intParser(pbText);
 
+            //-69 is the error code selected so if we don't get it then we know its a valid integer
             if (pbParsed != -69) {
+                //only set the new pb if it's greater than the old pb
                 if (pbParsed > zone.getPB()) {
                     personalBest.setText("Current Personal Best: " + pbParsed);
                 }
+                //set the pb, update the database and text
                 zone.setPB(pbParsed);
                 PEFZonesDatabase.savePEFZones(ID, zone);
                 currentZone.setText("Today's Zone: " + zone.calculateZone());
             }
         });
 
+        //redirects to technique helper page
         techniqueHelperRedirect.setOnClickListener(v-> {
             Intent intent = new Intent(ControllerLoggingScreen.this, VideoSBSInhallerUse.class);
             startActivity(intent);
@@ -162,6 +178,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
             int postInputAmount = intParser(postInput[0]);
             int breathShortnessInput = intParser(breathShortness[0]);
 
+            //if the optional fields are not error codes then set input to store those values
             if (doseInputAmount != -69) {
                 inputs.setDoseInput(doseInputAmount);
             }
@@ -182,12 +199,18 @@ public class ControllerLoggingScreen extends AppCompatActivity {
                 }
             }
 
+            //valid submission handles if all required fields are filled in with valid inputs
             if (validSubmission(inputs)) {
+                //save the controller
                 ControllerDatabase.logControllerDatabase(ID, inputs);
 
+                //if the pef logged is higher than the old pef set it
                 zone.setHighest_pef(postInputAmount);
+
+                //update feelings and pef
                 PEFZonesDatabase.savePEFZones(ID, zone);
 
+                //recalculate zone
                 currentZone.setText("Today's Zone: " + zone.calculateZone());
             }
         });
@@ -196,15 +219,19 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         backButton.setOnClickListener(v->{finish();});
     }
 
+    //this is the integer parser
     private int intParser(String input) {
         try {
             int ans = Integer.parseInt(input);
+            //if the value is a negative integer return error code -69
             if (ans < 0) {
                 return -69;
             }
+            //this means it was a non negative integer so valid
             return ans;
         }
         catch (NumberFormatException e) {
+            //if the value was not an integer return error code -69
             return -69;
         }
     }
@@ -235,32 +262,38 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         dialog.show();
     }
 
+    //if the submission is valid return true
     private boolean validSubmission(ControllerLog inputs) {
         TextView dateText = findViewById(R.id.selectedDateText);
         TextView timeChosen = findViewById(R.id.selectedTimeText);
         TextView doseAmount = findViewById(R.id.amountInputText);
         TextView breathShortnessText = findViewById(R.id.shortnessBreathInput);
 
+        //we return this
         boolean ans = true;
 
+        //if no date is chosen show an error
         if (inputs.getDate() == null) {
             dateText.setError("This field is required");
             dateText.requestFocus();
             ans = false;
         }
 
+        //if the time is not chosen show an error
         if (inputs.getTime() == null) {
             timeChosen.setError("This field is required");
             timeChosen.requestFocus();
             ans = false;
         }
 
+        //if the dosage amount is not given show an error
         if (inputs.getDoseInput() == -69) {
             doseAmount.setError("This field is required");
             doseAmount.requestFocus();
             ans = false;
         }
 
+        //if breath shortness isn't given show an error
         if (inputs.getBreathShortness() == -69) {
             breathShortnessText.setError("This field is required");
             breathShortnessText.requestFocus();
@@ -270,6 +303,7 @@ public class ControllerLoggingScreen extends AppCompatActivity {
         return ans;
     }
 
+    //update pb and zone if a new pb is given
     private void helperPB(String id, PEFZones pefZone) {
         TextView personalBest = findViewById(R.id.currentBest);
         TextView currentZone = findViewById(R.id.currentZoneText);

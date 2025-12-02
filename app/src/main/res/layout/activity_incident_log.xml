@@ -37,8 +37,6 @@
                 android:text="Triage Incident Log"
                 android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                 />
-
-            <include layout="@layout/view_shared_with_provider_chip" />
         </LinearLayout>
     </com.google.android.material.appbar.MaterialToolbar>
 
@@ -68,6 +66,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialToolbar"
             app:layout_constraintVertical_bias="0.0">
+
+            <com.google.android.material.chip.Chip
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sharedTag"
+                style="@style/SharedWithProviderChip"
+                android:layout_marginBottom="10dp"
+                android:text="Shared with Provider"
+                android:visibility="gone"/>
 
             <TextView
                 android:layout_width="match_parent"

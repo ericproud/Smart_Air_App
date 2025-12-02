@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!-- the Imageview Warning are OKAY leave them be! its for a description -->
-    P.S. got it done!
+
 
     <ImageView
         android:id="@+id/left"

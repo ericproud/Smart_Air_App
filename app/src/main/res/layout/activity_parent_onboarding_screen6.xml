@@ -27,22 +27,44 @@
         app:layout_constraintStart_toEndOf="@+id/backButton" />
 
     <ImageView
-        android:id="@+id/imageView10"
-        android:layout_width="350dp"
-        android:layout_height="450dp"
+        android:id="@+id/imageView5"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/provider_screen3" />
+        app:srcCompat="@drawable/parent_page6" />
 
     <TextView
-        android:id="@+id/textView33"
+        android:id="@+id/textView23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="This is an example of a dummy report, you can see that there is no controller adherence as this dummy account doesn't have a schedule. No rescue attempts were made so this account has no rescue attempts per day. You can see the symptoms they experience a day. Other refers to any symptom not listed. Below that there is a Monthly PEF zone distribution, this is the default one. The next page is empty but there would be a triage history for patients."
+        android:text="By default nothing is shared with the provider."
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView10" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="You can choose as many categories that you want to share. When you select one they will be highlighted like Controller Medicine use logs and summary charts."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="You also can choose the timeframe that you share in the image above the 5 months option is selected, you can choose whichever and the provider will be able to see that child's history for the selected amount of time."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

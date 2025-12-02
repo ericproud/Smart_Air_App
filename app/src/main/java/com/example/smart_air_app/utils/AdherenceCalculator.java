@@ -1,7 +1,5 @@
 package com.example.smart_air_app.utils;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -51,53 +49,57 @@ public class AdherenceCalculator {
 
         long days = ChronoUnit.DAYS.between(start, end) + 1;
 
-        Log.d("Controller Adherence", "" + days + " measuring");
-
         //call the calculator
         CalculateAdherence2(id, startKey, endKey, days, result);
     }
 
+    //converts date from MMM DD YYYY to yyyymmdd for query usage
     public static LocalDate dateParseHelp(String date) {
         String[] temp = date.trim().split(" ");
 
-        int month = 0;
+        String monthStr = temp[0].toUpperCase();
+        int month = 1;
         int day = Integer.parseInt(temp[1]);
         int year = Integer.parseInt(temp[2]);
 
-        if (temp[0].equals("JAN")) {
+        if (year < 100) {
+            year += 2000;
+        }
+
+        if (monthStr.equals("JAN")) {
             month = 1;
         }
-        else if (temp[0].equals("FEB")) {
+        else if (monthStr.equals("FEB")) {
             month = 2;
         }
-        else if (temp[0].equals("MAR")) {
+        else if (monthStr.equals("MAR")) {
             month = 3;
         }
-        else if (temp[0].equals("APR")) {
+        else if (monthStr.equals("APR")) {
             month = 4;
         }
-        else if (temp[0].equals("MAY")) {
+        else if (monthStr.equals("MAY")) {
             month = 5;
         }
-        else if (temp[0].equals("JUN")) {
+        else if (monthStr.equals("JUN")) {
             month = 6;
         }
-        else if (temp[0].equals("JUL")) {
+        else if (monthStr.equals("JUL")) {
             month = 7;
         }
-        else if (temp[0].equals("AUG")) {
+        else if (monthStr.equals("AUG")) {
             month = 8;
         }
-        else if (temp[0].equals("SEP")) {
+        else if (monthStr.equals("SEP")) {
             month = 9;
         }
-        else if (temp[0].equals("OCT")) {
+        else if (monthStr.equals("OCT")) {
             month = 10;
         }
-        else if (temp[0].equals("NOV")) {
+        else if (monthStr.equals("NOV")) {
             month = 11;
         }
-        else if (temp[0].equals("DEC")) {
+        else if (monthStr.equals("DEC")) {
             month = 12;
         }
 
@@ -124,8 +126,6 @@ public class AdherenceCalculator {
                 }
             }
 
-            Log.d("Controller Adherance", "sum = " + sum[0]);
-
             //handles amountTaken or goes through controller usage after the schedule is loaded to avoid potential asynch issues
             FirebaseDatabase fdb = FirebaseDatabase.getInstance();
 
@@ -140,12 +140,12 @@ public class AdherenceCalculator {
                     for (DataSnapshot toDo : snapshot.getChildren()) {
                         DataSnapshot amount_ref = toDo.child("amountUsed");
 
+                        //if the amount is logged and non null then add it to what we have taken
                         if (amount_ref.exists()) {
                             Integer dose = amount_ref.getValue(Integer.class);
                             if (dose != null && dose > 0) {
                                 amountTaken[0] += dose;
                             }
-                            Log.d("Controller Adherence", "dose = " + dose + "\namount taken = " + amountTaken[0]);
                         }
                     }
 
@@ -163,11 +163,6 @@ public class AdherenceCalculator {
                             result.setResult((1.0 * amountTaken[0]) / (sum[0] * days));
                         }
                     }
-
-                    Log.d("Controller Adherence", "amount taken = " + amountTaken[0]);
-                    Log.d("Controller Adherence", "supposed to take = " + sum[0]);
-                    Log.d("Controller Adherence", "days: " + days);
-                    Log.d("ControllerAdherence", "percent: " + result.getResult());
                 }
 
                 @Override

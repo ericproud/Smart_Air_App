@@ -61,6 +61,8 @@ public class ParentHomeScreen extends AppCompatActivity {
             startActivity(intent);
         });
 
+        helperOnboard(dbRef, parentUID);
+
         logoutButton.setOnClickListener(v -> {
             Logout.logout(this);
         });
@@ -91,8 +93,8 @@ public class ParentHomeScreen extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot childSnapshot) {
                 String firstName = childSnapshot.child("firstName").getValue(String.class);
                 String lastName = childSnapshot.child("lastName").getValue(String.class);
-                String childName = firstName + " " + lastName;
-                parentNameText.setText(childName);
+                String parentName = firstName + " " + lastName;
+                parentNameText.setText(parentName);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) { }
@@ -155,5 +157,33 @@ public class ParentHomeScreen extends AppCompatActivity {
                 dp,
                 getResources().getDisplayMetrics()
         );
+    }
+
+    private void helperOnboard(DatabaseReference d_ref, String id) {
+        //reference to see if the user is onboarded
+        DatabaseReference o_ref = d_ref.child(id).child("isOnboarded");
+
+        o_ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //the isOnboarded should exist this is just a safety net
+                if (snapshot.exists()) {
+                    Boolean val = snapshot.getValue(Boolean.class);
+
+                    //if false then send them to parent onboarding also check if null for safety
+                    if (val != null && !val) {
+                        Intent intent = new Intent(ParentHomeScreen.this, ParentOnboardingScreen1.class);
+                        startActivity(intent);
+
+                        //when they finish the onboarding set this to true
+                        o_ref.setValue(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 }

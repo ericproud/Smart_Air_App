@@ -18,6 +18,7 @@ public class ControllerDatabase {
         void onResult(List<String> steps);
     }
 
+    //converts date: MMM DD YYYY and time: HH:MM to yyyymmdd_hhmm for query usage
     public static String keyHelper(String date, String time)
     {
         String year = "";
@@ -70,6 +71,7 @@ public class ControllerDatabase {
         return year + month + day + "_" + time2;
     }
 
+    //save controller usage
     public static void logControllerDatabase(String id, ControllerLog info) {
         //key is the converted time to number for easy sorting
         String key = keyHelper(info.getDate(), info.getTime());
@@ -189,6 +191,7 @@ public class ControllerDatabase {
                 else {
                     //if the inventory doesn't exist we fill it with dummy values to show the inventory manager this was used but not logged
                     //the user id does not exist in inventory so we store it using empty strings
+                    //the inventory is created by default when a user signs up. this is an ultimate back up just in case
                     d_ref.child("expires").setValue("");
                     d_ref.child("lastPurchased").setValue("");
                     d_ref.child("remaining").setValue(200 - info.getDoseInput());
@@ -224,6 +227,7 @@ public class ControllerDatabase {
                                     schedule.add(val.getValue(String.class));
                                 }
                             }
+                            //callback to avoid asynch issues
                             callback.onResult(schedule);
                         }
 
@@ -233,6 +237,7 @@ public class ControllerDatabase {
                     });
                 }
                 else {
+                    //empty callback
                     callback.onResult(new ArrayList<String>());
                 }
             }
