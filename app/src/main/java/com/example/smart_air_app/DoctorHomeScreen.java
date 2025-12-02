@@ -3,6 +3,7 @@ package com.example.smart_air_app;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -194,7 +195,7 @@ public class DoctorHomeScreen extends AppCompatActivity {
                             if (childSnapshot.getValue() == null) {
                                 continue;
                             }
-                            else if (childSnapshot.getValue().equals(Long.parseLong(OTC))) {
+                            else if (childSnapshot.getValue().equals(OTC)) {
                                 String patientUID = childSnapshot.getKey();
                                 dbRef.child("Users").child(UID).child("Patients").child(patientUID).setValue(true);
                             }

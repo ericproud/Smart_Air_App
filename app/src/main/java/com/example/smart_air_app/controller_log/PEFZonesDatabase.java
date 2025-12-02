@@ -1,7 +1,10 @@
 package com.example.smart_air_app.controller_log;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
+import com.example.smart_air_app.utils.DateValidator;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -115,7 +118,14 @@ public class PEFZonesDatabase {
         ref.child("pef").setValue(info.getHighest_pef());
         ref.child("date").setValue(info.getDate());
 
-        String key = keyHelper(info.getDate());
+        String key = "";
+
+        if (!info.getDate().equals("")) {
+            key = keyHelper(info.getDate());
+        }
+        else {
+            key = keyHelper(DateValidator.getTodaysDate());
+        }
 
         //this PEFHistory is the history of what the child experienced, used in PEFHistory
         //we can just save directly no logic because PEFZones handles the logic
