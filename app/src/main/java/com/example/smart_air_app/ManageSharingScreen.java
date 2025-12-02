@@ -63,6 +63,7 @@ public class ManageSharingScreen extends AppCompatActivity {
     }
 
     public void setPermissions() {
+        String childUID = getIntent().getStringExtra("childUID");
         boolean controllerMedicine = toggleControllerMedicine.isChecked();
         boolean rescueMedicine = toggleRescueMedicine.isChecked();
         boolean triage = toggleTriage.isChecked();
@@ -80,13 +81,16 @@ public class ManageSharingScreen extends AppCompatActivity {
         else {
             timeframe = 3;
         }
-        dbRef.child("Permissions").child(childUID).child("controllerMedicineUse").setValue(controllerMedicine);
-        dbRef.child("Permissions").child(childUID).child("rescueMedicineUse").setValue(rescueMedicine);
+        dbRef.child("Permissions").child(childUID).child("controller adherence summary").setValue(controllerMedicine);
+        dbRef.child("Permissions").child(childUID).child("rescue logs").setValue(rescueMedicine);
         dbRef.child("Permissions").child(childUID).child("triage").setValue(triage);
         dbRef.child("Permissions").child(childUID).child("pef").setValue(pef);
         dbRef.child("Permissions").child(childUID).child("symptoms").setValue(symptoms);
         dbRef.child("Permissions").child(childUID).child("triggers").setValue(triggers);
-        dbRef.child("Permissions").child(childUID).child("summaries").setValue(summaries);
+        dbRef.child("Permissions").child(childUID).child("summary charts").setValue(summaries);
         dbRef.child("Permissions").child(childUID).child("sharing timeframe").setValue(timeframe);
+
+        // Accounting for previous error
+        dbRef.child("Permissions").child(childUID).child("triage incidents").setValue(triage);
     }
 }
