@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Random;
@@ -32,9 +33,13 @@ public class DailyCheckIn extends AppCompatActivity {
             return insets;
         });
 
+        MaterialToolbar toolbar = findViewById(R.id.materialToolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
+
         startFloatingAnimation(findViewById(R.id.blob_1));
         startFloatingAnimation(findViewById(R.id.blob_2));
-
 
 
         childUID = getIntent().getStringExtra("childUID");  //if it the parent this is not null
@@ -64,7 +69,6 @@ public class DailyCheckIn extends AppCompatActivity {
     private void startFloatingAnimation(View blob) {
         Random random = new Random();
 
-        // Random end positions (within ~30–60dp)
         float maxMove = dpToPx(blob.getContext(), 30 + random.nextInt(30));
 
         ObjectAnimator animX = ObjectAnimator.ofFloat(
@@ -87,7 +91,6 @@ public class DailyCheckIn extends AppCompatActivity {
         animY.setRepeatMode(ValueAnimator.REVERSE);
         animY.setDuration(5000 + random.nextInt(3000)); // 5–8 seconds
 
-        // Optional: gentle scale breathing
         ObjectAnimator scaleAnim = ObjectAnimator.ofFloat(
                 blob,
                 "scaleX",
