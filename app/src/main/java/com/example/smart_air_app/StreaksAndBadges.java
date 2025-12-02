@@ -1,5 +1,6 @@
 package com.example.smart_air_app;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -7,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +52,7 @@ public class StreaksAndBadges extends AppCompatActivity {
         }
 
         String usrId = usr.getUid();
+        String childName = getIntent().getStringExtra("ChildName");
 
         DatabaseReference typeRef = FirebaseDatabase.getInstance().getReference("Users").
                 child(usrId);
@@ -65,6 +68,25 @@ public class StreaksAndBadges extends AppCompatActivity {
 
             }
         });
+
+        Button backButton = findViewById(R.id.buttonStreaksBack);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent;
+                if (type.equals("parent")) {
+                    intent = new Intent(StreaksAndBadges.this, ParentChildHomeScreen.class);
+                }
+                else {
+                    intent = new Intent(StreaksAndBadges.this, ChildHomeScreen.class);
+                }
+                intent.putExtra("ChildUID", childUId);
+                intent.putExtra("ChildName", childName);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         /// two thing can happen either you are the child and I will just show you your thing
         /// or a parent and I will get the child and do the wierd thing
         if( type == "child" ) {

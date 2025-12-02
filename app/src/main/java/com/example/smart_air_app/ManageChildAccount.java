@@ -32,6 +32,7 @@ public class ManageChildAccount extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 
+            Button backButton = findViewById(R.id.buttonManageBack);
             Button sendOTCButton = findViewById(R.id.generateOTCButton);
             Button revokeProviderAccessButton = findViewById(R.id.revokeProviderAccessButton);
             Button managePermissionsButton = findViewById(R.id.manageChildPermissions);
@@ -39,6 +40,17 @@ public class ManageChildAccount extends AppCompatActivity {
 
             String childUID = getIntent().getStringExtra("childUID");
             String childName = getIntent().getStringExtra("childName");
+
+            backButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ManageChildAccount.this, ParentHomeScreen.class);
+                    intent.putExtra("childUID", getIntent().getStringExtra("childUID"));
+                    intent.putExtra("childName", getIntent().getStringExtra("childName"));
+                    startActivity(intent);
+                    finish();
+                }
+            });
 
             sendOTCButton.setOnClickListener(new View.OnClickListener() {
                 @Override

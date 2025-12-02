@@ -30,6 +30,8 @@ public class ManageSharingScreen extends AppCompatActivity {
     private Chip toggleSummaries;
     private MaterialButtonToggleGroup toggleTimeframe;
     private Button toggleTimeframeDefault;
+    private Button backButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class ManageSharingScreen extends AppCompatActivity {
         dbRef = FirebaseDatabase.getInstance().getReference();
         childUID = getIntent().getStringExtra("childUID");
 
+        backButton = findViewById(R.id.buttonSharingBack);
         submitButton = findViewById(R.id.submitButton);
         toggleControllerMedicine = findViewById(R.id.toggleControllerMedicine);
         toggleRescueMedicine = findViewById(R.id.toggleRescueMedicine);
@@ -58,6 +61,18 @@ public class ManageSharingScreen extends AppCompatActivity {
 
         submitButton.setOnClickListener(v -> {
             setPermissions(getIntent().getStringExtra("childUID"));
+            Intent intent = new Intent(ManageSharingScreen.this, ManageChildAccount.class);
+            intent.putExtra("childUID", getIntent().getStringExtra("childUID"));
+            intent.putExtra("childName", getIntent().getStringExtra("childName"));
+            startActivity(intent);
+            finish();
+        });
+
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ManageSharingScreen.this, ManageChildAccount.class);
+            intent.putExtra("childUID", getIntent().getStringExtra("childUID"));
+            intent.putExtra("childName", getIntent().getStringExtra("childName"));
+            startActivity(intent);
             finish();
         });
     }
