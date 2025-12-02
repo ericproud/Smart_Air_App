@@ -1,7 +1,13 @@
 package com.example.smart_air_app;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -10,14 +16,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.smart_air_app.triage.TriageEntry;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +35,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,6 +72,14 @@ public class MedicineLogs extends AppCompatActivity {
                     MedicineLogField.removeAllViews();
                     loadMedicineEntries(childUID);
                 }
+            }
+        });
+
+        MaterialButton pdfButton = findViewById(R.id.pdf);
+        pdfButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                populatePDF();
             }
         });
     }
@@ -296,6 +315,180 @@ public class MedicineLogs extends AppCompatActivity {
             return "";
         }
     }
+
+    void makePDF(Context context, List<String> lines) {
+        // Boilerplate setup
+        PdfDocument PDF = new PdfDocument();
+
+        Paint paint = new Paint();
+        paint.setTextSize(14);
+
+        int pageWidth = 595;
+        int pageHeight = 842;
+
+        int y = 50;
+        int lineHeight = 22;
+
+        PdfDocument.Page page = PDF.startPage(
+                new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
+        );
+        Canvas canvas = page.getCanvas();
+        int pageNumber = 1;
+
+        // Go through the created lines
+        for (String line : lines) {
+
+            // If the line is going past the page start a new page
+            if (y + lineHeight > pageHeight - 50) {
+                PDF.finishPage(page);
+
+                pageNumber++;
+                page = PDF.startPage(
+                        new PdfDocument.PageInfo.Builder(pageWidth, pageHeight, pageNumber).create()
+                );
+                canvas = page.getCanvas();
+                y = 50;
+            }
+
+            // Otherwise draw the line
+            canvas.drawText(line, 40, y, paint);
+            y += lineHeight;
+        }
+
+        PDF.finishPage(page);
+
+        // Boilerplate to make pdf
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        File file = new File(context.getExternalFilesDir(null), "MyGeneratedPDF" + timeStamp + ".pdf");
+
+        try {
+            PDF.writeTo(new FileOutputStream(file));
+        } catch (Exception e) {
+        }
+
+        PDF.close();
+
+        Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+        }
+    }
+
+    public void populatePDF() {
+        List<String> lines = new ArrayList<>();
+        DatabaseReference controllerRef = FirebaseDatabase.getInstance().getReference("ControllerLogs").child(childUID);
+        DatabaseReference rescueRef = FirebaseDatabase.getInstance().getReference("RescueAttempts").child(childUID);
+
+        // STEP 1: Load Controller Logs
+        controllerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                // Section title for controller logs
+                lines.add("CONTROLLER LOGS \n");
+                lines.add("");
+
+                for (DataSnapshot entry : snapshot.getChildren()) {
+                    // Get fields
+                    String dateStr = getDate(entry.getKey());
+                    String timeStr = getTime(entry.getKey());
+                    Long amountUsed = entry.child("amountUsed").getValue(Long.class);
+                    String breathRating = entry.child("breathRating").getValue(String.class);
+                    Long PEFbefore = entry.child("Pre PEF").getValue(Long.class);
+                    Long PEFafter = entry.child("postPEF").getValue(Long.class);
+                    Long shortness = entry.child("shortnessBreathRating").getValue(Long.class);
+
+                    // Add them to lines
+                    lines.add("Date: " + dateStr);
+                    lines.add("Time: " + timeStr);
+                    lines.add("Shortness Rating: " + shortness);
+                    lines.add("Dose Used: " + amountUsed);
+                    lines.add("PEF Before: " + PEFbefore);
+                    lines.add("PEF After: " + PEFafter);
+                    lines.add("Feeling After: " + breathRating);
+                    lines.add("");
+                }
+
+                rescueRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot2) {
+                        // Section title for rescue logs
+                        lines.add("RESCUE LOGS");
+                        lines.add("");
+
+                        for (DataSnapshot entry : snapshot2.getChildren()) {
+                            // Get fields
+                            Long dosage = entry.child("dosage").getValue(Long.class);
+                            Long PEFbefore = entry.child("peakFlowBefore").getValue(Long.class);
+                            Long PEFafter = entry.child("peakFlowAfter").getValue(Long.class);
+                            Long timestamp = entry.child("timestamp").getValue(Long.class);
+                            Boolean triage = entry.child("triageIncident").getValue(Boolean.class);
+
+                            List<String> symptomsList = new ArrayList<>();
+                            for (DataSnapshot ds : entry.child("symptoms").getChildren()) {
+                                symptomsList.add(ds.getValue(String.class));
+                            }
+
+                            List<String> triggersList = new ArrayList<>();
+                            for (DataSnapshot ds : entry.child("triggers").getChildren()) {
+                                triggersList.add(ds.getValue(String.class));
+                            }
+
+                            String date = new SimpleDateFormat("MMM dd yy").format(new Date(timestamp));
+                            String time = new SimpleDateFormat("HH:mm").format(new Date(timestamp));
+
+                            //Add them to lines
+                            lines.add("Date: " + date);
+                            lines.add("Time: " + time);
+                            if (triage) {
+                                lines.add("Triage Event: YES");
+                            } else {
+                                lines.add("Triage Event: NO");
+                            }
+                            lines.add("Dose: " + dosage);
+                            lines.add("PEF Before: " + PEFbefore);
+                            lines.add("PEF After: " + PEFafter);
+                            if (triggersList.isEmpty() ) {
+                                lines.add("Triggers: None");
+                            }
+                            else {
+                                lines.add("Triggers:");
+                                for (String trigger : triggersList) {
+                                    lines.add( "      " + trigger + ",");
+                                }
+                            }
+
+                            if (symptomsList.isEmpty() ) {
+                                lines.add("Symptoms: None");
+                            }
+                            else {
+                                lines.add("Symptoms:");
+                                for (String symptom : symptomsList) {
+                                    lines.add("      " + symptom + ",");
+                                }
+                            }
+                            lines.add("");
+                        }
+                        // Put the lines into the pdf and display it
+                        makePDF(MedicineLogs.this, lines);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {}
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {}
+        });
+    }
+
 }
 
 
