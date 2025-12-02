@@ -68,9 +68,6 @@ public class AddChildScreen extends AppCompatActivity {
 
         createAccountButton.setOnClickListener(v -> {
             createAccount();
-            Intent intent = new Intent(AddChildScreen.this, ParentHomeScreen.class);
-            startActivity(intent);
-            finish();
         });
     }
 
@@ -155,6 +152,9 @@ public class AddChildScreen extends AppCompatActivity {
                             }).addOnFailureListener(e -> {});
                         }).addOnFailureListener(e -> {});
                         childAuth.signOut();
+
+                        Intent intent = new Intent(AddChildScreen.this, ParentHomeScreen.class);
+                        startActivity(intent);
                         finish();
                     } else {
                         Toast.makeText(AddChildScreen.this, "Authentication failed.",
