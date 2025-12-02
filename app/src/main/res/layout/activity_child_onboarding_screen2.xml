@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="This is at the top of your homescreen once youlog in. It shows your breathing zone, the last time you used rescue medicine, and how many times you have used the rescue medicine this week and your trends."
+        android:text="This is at the top of your homescreen once you log in. It shows your breathing zone, the last time you used rescue medicine, and how many times you have used the rescue medicine this week and your trends."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView7" />

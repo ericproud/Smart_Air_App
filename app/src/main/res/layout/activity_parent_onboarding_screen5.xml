@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Manage account handles your privacy settings. Clicking Generate OTC generates a one time code above that you share with your provider to give them access to whatever you share with them."
+        android:text="Manage account handles your privacy settings. Clicking Generate OTC generates a one time code that you share with your provider to give them access to whatever you share with them."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />

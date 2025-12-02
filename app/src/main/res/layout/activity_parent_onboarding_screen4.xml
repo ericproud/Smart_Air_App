@@ -51,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Log Controller Usage allows you to log when you use a Controller. Log Rescue Attempt allows you to log when you use a Rescue. Having Trouble Breathing? is if you are having trouble breathing. SetPersonal Best allows you to set the child's personal best."
+        android:text="Log Controller Usage allows you to log when you use a Controller. Log Rescue Attempt allows you to log when you use a Rescue. Having Trouble Breathing? is if you are having trouble breathing. Set Personal Best allows you to set the child's personal best."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView16" />
