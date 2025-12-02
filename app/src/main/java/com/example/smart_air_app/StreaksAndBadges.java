@@ -1,18 +1,23 @@
 package com.example.smart_air_app;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.smart_air_app.log_rescue_attempt.RescueAttempt;
+import com.example.smart_air_app.utils.RescueCounter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,9 +28,9 @@ import com.google.firebase.database.ValueEventListener;
 
 public class StreaksAndBadges extends AppCompatActivity {
 
-    int defaul_tec = 10;
-    int default_low_rescue = 4;
-
+    int threshold_perfect_week = 7;
+    int threshold_technique = 10;
+    int threshold_low_rescue = 4;
 
     /// /////////////I need two int here, one is login days, the other is the number of something el
     /// that can be bundeled for a badges ( i.e. number of t excersises done)
@@ -33,181 +38,189 @@ public class StreaksAndBadges extends AppCompatActivity {
     /// /// mitoni 3 ta az ye aks dorost koni ba addad haye moktaleft faghat backend moskeleh
 
 
-    int login_streak ;
+    int login = 0 ;
+    int tecq = 0;
+    int Days = 0;
     int exercise ;
 
     String type;
     String childUId;
 
+    ImageView badgeController, badgeTechnique, badgeRescue;
+    TextView statsText;
+
     @Override
     protected void onCreate( Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_streaks_and_badges);
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
-        FirebaseUser usr = FirebaseAuth.getInstance().getCurrentUser(); ///current usr of the page
 
-        if(usr == null){
-            finish();
-            return;
+        badgeController = findViewById(R.id.left);
+        badgeTechnique = findViewById(R.id.middle);
+        badgeRescue = findViewById(R.id.right);
+        statsText = findViewById(R.id.streakNumber);
+
+
+        setupSettingsButtons();
+
+
+        childUId = getIntent().getStringExtra("childUId");
+        if (childUId == null) {
+            FirebaseUser usr = FirebaseAuth.getInstance().getCurrentUser();
+            if (usr != null) childUId = usr.getUid();
+            else { finish(); return; }
         }
 
-        String usrId = usr.getUid();
-        String childName = getIntent().getStringExtra("ChildName");
 
-        DatabaseReference typeRef = FirebaseDatabase.getInstance().getReference("Users").
-                child(usrId);
+        fetchGoals();  //gets the custum thresholda
+        fetchStreaks();  ///gets the login and technique
+        calculateRescueCount(); //gets the rescue days
+    }
 
-        typeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+
+    private void calculateRescueCount() {
+        long Min = System.currentTimeMillis() - (30L * 24 * 60 * 60 * 1000);  ///you cant be b4 this and count
+
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("RescueAttempts").child(childUId);
+
+        // Run the query directly here
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                type = snapshot.child("type").getValue( String.class );
+                int count = 0;
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    // Try to read timestamp. If strict mapping fails, try reading just the "timestamp" field
+                    Long timestamp = data.child("timestamp").getValue(Long.class);
+
+                    if (timestamp != null && timestamp >= Min) {  //check it
+                        count++;
+                    }
+                }
+
+
+                Days = count;
+                updateBadges();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
+    }
 
-        Button backButton = findViewById(R.id.buttonStreaksBack);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent;
-                if (type.equals("parent")) {
-                    intent = new Intent(StreaksAndBadges.this, ParentChildHomeScreen.class);
-                }
-                else {
-                    intent = new Intent(StreaksAndBadges.this, ChildHomeScreen.class);
-                }
-                intent.putExtra("ChildUID", childUId);
-                intent.putExtra("ChildName", childName);
-                startActivity(intent);
-                finish();
-            }
-        });
 
-        /// two thing can happen either you are the child and I will just show you your thing
-        /// or a parent and I will get the child and do the wierd thing
-        if( type == "child" ) {
-            childUId  = usrId;
-        } else {
-            childUId = getIntent().getStringExtra("the kid");
-        }
+    private void fetchStreaks() {
         DatabaseReference streakRef = FirebaseDatabase.getInstance().getReference("Streaks").child(childUId);
-
-        streakRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        streakRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot streakSnapshot) {
-                // Get Streak Info
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("consecutive controller use days").exists())
+                    login = snapshot.child("consecutive controller use days").getValue(Integer.class);
 
-                if (streakSnapshot.child("consecutive controller use days").exists()) {
-                    login_streak = streakSnapshot.child("consecutive controller use days").getValue(Integer.class);
+                if (snapshot.child("consecutive technique conpleted days").exists())
+                    tecq = snapshot.child("consecutive technique conpleted days").getValue(Integer.class);
 
-                }
-                if (streakSnapshot.child("consecutive technique conpleted days").exists()) {
-                    exercise = streakSnapshot.child("consecutive technique conpleted days").getValue(Integer.class);
-
-                }
-
-
+                updateBadges();
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
+    }
 
 
-
-        /*
-        DatabaseReference typeRef = FirebaseDatabase.getInstance().getReference("Users").child(usrId)
-                . child("type");
-        DatabaseReference streakRef = FirebaseDatabase.getInstance().getReference("Streaks").child(usrId);
-        //now we wait to
-        typeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void fetchGoals() {
+        DatabaseReference goalsRef = FirebaseDatabase.getInstance().getReference("Users").child(childUId).child("goals");
+        goalsRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot userSnapshot) {
-                // Get type Info
-                String type = userSnapshot.getValue(String.class);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("goal_controller").exists())
+                    threshold_perfect_week = snapshot.child("goal_controller").getValue(Integer.class);
+                if (snapshot.child("goal_technique").exists())
+                    threshold_technique = snapshot.child("goal_technique").getValue(Integer.class);
+                if (snapshot.child("limit_rescue").exists())
+                    threshold_low_rescue = snapshot.child("limit_rescue").getValue(Integer.class);
 
-                // 2. NOW, go get the Streak info
-                streakRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot streakSnapshot) {
-                        // Get Streak Info
-                        Integer techniqueCount = 0;
-                        if (streakSnapshot.child("tecnique").exists()) {
-                            techniqueCount = streakSnapshot.child("tecnique").getValue(Integer.class);
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.w("FIREBASE_ERROR", "Failed to read value.", error.toException());
-                    }
-                });
+                updateBadges();
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("FIREBASE_ERROR", "Failed to read value.", error.toException());
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
-        */
+    }
 
 
-
-        ImageView rightbadgeImageView = findViewById(R.id.right);
-
-        if(login_streak <= 0) {
-            rightbadgeImageView.setImageResource(R.drawable.sam);
-        } else if ( login_streak == 1) {
-            rightbadgeImageView.setImageResource(R.drawable.tree);
+    private void updateBadges() {
+        // Badge 1: Controller
+        if (login >= threshold_perfect_week) {
+            badgeController.setImageResource(R.drawable.forest);
+            badgeController.setAlpha(1.0f);
         } else {
-            rightbadgeImageView.setImageResource(R.drawable.forest);
+            badgeController.setImageResource(R.drawable.tree);
+            badgeController.setAlpha(0.5f);
         }
+        badgeController.setOnClickListener(v -> Toast.makeText(this,
+                "Controller Streak: "
+                + login + "/" + threshold_perfect_week, Toast.LENGTH_SHORT).show());
 
-        rightbadgeImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 3. Show the Toast message
-                Toast.makeText(StreaksAndBadges.this,
-                        "you have a " + login_streak + "consecutive controller use days" ,
-                        Toast.LENGTH_SHORT).show();
-            }
-        });
-        ImageView leftbadgeImageView = findViewById(R.id.left);
-
-        if(exercise < defaul_tec) {
-            leftbadgeImageView.setImageResource(R.drawable.lungs);
-        } else if ( exercise == defaul_tec) {
-            leftbadgeImageView.setImageResource(R.drawable.lungs1);
+        // Badge 2: Technique
+        if (tecq >= threshold_technique) {
+            badgeTechnique.setImageResource(R.drawable.lungs2);
+            badgeTechnique.setAlpha(1.0f);
         } else {
-            leftbadgeImageView.setImageResource(R.drawable.lungs2);
+            badgeTechnique.setImageResource(R.drawable.lungs);
+            badgeTechnique.setAlpha(0.5f);
         }
+        badgeTechnique.setOnClickListener(v -> Toast.makeText(this,
+                "Technique Sessions: " + tecq + "/" +
+                        threshold_technique, Toast.LENGTH_SHORT).show());
 
-        leftbadgeImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(StreaksAndBadges.this,
-                        "you have a " + exercise + "consecutive technique completed days",
-                        Toast.LENGTH_SHORT).show();
+        // Badge 3: Rescue (Calculated live!)
+        if (Days <= threshold_low_rescue) {
+            badgeRescue.setImageResource(R.drawable.trophy);
+            badgeRescue.setAlpha(1.0f);
+        } else {
+            badgeRescue.setImageResource(R.drawable.locked); /// you need to have lower days to be better!
+            badgeRescue.setAlpha(0.5f);
+        }
+        badgeRescue.setOnClickListener(v -> Toast.makeText(this,
+                "Rescue Usage (30d): " + Days +
+                        " (Limit: " + threshold_low_rescue + ")", Toast.LENGTH_SHORT).show());
+
+        // Text
+        statsText.setText("Controller Streak: " + login +
+                "\nTechnique: " + tecq + "\nRescue Uses (30d): " + Days);
+    }
+
+
+    private void setupSettingsButtons() {
+        Button btnCon = findViewById(R.id.btnSetController);
+        Button btnTech = findViewById(R.id.btnSetTechnique);
+        Button btnRes = findViewById(R.id.btnSetRescue);
+
+        btnCon.setOnClickListener(v -> showEditDialog("Controller Goal", "threshold_perfect_week"));
+        btnTech.setOnClickListener(v -> showEditDialog("Technique Goal", "threshold_technique"));
+        btnRes.setOnClickListener(v -> showEditDialog("Rescue Limit", "threshold_low_rescue"));
+    }
+
+    private void showEditDialog(String title, String field) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        builder.setView(input);
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            String text = input.getText().toString();
+            if (!text.isEmpty()) {
+                saveGoalToFirebase(field, Integer.parseInt(text));
             }
         });
-        /// milestone!!
-        String flag = "";
-        if(  login_streak < 7) {
-            flag = "not";
-        }
-        TextView daysStreak = findViewById(R.id.streakNumber);
-        daysStreak.setText( "You have " +  login_streak + " days of login streak" +
-                 "\n" + "and " + exercise + " days of controlled excersice" + "\n" +
-                "You have " + flag + "reached the perfect controller week milestone.");
+        builder.setNegativeButton("Cancel", (d, w) -> d.cancel());
+        builder.show();
+    }
 
-
-
-
+    private void saveGoalToFirebase(String fieldName, int value) {
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child(childUId).child("goals").child(fieldName).setValue(value);
+        Toast.makeText(this, "Goal Updated!", Toast.LENGTH_SHORT).show();
     }
 }

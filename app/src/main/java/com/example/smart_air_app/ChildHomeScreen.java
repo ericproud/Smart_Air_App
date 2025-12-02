@@ -122,9 +122,25 @@ public class ChildHomeScreen extends AppCompatActivity {
         });
 
         ///Hossein out
-        Button logRescueAttempt = findViewById(R.id.parentLogRescueAttemptButton);
+
+        ///
+        MaterialButton Streaks = findViewById(R.id.parentDailyCheckInButton);
+        dailyCheckIn.setOnClickListener(view -> {
+            ////Log.d("DEBUG", "Button was definitely clicked!");
+            ///Toast.makeText(this, "CLICKED!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ChildHomeScreen.this, DailyCheckIn.class);
+            intent.putExtra("childUID", childUID);
+            intent.putExtra("childName", childName);
+
+            startActivity(intent);
+        });
+
+        ///
+
+
+        Button logRescueAttempt = findViewById(R.id.parentStreaksAndBadgesButton);
         logRescueAttempt.setOnClickListener(view -> {
-            Intent intent = new Intent(ChildHomeScreen.this, LogRescueAttemptActivity.class);
+            Intent intent = new Intent(ChildHomeScreen.this, StreaksAndBadges.class);
             intent.putExtra("childUID", childUID);
             intent.putExtra("childName", childName);
             startActivity(intent);
