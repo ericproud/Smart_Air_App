@@ -84,7 +84,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Privacy defaults to nothing is shared unless you decide what you want to share and for how long with the provider."
+        android:text="Privacy defaults is nothing is shared with you, as a provider, unless the parent selects specifically what they want to share with you."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
